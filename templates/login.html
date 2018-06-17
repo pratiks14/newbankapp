@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='style.css')}}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+
+<script src="//apis.google.com/js/platform.js?onload=start"> </script>
+</head>
+<body>
+	<div class="container">
+
+
+<!-- offline =access user even whe n the user is offline -->
+
+<section class= "default well well-sm">
+	<div class="jumbotron text-center">
+	<div class="btn-group btn-group-lg text-center" >
+	<button class="btn btn-primary btn-lg"  id="login-btn">Login</button>
+	<button class="btn btn-primary"  id ="Signup-btn">SignUp</button>
+	</div>
+	</div>
+	<br>
+	<div id="login" class="well well-sm">
+	<form name="Login" id="loginform" action="" method="post">
+		<div class="input-group input-group-lg">
+			<span class="input-group-addon">username</span>
+			<input type="text" name="email" class="form-control" maxlength="50" >
+		</div><br>
+		<div class="input-group input-group-lg">
+			<span class="input-group-addon">password </span>
+			<input type="password" name="password" class="form-control" maxlength="50" autocomplete="false">
+		</div><br>
+		<p><button class="btn btn-submit btn-lg" type="submit">Login</button></p>
+	</form>
+	</div>
+	<div id="Signup" class="well well-sm">
+	<form id="signupform" action="" method = "post">
+		<div class="input-group input-group-lg">
+			<span class="input-group-addon">username</span>
+			<input type="text" name="email" class="form-control" maxlength="50">
+		</div><br>
+		<div class="input-group input-group-lg">
+			<span class="input-group-addon">FullName</span>
+			<input type="text" name="name"  class="form-control" maxlength="50" >
+		</div><br>
+		<div class="input-group input-group-lg">
+			<span class="input-group-addon">password</span>
+			<input type="password" name="password" class="form-control" maxlength="50" autocomplete="false">
+		</div><br>
+		<p><input class="btn btn-submit btn-lg" type="submit" name="button" value="Sign Up"></p>
+	</form>
+	</div>
+</section>
+<section id="result" ></section>
+</div>
+<script>
+window.onload=function(){
+		$('#login').show();
+		$('#Signup').hide();
+
+	};
+
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script>
+
+	$('#login-btn').click(function(){
+			$('#login').show();
+			$('#Signup').hide();
+		});
+	$('#Signup-btn').click(function(){
+			$('#login').hide();
+			$('#Signup').show();
+		});
+
+	// login ajax request
+	$('#loginform').submit(function(event)
+	{
+		event.preventDefault();
+		data  = {};
+		$.map($('#loginform').serializeArray(),function(ele,index){
+			data[ele["name"]] = ele["value"];
+
+		});
+		$.ajax({
+			type : 'POST',
+			url : '/login',
+			processData:false,
+			data :JSON.stringify(data),
+			contentType: 'application/ajax; charset=utf-8',
+			success:function(result)
+			{
+				if(result)
+				{
+					$(".container").hide();
+					$('#result').html("Sign up successfull!!<br>"+result+"redirecting..");
+
+					setTimeout(function(){
+							window.location.href = "/";
+						},2000);
+				}
+				else
+				{
+					$('#result').html("Invalid Credentials!!");
+				}
+			},
+			statusCode: {
+				401: function() {
+
+				  alert("login Unsuccessfull!!");
+				},
+				404:function(){
+					alert("Invalid Credentials!!");
+				}
+			}
+		});
+	});
+
+	// singup ajax request
+	$('#signupform').submit(function(event)
+	{
+		event.preventDefault();
+
+
+
+		data  = {};
+		$.map($('#signupform').serializeArray(),function(ele,index){
+			data[ele["name"]] = ele["value"];
+		});
+
+		$.ajax({
+			type : 'POST',
+			url : '/signup',
+			processData:false,
+			data :JSON.stringify(data),
+			contentType: 'application/ajax; charset=utf-8',
+			success:function(result)
+			{
+				if(result)
+				{
+					$('.container').hide();
+					$('#result').html("Sign up successfull!!<br>"+result+"redirecting..");
+
+					setTimeout(function(){
+							window.location.href = "/";
+						},2000);
+				}
+				else
+				{
+					$('#result').html("Please Try Again!!");
+				}
+			},
+			statusCode:{
+				401:function(){
+					alert("Error:Please try Again! ");
+				},
+				404:function(){
+					alert("Username is already Present");
+				}
+			}
+		});
+	});
+</script>
+</body>
+</html>
