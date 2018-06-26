@@ -40,7 +40,7 @@
  * General styles
  */
 body, html {
-    height: 100%;
+    height: auto;
     background-repeat: no-repeat;
     background-image: linear-gradient(rgb(104, 145, 162), rgb(207, 230, 212));
 }
@@ -60,7 +60,9 @@ label {
     user-select: none;
     cursor: default;
 }
-
+label,.profile-name-card,h5,strong{
+    font-family: Tajawal,sans-serif;
+}
 /*
  * Card component
  */
@@ -93,7 +95,7 @@ label {
  * Form styles
  */
 .profile-name-card {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     text-align: center;
     margin: 10px 0 0;
@@ -176,46 +178,160 @@ label {
 .forgot-password:focus{
     color: rgb(12, 97, 33);
 }
+a{
+    color:#555;
+}
+a:hover{
+    text-decoration: none;
+    color:#555;
+}
     </style>
 </head>
 <body>
     <div class="container">
         <div class="card card-container">
             <!-- <img class="profile-img-card/" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
-            <h5 class="card-title text-center"><span class="badge badge-secondary"><i>EB</i></span>  ETA BANK</h5>
-            <p id="profile-name" class="profile-name-card"> REGISTER</p>      
-            <form class="form-signin " id="id-form" type="POST">
+            <a  href="/"><h5 class="card-title text-center"><span class="badge badge-secondary"><i>EB</i></span>  ETA BANK</h5></a>
+            <p id="profile-name" class="profile-name-card "> REGISTER</p>      
+            <form class="   " id="register-form" action="" method="post">
                 <div class="form-group row">
-                    <label for="staticEmail" class="col-sm-5 col-form-label">Customer ID</label>
-                    <div class="col-sm-7">
+                    <label for="staticEmail" class="col-5 col-form-label">Customer ID</label>
+                    <div class="col-7">
                       <input type="text" name="customerid" readonly class="form-control-plaintext" id="staticEmail" value="email@example.com" >
                     </div>
+                    <div class="col-12"><p >(Customer Id will be your <strong>Login Id</strong  > for netbanking)</p></div>
                 </div>
+                <div class="form-group ">
+                    <label for="name" class="col-form-label">Name</label>
+                    <div class="">
+                      <input type="text" name="name"  class="form-control" id="inputname" placeholder="Your Full Name" required  autofocus>
+                    </div>
+                </div>
+                <label for="mobile" class="col-form-label">Mobile No(10 Digits)</label>
+                <div class="input-group ">
+                    <div class="input-group-prepend">
+                            <span class="input-group-text">+91</span>
+                    </div>
+                    <input type="text" name="mobileno"  class="form-control" id="inputmobile" placeholder="Your Mobile No " required >
+                </div>
+                <div class="form-group ">
+                    <label for="email" class="col-form-label">Email</label>
+                    <div class="">
+                      <input type="email" name="email"  class="form-control" id="inputemail" placeholder="Email" required >
+                    </div>
+                </div>    
+
                 <div class="form-group ">
                     <label for="inputPassword" class="col-form-label">Password</label>
                     <div class="">
-                      <input type="password" name="password"  class="form-control" id="inputPassword" placeholder="Password" required autofocus>
+                      <input type="password" name="password"  class="form-control" id="inputPassword" placeholder="Password" required >
                     </div>
                 </div>
                 <div class="form-group ">
-                    <label for="inputPassword" class="col-form-label">Retype-Password</label>
-                    <div >
+                    <label data-toggle="popover" onmouseover="this.title='';" data-placement="left" data-trigger="none" title="Popover Header" data-content="Password doesn't match!!" for="inputPassword" class="col-form-label">Confirm Password</label>
+                    <div  >
                       <input type="password" name="password" class="form-control" id="retypePassword" placeholder="Password" required>
                     </div>
                 </div>
-                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+                <button class="btn  btn-primary" id="register-btn" type="submit">Register</button>
             </form>
             <!-- /form -->
         </div><!-- /card-container -->
+        <div class="modal fade" id="signModal" role="dialog">  
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog">  
+                
+                <!-- Modal content-->  
+                <div class="modal-content">  
+                    <div class="modal-header ">
+                      
+                        <h3><i class="far fa-check-square"></i> Verifing..</h3>
+                    </div>  
+                    <div class="modal-body">  
+                    <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> Checking Inputs..</li></ol>  
+                    </div>  
+                    <div class="modal-footer">    
+                    </div>  
+                </div>  
+                    
+                </div>  
+            </div>	
+        </div>
     </div><!-- /container -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
 <script>
-// $(window).load(function(){
-//     $('#card-form').hide();
-// });
+
+// window.onload = function(){
+//     $('#card-form').hide(); 
+// };
+
+$('#retypePassword').focus(function(){
+    $("[data-toggle='popover']").popover('hide');
+});
+
+$('#inputPassword').focus(function(){
+    $("[data-toggle='popover']").popover('hide');
+});
+
+function equatePassword(){
+    if($('#inputPassword').val() === $('#retypePassword').val())
+    {
+        return true;
+    }
+    else
+        return false;    
+}
+$('#register-form').submit(function(event)
+{
+    event.preventDefault();
+    if(!equatePassword()){
+        $("[data-toggle='popover']").popover('show');
+         }
+    else{
+        data = {};
+ 		
+ 		$.map($('#signupform').serializeArray(),function(ele,index){
+ 			data[ele["name"]] = ele["value"];
+ 		});
+
+ 		$('#signModal .modal-header').html('<h3><i class="far fa-check-square"></i> Verifing..</h3>');
+ 		$('#signModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> Checking Inputs..</li></ol>');
+ 		$('#signModal .modal-footer').html('');
+ 
+ 		$("#signModal").modal("show");
+        $.ajax({
+ 			type:"POST",
+ 			url:'/signup',
+ 			processData:false,
+ 			data:JSON.stringify(data),
+ 			contentType:'application/ajax; charset=utf-8',
+ 			success:function(result){
+ 				
+                setTimeout(function(){
+                    $('#signModal .modal-header').html('<h3><i class="fas fa-check-square"></i> Successfull</h3>');
+                $('#signModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> '+ result+ '</li></ol>');
+                    },2000);
+
+
+                setTimeout(function(){
+                    window.location.href = '/main';
+                    },2000);
+ 			},
+ 			error:function(response){
+ 				setTimeout(function(){
+ 					$('#signModal .modal-header').html('<h3><i class="fas fa-exclamation-triangle"></i> Error</h3>');
+ 					$('#signModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> '+response.responseJSON+'</li></ol>');
+ 					$('#signModal .modal-footer').html('<button type="button" class="btn " data-dismiss="modal">Close</button>');
+ 						},2000);
+ 			}
+		});
+    }
+});
 
 </script>
 </body>
