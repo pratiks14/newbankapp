@@ -103,6 +103,61 @@ def netLoginPage():
 def register():
 	return render_template('register.html')
 
+def checkCustomerIdExists(customerid):
+	filename = 'dbconfig.json'
+	with open(filename, 'r') as f:
+		dbdata = json.load(f)
+	
+	db = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+dbdata['server']+';DATABASE='+dbdata['database']+';UID='+dbdata['username']+';PWD='+ dbdata['password'])
+	cursor = db.cursor()
+	sql = "select * from netbankusers where email_id = '%s'" % (email,)
+	cursor.execute(sql)
+	account = cursor.fetchone()
+
+	if account is not None :
+	
+		return (account,cursor.description)
+	else:
+		return None
+
+
+@app.route('/signup', methods=['POST'])
+def signup():
+	params = json.loads(request.data.decode('utf-8'))
+	name_list = params['name'].split(' ')
+	name_list = [a[0].upper()+a[1:] for a in name_list]
+	login_session['name'] = ' '.join(name_list)
+	login_session['email'] = params['email']
+	login_session['password'] = params['password']
+	user = getUser(login_session['email'])
+	if user is None:
+		user_id = createUser(login_session)
+		if user_id is not None:
+			addAccountDetails(login_session)
+	else:
+		response = make_response(json.dumps('Email is already Registered!!'), 401)
+		response.headers['Content-Type'] = 'application/json'
+		return response
+	
+	account,description = fetchAccountdetails(login_session['email'])
+	j=0
+	for i in description:
+		data_val =str(account[j])
+		if data_val.strip() == 'F':
+			login_session[i[0]]='NO'
+		elif data_val.strip() == 'T':
+			login_session[i[0]]='YES'
+		else:
+			if i[0] == 'acc_bal':
+				locale.setlocale(locale.LC_MONETARY, '')
+				data_val = locale.currency(float(data_val),grouping=True)
+			login_session[i[0]]=data_val
+		j+=1
+	response = make_response(json.dumps('Sign-IN Successfull!! Logging in.....'), 200)
+	response.headers['Content-Type'] = 'application/json'
+	return response
+
+
 @app.before_request
 def setSessionModified():
 	login_session.modified = True
