@@ -1,2 +1,13 @@
-<Html>
-<\html>
+create table netbankusers(
+customerid char(7) primary key,
+emailid varchar(25) not null,
+mobileno char(10) not null,
+name varchar(25) not null,
+accountno char(16) not null,
+creditcard char(3) default('no'),
+debitcardno char(16) not null,
+kyc char(3) default('no'),
+password char(25) not null,
+balance  decimal(20,4) default(0.0),
+last_login datetime2
+);
