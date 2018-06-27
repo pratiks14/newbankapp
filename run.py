@@ -1,78 +1,3 @@
-# from flask import Flask, render_template, request
-# from flask import redirect, jsonify, url_for, flash
-# from flask import session as login_session
-# import random
-# import string
-# import httplib2
-# import json
-# from flask import make_response
-# import pymysql
-
-
-# app = Flask(__name__)
-
-# @app.route('/')
-# def showLogin():
-#     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-#                     for x in range(32))
-#     login_session['state'] = state
-#     return render_template('login.html')
-
-# # def getUserInfo(user_id):
-# #     user = session.query(User).filter_by(id=user_id).one()
-# #     return user
-
-
-# def getUserID(email):
-# 	db = pymysql.connect("localhost","newuser","password","testdb")
-# 	cursor = db.cursor()
-# 	sql = "select * from user where email = '%s'" % (email,)
-# 	cursor.execute(sql)
-# 	rowcount = cursor.rowcount
-# 	if rowcount > 0 :
-# 		return email
-# 	else:
-# 		return None
-
-
-# def createUser(login_session):
-#     db = pymysql.connect("localhost","newuser","password","testdb")
-#     cursor = db.cursor()
-#     sql="insert into user values('%s','%s','%s')"%(login_session['email'],login_session['name'],login_session['password'])
-#     try:
-#     	cursor.execute(sql)
-#     	db.commit()
-
-
-#     except:
-#     	db.rollback()
-#     return login_session['email']
-
-
-# @app.route('/signup', methods=['POST'])
-# def signup():
-# 	params = json.loads(request.data.decode('utf-8'))
-# 	login_session['name'] = params['name']
-# 	login_session['email'] = params['email']
-# 	login_session['password'] = params['password']
-# 	user_id = getUserID(login_session['email'])
-# 	if not user_id:
-# 		user_id = createUser(login_session)
-# 	else:
-# 		response = make_response(json.dumps('Email is already Present'), 404)
-# 		response.headers['Content-Type'] = 'application/json'
-# 		return response
-# 	output = ''
-# 	output += '<h1>Welcome,'
-# 	output += login_session['name']
-# 	output += '</h1>'
-# 	return output
-
-# if __name__ == '__main__':
-#     app.secret_key = "my_app_secretkey"
-#     app.debug = True
-#     app.run(host='localhost', port=5000)
-
 from flask import Flask,render_template,request
 from flask import redirect,jsonify,url_for,flash
 from flask import session as login_session
@@ -84,6 +9,8 @@ from datetime import timedelta
 # import httplib2
 from flask import make_response
 import pyodbc
+import re
+import time
 
 
 
@@ -91,7 +18,7 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def showMain():
+def showIndex():
     return render_template('index2.html')
 
 
@@ -99,9 +26,57 @@ def showMain():
 def netLoginPage():
 	return render_template('netbanklogin.html')
 
+def generateCustomerid():
+	filename = 'dbconfig.json'
+	with open(filename, 'r') as f:
+		dbdata = json.load(f)
+	db = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+dbdata['server']+';DATABASE='+dbdata['database']+';UID='+dbdata['username']+';PWD='+ dbdata['password'])
+	cursor = db.cursor()
+	sql = 'select * from netbankusers where customerid = {customerid}'
+	while True:
+		customerid =  str(random.randint(10**(7-1),10**7-1))
+		sql_exe = sql.format(customerid = customerid)
+		cursor.execute(sql_exe)
+		account = cursor.fetchone()
+		if account is None:
+			return customerid	
+
+def generateAccountNumber():
+	filename = 'dbconfig.json'
+	with open(filename, 'r') as f:
+		dbdata = json.load(f)
+	db = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+dbdata['server']+';DATABASE='+dbdata['database']+';UID='+dbdata['username']+';PWD='+ dbdata['password'])
+	cursor = db.cursor()
+	sql = 'select * from netbankusers where accountno = {accountno}'
+	while True:
+		accountno =  str(random.randint(10**(16-1),10**16-1))
+		sql_exe = sql.format(accountno=accountno)
+		cursor.execute(sql_exe)
+		account = cursor.fetchone()
+		if account is None:
+			return accountno
+
+def generateDebitCard():
+	filename = 'dbconfig.json'
+	with open(filename, 'r') as f:
+		dbdata = json.load(f)
+	db = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+dbdata['server']+';DATABASE='+dbdata['database']+';UID='+dbdata['username']+';PWD='+ dbdata['password'])
+	cursor = db.cursor()
+	sql = 'select * from netbankusers where debitcardno = {cardno}'
+	while True:
+		cardno =  str(random.randint(10**(16-1),10**16-1))
+		sql_exe = sql.format(cardno=cardno)
+		cursor.execute(sql_exe)
+		account = cursor.fetchone()
+		if account is None:
+			return cardno
+
+
 @app.route('/register')
-def register():
-	return render_template('register.html')
+def getRegisterForm():
+	customerid = generateCustomerid()
+	login_session['customerid'] = customerid
+	return render_template('register.html',customerid=customerid)
 
 def checkCustomerIdExists(customerid):
 	filename = 'dbconfig.json'
@@ -120,40 +95,150 @@ def checkCustomerIdExists(customerid):
 	else:
 		return None
 
+def emailExists(email):
+	filename = 'dbconfig.json'
+	with open(filename, 'r') as f:
+		dbdata = json.load(f)
+	
+	db = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+dbdata['server']+';DATABASE='+dbdata['database']+';UID='+dbdata['username']+';PWD='+ dbdata['password'])
+	cursor = db.cursor()
+	sql = "select * from netbankusers where emailid = '%s'"%(email,)
+	cursor.execute(sql)
+	account =cursor.fetchone()
+
+	if account is not None:
+		return True
+	else:
+		return False	
+
+def mobilenoExists(number):
+	filename = 'dbconfig.json'
+	with open(filename, 'r') as f:
+		dbdata = json.load(f)
+	
+	db = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+dbdata['server']+';DATABASE='+dbdata['database']+';UID='+dbdata['username']+';PWD='+ dbdata['password'])
+	cursor = db.cursor()
+	sql = "select * from netbankusers where mobileno = '%s'"%(number,)
+	cursor.execute(sql)
+	account =cursor.fetchone()
+
+	if account is not None:
+		return True
+	else:
+		return False	
+
+def validateEmail(email):
+	if re.match(r"^[@a-zA-Z0-9]+\.com$",email) == None:
+		response = make_response(json.dumps('Invalid Email Format'), 401)
+		response.headers['Content-Type'] = 'application/json'
+		return response
+	elif emailExists(email):
+		response = make_response(json.dumps('Email already registered'), 401)
+		response.headers['Content-Type'] = 'application/json'
+		return response
+	else:
+		return None
+
+def validateMobile(number):
+	if re.match(r"^[0-9]{10}$",number)==None:
+		response = make_response(json.dumps('Invalid Mobile Number'), 401)
+		response.headers['Content-Type'] = 'application/json'
+		return response
+	elif mobilenoExists(number):
+		response = make_response(json.dumps('Mobile No already linked to an Account!'), 401)
+		response.headers['Content-Type'] = 'application/json'
+		return response
+	else:
+		return None
+
+def validatePassword(pwrd):
+	if len(pwrd) < 6:
+		response = make_response(json.dumps('Password length less than 6'), 401)
+		response.headers['Content-Type'] = 'application/json'
+		return response
+	else:
+		return None	
+
+def setLastlogin():
+	filename = 'dbconfig.json'
+	with open(filename, 'r') as f:
+		dbdata = json.load(f)
+	
+	db = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+dbdata['server']+';DATABASE='+dbdata['database']+';UID='+dbdata['username']+';PWD='+ dbdata['password'])
+	cursor = db.cursor()
+	sql = "update netbankusers set last_login = '%s' where customerid = '%s'"%(time.strftime('%Y-%m-%d %H:%M:%S'),login_session['customerid'])
+	try:
+		cursor.execute(sql)
+		db.commit()
+	except :
+		db.rollback()
+		raise Exception("Couldn't set Last login")	
+
+def register(params):
+	if not login_session.get(customerid):
+		response = make_response(json.dumps('Session Expired!!'), 401)
+		response.headers['Content-Type'] = 'application/json'
+		return response
+	name_list = params['name'].split(' ')
+	name_list = [a[0].upper()+a[1:] for a in name_list]
+	name = ' '.join(name_list)
+	login_session['name'] = name
+	login_session['mobileno'] = params['mobileno']
+	login_session['email'] = params['email']
+	accountno = generateAccountNumber()
+	debitcard = generateDebitCard()
+	last_login = ''
+	current_login = time.strftime('%Y-%m-%d %H:%M:%S')
+
+	filename = 'dbconfig.json'
+	with open(filename, 'r') as f:
+		dbdata = json.load(f)
+	
+	db = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+dbdata['server']+';DATABASE='+dbdata['database']+';UID='+dbdata['username']+';PWD='+ dbdata['password'])
+	cursor = db.cursor()
+	sql="""insert into netbankusers(customerid,emailid,mobileno,name,accountno,debitcardno,password,last_login)
+	  values('%s','%s','%s','%s','%s','%s',
+	  '%s')"""%(login_session['customerid'],login_session['email'],login_session['mobileno'],login_session['name'],accountno,debitcard,params['password'],current_login)
+	try:
+		cursor.execute(sql)
+		db.commit()
+	except Exception as e:
+		db.rollback()
+		raise Exception(e)
+	
+	login_session['account'] = accountno
+	login_session['debitcard'] = debitcard
+	login_session['lastlogin'] = last_login
+
 
 @app.route('/signup', methods=['POST'])
 def signup():
 	params = json.loads(request.data.decode('utf-8'))
-	name_list = params['name'].split(' ')
-	name_list = [a[0].upper()+a[1:] for a in name_list]
-	login_session['name'] = ' '.join(name_list)
-	login_session['email'] = params['email']
-	login_session['password'] = params['password']
-	user = getUser(login_session['email'])
-	if user is None:
-		user_id = createUser(login_session)
-		if user_id is not None:
-			addAccountDetails(login_session)
-	else:
-		response = make_response(json.dumps('Email is already Registered!!'), 401)
+	
+	
+	response = validateEmail(params['email'])
+	if response is not None:
+		return response
+	response = validateMobile(params['mobileno'])
+	if response is not None:
+		return response
+
+	response = validatePassword(params['password'])
+	if response  is not None:
+		return response
+
+	try:
+		register(params)
+		login_session.permanent = True
+
+	except Exception as e:
+		print(e)		
+		print(login_session['customerid'])
+		response = make_response(json.dumps('Some Error Occured.Try Again!'), 402)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	
-	account,description = fetchAccountdetails(login_session['email'])
-	j=0
-	for i in description:
-		data_val =str(account[j])
-		if data_val.strip() == 'F':
-			login_session[i[0]]='NO'
-		elif data_val.strip() == 'T':
-			login_session[i[0]]='YES'
-		else:
-			if i[0] == 'acc_bal':
-				locale.setlocale(locale.LC_MONETARY, '')
-				data_val = locale.currency(float(data_val),grouping=True)
-			login_session[i[0]]=data_val
-		j+=1
-	response = make_response(json.dumps('Sign-IN Successfull!! Logging in.....'), 200)
+	response = make_response(json.dumps('Registration Successfull!! Logging in.....'), 200)
 	response.headers['Content-Type'] = 'application/json'
 	return response
 
@@ -165,6 +250,6 @@ def setSessionModified():
 
 if __name__ == '__main__':
 	app.secret_key = "my_app_secretkey"
-	app.permanent_session_lifetime = timedelta(minutes=5)
+	app.permanent_session_lifetime = timedelta(minutes=15)
 	app.debug = True
 	app.run(host='localhost', port=5000)
