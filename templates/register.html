@@ -63,6 +63,20 @@ label {
 label,.profile-name-card,h5,strong{
     font-family: Tajawal,sans-serif;
 }
+
+
+ .vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 60%;
+    margin:0% 20%;
+}
+.modal-dialog {
+    display: table-cell;
+    vertical-align: middle;
+    border-radius: 20em;
+  }
+
 /*
  * Card component
  */
@@ -145,6 +159,7 @@ label,.profile-name-card,h5,strong{
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
 }
 
+
 .btn.btn-signin {
     /*background-color: #4d90fe; */
     background-color: rgb(104, 145, 162);
@@ -192,12 +207,12 @@ a:hover{
         <div class="card card-container">
             <!-- <img class="profile-img-card/" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
             <a  href="/"><h5 class="card-title text-center"><span class="badge badge-secondary"><i>EB</i></span>  ETA BANK</h5></a>
-            <p id="profile-name" class="profile-name-card "> REGISTER</p>      
-            <form class="   " id="register-form" action="" method="post">
+            <!-- <p id="profile-name" class="profile-name-card "> REGISTER</p>       -->
+            <form class="" id="register-form" action="" method="post">
                 <div class="form-group row">
-                    <label for="staticEmail" class="col-5 col-form-label">Customer ID</label>
-                    <div class="col-7">
-                      <input type="text" name="customerid" readonly class="form-control-plaintext" id="staticEmail" value="email@example.com" >
+                    <label for="staticEmail" class="col-6 col-form-label">Customer ID</label>
+                    <div class="col-6">
+                      <input type="text" name="customerid" readonly class="form-control-plaintext" id="staticEmail" value="{{customerid}}" >
                     </div>
                     <div class="col-12"><p >(Customer Id will be your <strong>Login Id</strong  > for netbanking)</p></div>
                 </div>
@@ -207,30 +222,30 @@ a:hover{
                       <input type="text" name="name"  class="form-control" id="inputname" placeholder="Your Full Name" required  autofocus>
                     </div>
                 </div>
-                <label for="mobile" class="col-form-label">Mobile No(10 Digits)</label>
+                <label for="mobile" class="col-form-label">Mobile No</label>
                 <div class="input-group ">
                     <div class="input-group-prepend">
                             <span class="input-group-text">+91</span>
                     </div>
-                    <input type="text" name="mobileno"  class="form-control" id="inputmobile" placeholder="Your Mobile No " required >
+                    <input type="text" name="mobileno"  class="form-control" id="inputmobile" placeholder="10 Digit Mobile Number " required >
                 </div>
                 <div class="form-group ">
                     <label for="email" class="col-form-label">Email</label>
                     <div class="">
-                      <input type="email" name="email"  class="form-control" id="inputemail" placeholder="Email" required >
+                      <input type="email" name="email"  class="form-control" id="inputemail" placeholder="someone@example.com" required >
                     </div>
                 </div>    
 
                 <div class="form-group ">
                     <label for="inputPassword" class="col-form-label">Password</label>
                     <div class="">
-                      <input type="password" name="password"  class="form-control" id="inputPassword" placeholder="Password" required >
+                      <input type="password" name="password"  class="form-control" id="inputPassword" placeholder="Must have atleast 6 characters" required >
                     </div>
                 </div>
                 <div class="form-group ">
                     <label data-toggle="popover" onmouseover="this.title='';" data-placement="left" data-trigger="none" title="Popover Header" data-content="Password doesn't match!!" for="inputPassword" class="col-form-label">Confirm Password</label>
                     <div  >
-                      <input type="password" name="password" class="form-control" id="retypePassword" placeholder="Password" required>
+                      <input type="password" name="password" class="form-control" id="retypePassword" placeholder="Retype-Password" required>
                     </div>
                 </div>
                 <button class="btn  btn-primary" id="register-btn" type="submit">Register</button>
@@ -295,7 +310,7 @@ $('#register-form').submit(function(event)
     else{
         data = {};
  		
- 		$.map($('#signupform').serializeArray(),function(ele,index){
+ 		$.map($('#register-form').serializeArray(),function(ele,index){
  			data[ele["name"]] = ele["value"];
  		});
 
