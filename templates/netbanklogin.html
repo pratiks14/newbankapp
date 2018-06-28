@@ -1,257 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link href="https://fonts.googleapis.com/css?family=Tajawal:700" rel="stylesheet">
-
-    <title>THE Bank</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <!-- Custom CSS -->
-    <!-- <link href="templates/css/sb-admin.css" rel="stylesheet"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='style1.css')}}"> -->
-    
-    <!-- Morris Charts CSS -->
-    <!-- <link href="css/plugins/morris.css" rel="stylesheet"> -->
-
-    <!-- Custom Fonts -->
-	<link  href="{{url_for('static',filename='font-awesome2/css/fontawesome-all.min.css')}}" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">    <title>Hello, world!</title>
-
-    <style>
-   /*
- * Specific styles of signin component
- */
-/*
- * General styles
- */
-body, html {
-    height: 100%;
-    background-repeat: no-repeat;
-    background-image: linear-gradient(rgb(104, 145, 162), rgb(207, 230, 212));
-}
-
-.card-container.card {
-    max-width: 350px;
-    padding: 40px 40px;
-}
-
-.btn {
-    font-weight: 700;
-    height: 36px;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: default;
-}
-
-/*
- * Card component
- */
-.card {
-    background-color: #F7F7F7;
-    /* just in case there no content*/
-    padding: 20px 25px 30px;
-    margin: 0 auto 25px;
-    margin-top: 50px;
-    /* shadows and rounded borders */
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-}
-
-.profile-img-card {
-    width: 96px;
-    height: 96px;
-    margin: 0 auto 10px;
-    display: block;
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
-    border-radius: 50%;
-}
-
-/*
- * Form styles
- */
-.profile-name-card {
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    margin: 10px 0 0;
-    min-height: 1em;
-}
-
-.reauth-email {
-    display: block;
-    color: #404040;
-    line-height: 2;
-    margin-bottom: 10px;
-    font-size: 14px;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-.form-signin #inputEmail,
-.form-signin #inputPassword {
-    direction: ltr;
-    height: 44px;
-    font-size: 16px;
-}
-
-.form-signin input[type=email],
-.form-signin input[type=password],
-.form-signin input[type=text],
-.form-signin button {
-    width: 100%;
-    display: block;
-    margin-bottom: 10px;
-    z-index: 1;
-    position: relative;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-.form-signin .form-control:focus {
-    border-color: rgb(104, 145, 162);
-    outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
-}
-
-.btn.btn-signin {
-    /*background-color: #4d90fe; */
-    background-color: rgb(104, 145, 162);
-    /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
-    padding: 0px;
-    font-weight: 700;
-    font-size: 14px;
-    height: 36px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-    border: none;
-    -o-transition: all 0.218s;
-    -moz-transition: all 0.218s;
-    -webkit-transition: all 0.218s;
-    transition: all 0.218s;
-}
-
-.btn.btn-signin:hover,
-.btn.btn-signin:active,
-.btn.btn-signin:focus {
-    background-color: rgb(12, 97, 33);
-}
-
-.forgot-password {
-    color: rgb(104, 145, 162);
-}
-
-.forgot-password:hover,
-.forgot-password:active,
-.forgot-password:focus{
-    color: rgb(12, 97, 33);
-}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="card card-container">
-            <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
-            <h5 class="card-title text-center"><span class="badge badge-secondary"><i>EB</i></span>  ETA BANK</h5>
-            <p id="profile-name" class="profile-name-card"></p>
-            <ul class="nav nav-pills nav-fill" >
-                    <li class="nav-item ">
-                            <p class="profile-name-card"  ><a class="nav-link active" id="id-btn" href="#">Customer-id</a></p>
-                    </li>
-                    <li class="nav-item" >
-                            <p class="profile-name-card" ><a class="nav-link " id="card-btn" href="#">Debit-Card</a></p>
-                    </li>
-            </ul>        
-            <form class="form-signin " id="id-form">
-                <span id="reauth-email" class="reauth-email"></span>
-                <input type="text" id="inputID" class="form-control" placeholder="Customer Id" required autofocus>
-                <input type="password" id="inputPin" class="form-control" placeholder="Password" required>
-                <div id="remember" class="checkbox">
-                    <label>
-                        <input type="checkbox" value="remember-me"> Remember me
-                    </label>
-                </div>
-                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
-            <!-- /form -->
-            <a href="#" class="forgot-password">
-                Forgot the password?
-            </a>
-            <br/>
-            <a href="/register" >
-                First time user? Register
-            </a>
-            </form>
-            <form class="form-signin " id="card-form">
-                    <span id="reauth-email" class="reauth-email"></span>
-                    <input type="text" id="inputNumber" class="form-control" placeholder="Card No" required autofocus>
-                    <input type="password" id="inputPassword" class="form-control" placeholder="PIN" required>
-                    <div id="remember" class="checkbox">
-                        <label>
-                            <input type="checkbox" value="remember-me"> Remember me
-                        </label>
-                    </div>
-                    <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
-            </form>
-        </div><!-- /card-container -->
-    </div><!-- /container -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-
-<script>
-// $(window).load(function(){
-//     $('#card-form').hide();
-// });
-window.onload = function(){
-    $('#card-form').hide(); 
-};
-
-$('#card-btn').click(function(){
-    $('#card-form').show();
-    $('#id-form').hide();
-    $('#id-btn').removeClass('active');
-    $('#card-btn').addClass('active');
-
-});
-
-$('#id-btn').click(function(){
-    $('#id-form').show();
-    $('#card-form').hide();
-    $('#card-btn').removeClass('active');
-    $('#id-btn').addClass('active');
-});
-</script>
-</body>
- -->
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -298,12 +44,10 @@ body, html {
     background-repeat: no-repeat;
     background-image: linear-gradient(rgb(104, 145, 162), rgb(207, 230, 212));
 }
-
 .card-container.card {
     max-width: 350px;
     padding: 40px 40px;
 }
-
 .vertical-alignment-helper {
     display:table;
     height: 100%;
@@ -315,7 +59,6 @@ body, html {
     vertical-align: middle;
     border-radius: 20em;
   }
-
 .btn {
     font-weight: 700;
     height: 36px;
@@ -324,7 +67,6 @@ body, html {
     user-select: none;
     cursor: default;
 }
-
 /*
  * Card component
  */
@@ -342,7 +84,6 @@ body, html {
     -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
 }
-
 .profile-img-card {
     width: 96px;
     height: 96px;
@@ -352,7 +93,6 @@ body, html {
     -webkit-border-radius: 50%;
     border-radius: 50%;
 }
-
 /*
  * Form styles
  */
@@ -363,7 +103,6 @@ body, html {
     margin: 10px 0 0;
     min-height: 1em;
 }
-
 .reauth-email {
     display: block;
     color: #404040;
@@ -378,14 +117,12 @@ body, html {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
-
 .form-signin #inputEmail,
 .form-signin #inputPassword {
     direction: ltr;
     height: 44px;
     font-size: 16px;
 }
-
 .form-signin input[type=email],
 .form-signin input[type=password],
 .form-signin input[type=text],
@@ -399,14 +136,12 @@ body, html {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
-
 .form-signin .form-control:focus {
     border-color: rgb(104, 145, 162);
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
 }
-
 .btn.btn-signin {
     /*background-color: #4d90fe; */
     background-color: rgb(104, 145, 162);
@@ -424,17 +159,14 @@ body, html {
     -webkit-transition: all 0.218s;
     transition: all 0.218s;
 }
-
 .btn.btn-signin:hover,
 .btn.btn-signin:active,
 .btn.btn-signin:focus {
     background-color: rgb(12, 97, 33);
 }
-
 .forgot-password {
     color: rgb(104, 145, 162);
 }
-
 .forgot-password:hover,
 .forgot-password:active,
 .forgot-password:focus{
@@ -467,9 +199,9 @@ body, html {
                 </div>
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
             <!-- /form -->
-            <a href="" class="forgot-password" disabled>
+            <!-- <a href="" class="forgot-password" disabled>
                 Forgot the password?
-            </a>
+            </a> -->
             <br/>
             <a href="/register"  >
                 First time user? Register
@@ -477,7 +209,7 @@ body, html {
             </form>
             <form class="form-signin " id="card-form">
                     <span id="reauth-email" class="reauth-email"></span>
-                    <input type="text" name="debitcardno" id="inputNumber" class="form-control" placeholder="Card No" required>
+                    <input type="text" name="cardno" id="inputNumber" class="form-control" placeholder="Card No" required>
                     <input type="password" name="pin" id="inputPassword" class="form-control" placeholder="4 Digit PIN" required>
                     <div id="remember" class="checkbox">
                         <label>
@@ -518,29 +250,31 @@ body, html {
 window.onload = function(){
     $('#card-form').hide(); 
 };
-
-$('#card-btn').click(function(){
+$('#card-btn').click(function(event){
+    event.preventDefault();
     $('#card-form').show();
     $('#id-form').hide();
     $('#id-btn').removeClass('active');
     $('#card-btn').addClass('active');
-
 });
-
-$('#id-btn').click(function(){
+$('#id-btn').click(function(event){
+    event.preventDefault();
     $('#id-form').show();
     $('#card-form').hide();
     $('#card-btn').removeClass('active');
     $('#id-btn').addClass('active');
 });
-
-
 $('#id-form').submit(function(event)
  	{
  		event.preventDefault();
  		data  = {};
  		$.map($('#id-form').serializeArray(),function(ele,index){
- 			data[ele["name"]] = ele["value"];
+            if (ele["name"] == "password"){
+                data[ele["name"]] = ele["value"];
+             }
+             else{
+ 			    data[ele["name"]] = $.trim(ele["value"]);
+             }
  		
  		});
  
@@ -551,7 +285,7 @@ $('#id-form').submit(function(event)
  		$("#loginModal").modal("show");
  		$.ajax({
  			type : 'POST',
- 			url : '/login',
+ 			url : '/idlogin',
  			processData:false,
  			data :JSON.stringify(data),
  			contentType: 'application/ajax; charset=utf-8',
@@ -564,7 +298,6 @@ $('#id-form').submit(function(event)
                 $('#loginModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> '+result+'</li></ol>');
                     },2000);
                     
-
                 setTimeout(function(){
                         window.location.href = '/main';
                     },3000);
@@ -587,13 +320,17 @@ $('#id-form').submit(function(event)
  			// }
  		});
      });
-
 $('#card-form').submit(function(event)
  	{
  		event.preventDefault();
  		data  = {};
  		$.map($('#card-form').serializeArray(),function(ele,index){
- 			data[ele["name"]] = ele["value"];
+            if (ele["name"] == "password"){
+                data[ele["name"]] = ele["value"];
+             }
+             else{
+ 			    data[ele["name"]] = $.trim(ele["value"]);
+             }
  		
  		});
  
