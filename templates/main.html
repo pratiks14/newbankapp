@@ -26,7 +26,7 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">    <title>Hello, world!</title>
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous"> -->
     <style>
         .title{
             font-family: Tajawal,sans-serif;
@@ -40,7 +40,11 @@
            height:80px;
            border-bottom:3px solid #006666 ;
         }
-
+        label{
+            font-family: Tajawal,sans-serif;
+            size: 19px;
+           
+        }
         footer{
             border-top:2px solid #006666;
         }
@@ -117,17 +121,28 @@
                 <a class="nav-link " href="#">PPF</a>
             </li>
             <li class="nav-item">
-                    <a class="nav-link " href="#">Edge Rewards</a>
+                    <a class="nav-link " href="#">Rewards</a>
             </li>
         </ul>
        
         <hr style="height:1px;border:none;background-color:#006666;" />
+        <div class="card" style="width: 100%;">
+            
+            <div class="card-body" id="op-account">
+              <!-- <h5 class="card-title">Account de</h5> -->
+              <h6 class="card-subtitle mb-2 text-muted">You don't have any account with us!</h6>
+              <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+              <button  class="btn btn-secondary card-link" id="openacc"><i class="fas fa-address-book"></i> Open Account</button>
+             
+            </div>
+          </div>
+
         </div>
     </div>
     <footer>
-        <div class="footer-copyright text-center py-3 text-secondary">© 2018 Copyright:<a href="/"> etabank.com</a>
+        <div class="footer-copyright text-center py-3 text-secondary">© 2018 Copyright:<a target="_blank" href="/"> etabank.com</a>
         </div>
-        <div style="height:50px;background-color:azure" class=" d-flex justify-content-center align-items-center">
+        <div style="height:80px;background-color:azure" class=" d-flex justify-content-center align-items-center">
                 <p><i class="fab fa-facebook-f"></i> <i class="fab fa-linkedin"></i> <i class="fab fa-twitter"></i></p>
             
         </div>
@@ -135,6 +150,69 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script>
+    function getDate(){
+            var today = new Date();
+             return today.getDate()+'-'+(1+today.getMonth())+'-'+today.getFullYear();
 
+             }
+    $('#openacc').click(function(event){
+        event.preventDefault()
+        var html = `<form>
+        <div class="form-group row">
+                    <label for="staticEmail" class="col-sm-2 col-form-label">Branch</label>
+                    <div class="col-sm-4">
+                      <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="Mysore Branch">
+                    </div>
+                    <label for="staticEmail" class="col-sm-2 col-form-label">Code</label>
+                    <div class="col-sm-4">
+                            <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="1F2325490">
+                    </div>
+        </div>
+        <div class="form-group row">
+            <label for="date" class="col-2 col-form-label">Date</label>
+            <input type="text" readonly class="col-10 form-control-plaintext" id="date"  value = ${getDate()}>
+        </div>
+        <div class="form-group">
+                <label for="accounttype">Account Type</label>
+                <input type="radio" class="form-control" name="acc_type" value="savings">Savings
+                <input type="radio" class="form-control" name="acc_type" value="current">Current
+                <input type="radio" class="form-control" name="acc_type" value="Loan"> Loan
+                <input type="radio" class="form-control" name="acc_type" value="Deposit">   Deposit
+
+        </div>
+        <div class="form-group">
+          <label for="inputAddress">Address</label>
+          <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+        </div>
+        <div class="form-group">
+          <label for="inputAddress2">Address 2</label>
+          <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputCity">City</label>
+            <input type="text" class="form-control" id="inputCity">
+          </div>
+          <div class="form-group col-md-4">
+            <label for="inputState">State</label>
+            <select id="inputState" class="form-control" place>
+            {% for state in states %}
+              <option value="{{state}}">{{state}}</option>
+            {% endfor %}  
+            </select>
+          </div>
+          <div class="form-group col-md-2">
+            <label for="inputZip">Zip</label>
+            <input type="text" class="form-control" id="inputZip">
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Apply</button>
+      </form>`;
+
+      $('#op-account').html(html);
+    });
+</script>
 </body>
 </html>
