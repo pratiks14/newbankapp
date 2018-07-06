@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Tajawal:700" rel="stylesheet">
+
+    <title>THE Bank</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <!-- <link href="templates/css/sb-admin.css" rel="stylesheet"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='style1.css')}}"> -->
+    
+    <!-- Morris Charts CSS -->
+    <!-- <link href="css/plugins/morris.css" rel="stylesheet"> -->
+
+    <!-- Custom Fonts -->
+	<link  href="{{url_for('static',filename='font-awesome2/css/fontawesome-all.min.css')}}" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous"> -->
+    <style>
+        body{
+    /* background-color: #E7E7EF; */
+    height: 100%;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(rgb(104, 145, 162), rgb(207, 230, 212));
+}
+        .title{
+            font-family: Tajawal,sans-serif;
+            
+        }
+        .head{
+            
+            background-color: azure;
+        }
+        .bank-head{
+           height:80px;
+           border-bottom:3px solid #006666 ;
+        }
+        label,h3,h4{
+            font-family: Tajawal,sans-serif;
+            size: 19px;
+           
+        }
+        input[type="text"]:not([readonly]),select{
+            font-family: Tajawal,sans-serif;
+            font-size:1.17em;
+            font-weight: bold;
+        }
+        footer{
+            border-top:2px solid #006666;
+        }
+
+        nav-item:hover{
+            background-color: rgb(104, 145, 162)
+        }
+        .container{
+            margin-top:30px;
+        }
+        .funkyradio div {
+  clear: both;
+  overflow: hidden;
+}
+
+.funkyradio label {
+  width: 100%;
+  border-radius: 3px;
+  border: 1px solid #D1D3D4;
+  font-weight: normal;
+}
+
+.funkyradio input[type="radio"]:empty,
+.funkyradio input[type="checkbox"]:empty {
+  display: none;
+}
+
+.funkyradio input[type="radio"]:empty ~ label,
+.funkyradio input[type="checkbox"]:empty ~ label {
+  position: relative;
+  line-height: 2.5em;
+  text-indent: 3.25em;
+  margin-top: 0em;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.funkyradio input[type="radio"]:empty ~ label:before,
+.funkyradio input[type="checkbox"]:empty ~ label:before {
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  content: '';
+  width: 2.5em;
+  background: #D1D3D4;
+  border-radius: 3px 0 0 3px;
+}
+
+.funkyradio input[type="radio"]:hover:not(:checked) ~ label,
+.funkyradio input[type="checkbox"]:hover:not(:checked) ~ label {
+  color: #777;
+}
+
+.funkyradio input[type="radio"]:hover:not(:checked) ~ label:before,
+.funkyradio input[type="checkbox"]:hover:not(:checked) ~ label:before {
+  content: '\2714';
+  text-indent: .9em;
+  color: #C2C2C2;
+}
+
+.funkyradio input[type="radio"]:not(:checked) ~ label,
+.funkyradio input[type="checkbox"]:not(:checked) ~ label {
+  color: #777;
+}
+
+.funkyradio input[type="radio"]:checked ~ label,
+.funkyradio input[type="checkbox"]:checked ~ label {
+  color: #333;
+}
+
+.funkyradio input[type="radio"]:checked ~ label:before,
+.funkyradio input[type="checkbox"]:checked ~ label:before {
+  content: '\2714';
+  text-indent: .9em;
+  color: #333;
+  background-color: #ccc;
+}
+
+.funkyradio input[type="radio"]:focus ~ label:before,
+.funkyradio input[type="checkbox"]:focus ~ label:before {
+  box-shadow: 0 0 0 3px #777;
+}
+
+.funkyradio-default input[type="radio"]:checked ~ label:before,
+.funkyradio-default input[type="checkbox"]:checked ~ label:before {
+  color: #777;
+  background-color: #006666;
+}
+
+/* .funkyradio-primary input[type="radio"]:checked ~ label:before,
+.funkyradio-primary input[type="checkbox"]:checked ~ label:before {
+  color: #fff;
+  background-color: #337ab7;
+}
+
+.funkyradio-success input[type="radio"]:checked ~ label:before,
+.funkyradio-success input[type="checkbox"]:checked ~ label:before {
+  color: #fff;
+  background-color: #5cb85c;
+}
+
+.funkyradio-danger input[type="radio"]:checked ~ label:before,
+.funkyradio-danger input[type="checkbox"]:checked ~ label:before {
+  color: #fff;
+  background-color: #d9534f;
+}
+
+.funkyradio-warning input[type="radio"]:checked ~ label:before,
+.funkyradio-warning input[type="checkbox"]:checked ~ label:before {
+  color: #fff;
+  background-color: #f0ad4e;
+}
+
+.funkyradio-info input[type="radio"]:checked ~ label:before,
+.funkyradio-info input[type="checkbox"]:checked ~ label:before {
+  color: #fff;
+  background-color: #5bc0de;
+} */
+
+.nav-link,.nav-link:hover {
+    color:#006666 ;
+}
+.nav-pills > .nav-item > .active{
+    background-color: #006666 !important;
+}
+.nav-tabs > .nav-item > .active{
+    background-repeat: no-repeat;
+    background-image: linear-gradient(rgb(123, 168, 187),rgb(104, 145, 162));
+    color:#fff;
+}
+ul.nav.nav-tabs.nav-fill{
+    border-radius: 5px;
+}
+.dropdown-item{
+    margin:0px;
+}
+
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 50%;
+    margin: 0 22%;
+}
+.modal-dialog {
+    display: table-cell;
+    vertical-align: middle;
+    border-radius: 20em;
+  }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row head">
+            <div class="col-6 d-flex justify-content-start align-items-center">
+                <p ><span class="title">Last Login :</span>  {{last_login}}</p>
+            </div>
+            <div class="col-6 d-flex justify-content-end align-items-center">
+                <p><span class="title">Customer Service :</span>   15-6656-555 / 15-500-5555</p>
+            </div>
+        </div>
+    
+            <div class="row bank-head" style="background-color: #e3f2fd">
+                <div class="col-4 d-flex justify-content-start align-items-center">
+                        <h4><span class="badge badge-secondary lead"><i>EB</i></span>  ETA BANK</h4>
+                </div>
+                <div class="col-8 d-flex justify-content-end align-items-center">
+                        <!-- <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="far fa-fw fa-user"></i> {{session['name']}} <b class="caret"></b>
+                               </a> -->
+                            <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"><i class="far fa-fw fa-user"></i> {{session['name']}}</button>   
+                               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                   <a class="dropdown-item" href=""><i class="fas fa-cog"> </i> Info</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/disconnect"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                                 
+                               </div>
+
+                              
+                    
+                </div>
+            </div>
+      
+        <ul class="nav nav-tabs nav-fill" style="height:auto;background-color: #e9ecef;">
+                <li class="nav-item" >
+                  <a class="nav-link " href="/snapshot" id="snapshot">SnapShot</a>
+                </li>
+                <li class="nav-item ">
+                  <a class="nav-link " href="/main" id="accounts">Accounts</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link"  href="/payments" id="payments">Payments</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="/services" id="services">Services</a>
+                </li>
+                <li class="nav-item">
+                        <a class="nav-link" href="/investments" id="investments">Investments</a>
+                </li>
+                
+              </ul>
+    </div>
+    <div class="container">
+        <div class="jumbotron" id="firstspace">
+    
+           
+
+        </div>
+    </div>
+    <div class="modal fade" id="dataModal" role="dialog">  
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog">  
+            
+            <!-- Modal content-->  
+                <div class="modal-content">  
+                        <!-- <div class="modal-header ">
+                      
+                                <h3><i class="far fa-check-square"></i> Verifing..</h3>
+                        </div>  
+                        <div class="modal-body">  
+                        <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> Checking Inputs..</li></ol>  
+                        </div>  
+                        <div class="modal-footer">    
+                        </div>  -->
+                </div>  
+                
+            </div>  
+        </div>	
+    </div>
+    <footer>
+        <div class="footer-copyright text-center py-3 text-secondary">© 2018 Copyright:<a target="_blank" href="/"> etabank.com</a>
+        </div>
+        <div style="height:80px;background-color:azure" class=" d-flex justify-content-center align-items-center">
+                <p><i class="fab fa-facebook-f"></i> <i class="fab fa-linkedin"></i> <i class="fab fa-twitter"></i></p>
+            
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script src = "{{url_for('static',filename='script1.js')}}"></script>
+<script>
+    
+
+</script>
+</body>
+</html>
