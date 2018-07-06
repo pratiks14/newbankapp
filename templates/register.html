@@ -311,7 +311,12 @@ $('#register-form').submit(function(event)
         data = {};
  		
  		$.map($('#register-form').serializeArray(),function(ele,index){
- 			data[ele["name"]] = ele["value"];
+             if (ele["name"] == "password"){
+                data[ele["name"]] = ele["value"];
+             }
+             else{
+ 			    data[ele["name"]] = $.trim(ele["value"]);
+             }
  		});
 
  		$('#signModal .modal-header').html('<h3><i class="far fa-check-square"></i> Verifing..</h3>');
@@ -328,7 +333,7 @@ $('#register-form').submit(function(event)
  			success:function(result){
  				
                 setTimeout(function(){
-                    $('#signModal .modal-header').html('<h3><i class="fas fa-check-square"></i> Successfull</h3>');
+                    $('#signModal .modal-header').html('<h3><i class="fas fa-check-square"></i> Successful</h3>');
                 $('#signModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> '+ result+ '</li></ol>');
                     },2000);
 
@@ -341,7 +346,7 @@ $('#register-form').submit(function(event)
  				setTimeout(function(){
  					$('#signModal .modal-header').html('<h3><i class="fas fa-exclamation-triangle"></i> Error</h3>');
  					$('#signModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> '+response.responseJSON+'</li></ol>');
- 					$('#signModal .modal-footer').html('<button type="button" class="btn " data-dismiss="modal">Close</button>');
+ 					$('#signModal .modal-footer').html('<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>');
  						},2000);
  			}
 		});
