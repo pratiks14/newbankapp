@@ -254,7 +254,7 @@ ul.nav.nav-tabs.nav-fill{
                             <a class="nav-link" href="/admin/update" >Update Account</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" id="loan">Rewards</a>
+                            <a class="nav-link" href="/admin/transaction" id="loan">Transactions</a>
                         </li>
                 </ul>
                 <hr>
@@ -346,7 +346,7 @@ ul.nav.nav-tabs.nav-fill{
 
             $('.accept').click(function(event){
                 event.preventDefault();
-                let accoutno = $(this).parent().parent().find('.accountno').text();
+                let accoutno = $.trim($(this).parent().parent().find('.accountno').text());
                 data = {"accountno":accoutno};
 
                 $.ajax({
@@ -378,7 +378,7 @@ ul.nav.nav-tabs.nav-fill{
 
             $('.reject').click(function(event){
                 event.preventDefault();
-                let accoutno = $(this).parent().parent().find('.accountno').text();
+                let accoutno = $.trim($(this).parent().parent().find('.accountno').text());
                 data = {"accountno":accoutno};
 
                 $.ajax({
