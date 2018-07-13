@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://fonts.googleapis.com/css?family=Tajawal:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:700|Quicksand" rel="stylesheet">
 
     <title>THE Bank</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
@@ -46,11 +46,18 @@
            height:80px;
            border-bottom:3px solid #006666 ;
         }
-        label,h3,h4{
-            font-family: Tajawal,sans-serif;
-            size: 19px;
-           
+        .card-head{
+            font-family: Merriweather,sans-serif;
+            size: 25px;
+            color:#006666;
         }
+
+        /* label,h3,h4{
+            font-family: Tajawal,sans-serif;
+            
+           
+        } */
+        
         input[type="text"]:not([readonly]),select{
             font-family: Tajawal,sans-serif;
             font-size:1.17em;
@@ -209,6 +216,14 @@ ul.nav.nav-tabs.nav-fill{
     vertical-align: middle;
     border-radius: 20em;
   }
+
+  a>small{
+    color:#006666;
+  }
+  a>small:hover{
+      color:#005555;
+      text-decoration: underline;
+  }
     </style>
 </head>
 <body>
@@ -226,13 +241,29 @@ ul.nav.nav-tabs.nav-fill{
                 <div class="col-4 d-flex justify-content-start align-items-center">
                         <h4><span class="badge badge-secondary lead"><i>EB</i></span>  ETA BANK</h4>
                 </div>
-                <div class="col-8 d-flex justify-content-end align-items-center">
+                <div class="col-5 d-flex justify-content-end align-items-center">
+                        {% with messages =get_flashed_messages() %}
+                <a class="nav-link "  id="navbarDropdownMenuLink2" data-toggle = "dropdown" href="#"><i class="fas fa-bell"></i> <span class="badge badge-light">{{ messages|length }}</span></a>
+                
+                    {% if messages %}
+                <ul class="dropdown-menu alert-dropdown dropdown-menu-middle" aria-labelledby="navbarDropdownMenuLink2">
+                    {% for message in messages %}
+                    <li>
+                        <p style="cursor:pointer" class="dropdown-item">{{ message|safe }}</p>
+                    </li>
+                   {% endfor %}
+                
+                 </ul>
+                    {% endif %} 
+                    {% endwith %}
+                </div>
+                <div class="col-3 d-flex justify-content-end align-items-center">
                         <!-- <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="far fa-fw fa-user"></i> {{session['name']}} <b class="caret"></b>
                                </a> -->
                             <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"><i class="far fa-fw fa-user"></i> {{session['name']}}</button>   
                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                   <a class="dropdown-item" href=""><i class="fas fa-cog"> </i> Info</a>
+                                   <a class="dropdown-item" id="info-btn" href=""><i class="fas fa-cog"> </i> Info</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="/disconnect"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                                  
@@ -244,27 +275,115 @@ ul.nav.nav-tabs.nav-fill{
             </div>
       
         <ul class="nav nav-tabs nav-fill" style="height:auto;background-color: #e9ecef;">
-                <li class="nav-item" >
-                  <a class="nav-link " href="/snapshot" id="snapshot">SnapShot</a>
-                </li>
                 <li class="nav-item ">
-                  <a class="nav-link " href="/main" id="accounts">Accounts</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link"  href="/payments" id="payments">Payments</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link active" href="/services" id="services">Services</a>
-                </li>
-                <li class="nav-item">
-                        <a class="nav-link" href="/investments" id="investments">Investments</a>
-                </li>
+                        <a class="nav-link " href="/main" id="accounts"><i class="fas fa-address-book"></i> Accounts</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link"  href="/payments" id="payments"><i class="fas fa-exchange-alt"></i> Money Transfer</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active" href="/services" id="services"><i class="far fa-credit-card"></i> Cards</a>
+                      </li>
                 
               </ul>
     </div>
     <div class="container">
-        <div class="jumbotron" id="firstspace">
-    
+        <div class="jumbotron" id="firstspace" style="min-height:65vh;">
+                <h4 class="card-head">Debit Card</h4>
+                <hr>
+                <div class="card">
+                    {% if debitcards | length  > 0 %}
+
+                    {% for card in debitcards %}
+                        <div class="card-body"  style="border-bottom:1px solid #006666">
+                            <div class="row">
+                                <div class="col-5" style="border-right:1px solid #006666">
+                                    <label>Card No :</label>
+                                    <p class="card-subtitle mb-2 text-muted d-inline"> {{card[0]}}</p>
+                                </div>
+                                <div class="col-2" style="border-right:1px solid #006666">
+                                    <label>Card Type </label>
+                                    <p class="card-subtitle mb-2 text-info">Visa</p>
+                                </div>
+                                <div class="col-2" style="border-right:1px solid #006666">
+                                        <label>Balance </label>
+                                        <p class="card-subtitle mb-2 text-success">&#8377; {{card[1]}}</p>
+                                    </div>
+                                <div class="col-3 form-row">
+                                    <div class="col-12">
+                                    <label>PIN <small>(4 Digit)</small> </label>
+                                    </div>
+                                    <div class="col">
+                                    <input class="card-subtitle mb-2 text-success d-inline form-control-plaintext pin" readonly placeholder="4 Digit" type="password" value="{{card[2]}}" >
+                                    </div>
+                                    <div class="col show-pin">
+                                    <small class="" ><p style="cursor:pointer" ><i class="fas fa-eye"></i> Show</p></small>
+                                    </div>
+                                    <div class="col edit-pin">
+                                        <small ><p style="cursor:pointer" ><i class="fas fa-pencil-alt"></i> Edit</p></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    {% else %}
+                    <div class="card">
+                            <div class="card-body">
+                                <p style="font-family:Quicksand" >You Dont have any account with us</p>
+                                <button class="btn btn-sm btn-info" id="gotoaccount">Click Here</button> to open an account.
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <br>
+                <!-- <h4 class="card-head">Credit Card</h4>
+                <hr>
+                <div class="card">
+                    {% if debitcards | length  > 0 %}
+
+                    {% for card in debitcards %}
+                        <div class="card-body"  style="border-bottom:1px solid #006666">
+                            <div class="row">
+                                <div class="col-5" style="border-right:1px solid #006666">
+                                    <label>Card No :</label>
+                                    <p class="card-subtitle mb-2 text-muted d-inline"> {{card[0]}}</p>
+                                </div>
+                                <div class="col-2" style="border-right:1px solid #006666">
+                                    <label>Card Type </label>
+                                    <p class="card-subtitle mb-2 text-info">Visa</p>
+                                </div>
+                                <div class="col-2" style="border-right:1px solid #006666">
+                                        <label>Balance </label>
+                                        <p class="card-subtitle mb-2 text-success">&#8377; {{card[1]}}</p>
+                                    </div>
+                                <div class="col-3 form-row">
+                                    <div class="col-12">
+                                    <label>PIN <small>(4 Digit)</small> </label>
+                                    </div>
+                                    <div class="col">
+                                    <input class="card-subtitle mb-2 text-success d-inline form-control-plaintext pin" readonly placeholder="4 Digit" type="password" value="{{card[2]}}" >
+                                    </div>
+                                    <div class="col show-pin">
+                                    <small class="" ><p style="cursor:pointer" ><i class="fas fa-eye"></i> Show</p></small>
+                                    </div>
+                                    <div class="col edit-pin">
+                                        <small ><p style="cursor:pointer" ><i class="fas fa-pencil-alt"></i> Edit</p></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                    
+                    <div class="card">
+                            <div class="card-body"> -->
+                                <!-- <p style="font-family:Quicksand" >You Dont have any account with us</p> -->
+                                <!-- <button class="btn btn-sm btn-info" id="creditcard">Click Here</button> to apply for credit card.
+                            </div>
+                        </div>
+                     -->
+                </div>
            
 
         </div>
@@ -302,8 +421,108 @@ ul.nav.nav-tabs.nav-fill{
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 <script src = "{{url_for('static',filename='script1.js')}}"></script>
 <script>
-    
+    $('#gotoaccount').click(function(event){
+        event.preventDefault();
+        window.location.href = '/main';
+    });
 
+    $('#info-btn').click(function(event){
+       event.preventDefault();
+       var html =` <div class="modal-header ">
+                      
+                      <h3><i class="fas fa-user-tie"></i> Info</h3>
+              </div>  
+              <div class="modal-body info-data row">  
+                    <div class="col-4"><label>Customerid <label></div>
+                    <div class="col-8"><p>{{session['customerid']}}</p></div>
+                    <div class="col-4"><label>Name <label></div>
+                    <div class="col-8"><p>{{session['name']}}</p></div>
+                    <div class="col-4"><label>Email <label></div>
+                    <div class="col-8"><p>{{session['email']}}</p></div>
+                    <div class="col-4"><label>Phone No <label></div>
+                    <div class="col-8"><p>{{session['mobileno']}}</p></div>
+              </div>  
+              <div class="modal-footer"> 
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>   
+              </div> `;
+        $('.modal-content').html(html);
+        $('#dataModal').modal("show");
+   });
+
+    $('.show-pin').click(function(event){ 
+    event.preventDefault();    
+    let pin = $(this).parent().find('.pin');
+    
+    if (pin.attr('type') == "password") {
+        pin.attr('type', "text");
+        return false;
+        
+    } else {
+        pin.attr('type', "password");
+        return false;
+    }   
+});
+$('.edit-pin').click(function(event){
+        event.preventDefault();
+        $(this).parent().find('.show-pin').hide();
+        $(this).parent().find('.pin').removeAttr('readonly').removeClass('form-control-plaintext').addClass('form-control');
+        $(this).find('p').html('<i class="fas fa-pencil-alt"></i> Update');
+
+        $(this).click(function(event){
+            event.preventDefault();
+            data = {};
+            let pin = $(this).parent().find('.pin');
+
+            data['pin'] =  $.trim(pin.val());
+            data['debitcardno'] = $.trim($(this).parent().parent().find('div:first-child p').html());
+            $.ajax({
+                type:"POST",
+                url:'/updatepin',
+                processData:false,
+                data:JSON.stringify(data),
+                contentType:'application/json;charset=utf-8',
+                success:function(result){
+                    header = '<i class="fas fa-check-square"></i> Updated';
+                    body = result;
+                    let reply = `<div class="modal-header">
+                            <h3>${header}</h3>
+                        </div>
+                        <div class="modal-body">
+                                <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> ${body} </li></ol>  
+                        </div>
+                        `;
+                   
+                    $('.modal-content').html(reply);
+                    $('#dataModal').modal("show");
+                   
+
+                    setTimeout(function(){
+                        window.location.href = '/services';
+                        },3000);
+                },
+                error:function(response){
+                    console.log("error");
+                    header = '<i class="fas fa-exclamation-triangle"></i> Error';
+                    body = response.responseJSON;
+                    var footer = '<div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div>';
+                    var reply1 = `<div class="modal-header">
+                                <h3>${header}</h3>
+                            </div>
+                            <div class="modal-body">
+                                    <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> ${body} </li></ol>  
+                            </div>
+                            ${footer}
+                            `;
+                    console.log(reply1);
+                    
+                        
+                    $('.modal-content').html(reply1);
+                    $('#dataModal').modal("show");
+                
+                }
+            });
+        });
+    }); 
 </script>
 </body>
 </html>
