@@ -178,7 +178,7 @@ body, html {
     <div class="container">
         <div class="card card-container">
             <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
-            <h5 class="card-title text-center"><span class="badge badge-secondary"><i>EB</i></span>  ETA BANK</h5>
+            <h5 class="card-title text-center" style="cursor:pointer" id="homepage"><span class="badge badge-secondary"><i>EB</i></span>  ETA BANK</h5>
                   
             <form class="form-signin " id="id-form">
                 <span id="reauth-email" class="reauth-email"></span>
@@ -217,6 +217,12 @@ body, html {
 // $(window).load(function(){
 //     $('#card-form').hide();
 // });
+
+$('#homepage').click(function(Event){
+    event.preventDefault();
+    window.location.href = '/';
+});
+
 $('#id-form').submit(function(event)
  	{
  		event.preventDefault();
@@ -231,25 +237,22 @@ $('#id-form').submit(function(event)
  		
  		});
  
- 		$('#loginModal .modal-header').html('<h3><i class="far fa-check-square"></i> Verifing..</h3>');
- 		$('#loginModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> Checking Inputs..</li></ol>');
- 		$('#loginModal .modal-footer').html('');
- 
- 		$("#loginModal").modal("show");
+ 		
  		$.ajax({
  			type : 'POST',
  			url : '/login',
  			processData:false,
  			data :JSON.stringify(data),
- 			contentType: 'application/ajax; charset=utf-8',
+ 			contentType: 'application/json; charset=utf-8',
  			success:function(result)
  			{
  				
                 // $(".container").hide();
-                setTimeout(function(){
+               
                     $('#loginModal .modal-header').html('<h3><i class="fas fa-check-square"></i> Successful</h3>');
                 $('#loginModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> '+result+'</li></ol>');
-                    },2000);
+                $("#loginModal").modal("show");
+        
                     
                 setTimeout(function(){
                         window.location.href = '/admin';
@@ -258,11 +261,12 @@ $('#id-form').submit(function(event)
  				
  			},
  			error:function(response){
- 				setTimeout(function(){
+ 			
  					$('#loginModal .modal-header').html('<h3><i class="fas fa-exclamation-triangle"></i> Error</h3>');
  					$('#loginModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> '+response.responseJSON+'</li></ol>');
  					$('#loginModal .modal-footer').html('<button type="button" class="btn" data-dismiss="modal">Close</button>');
- 						},2000);
+                     $("#loginModal").modal("show");
+
  			}
  			// statusCode: {
  				
