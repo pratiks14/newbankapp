@@ -1,6 +1,6 @@
-
 import json
 import pyodbc
+import time
 
 
 
@@ -26,7 +26,7 @@ class dbase():
     def getLiveAccounts(customerid):
         db = dbase.getDB()
         cursor = db.cursor()
-        sql = "select * from accountdetails where customerid ='%s' and status ='live' and acc_type IN ('SAVINGS','CURRENT')"%(customerid)
+        sql = "select * from accountdetails where customerid ='%s' and status ='Live' and acc_type IN ('SAVINGS','CURRENT')"%(customerid)
         cursor.execute(sql)
         
         accounts = cursor.fetchall()
@@ -153,5 +153,138 @@ class dbase():
         db = dbase.getDB()
         cursor = db.cursor()
         sql = "delete from accountdetails where accountno = '%s'"%(accountno)
+        try:
+            cursor.execute(sql)
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            raise e
+
+
+    @staticmethod
+    def updateAccountDetails(accountno,accounttype,aadharno):
+        db = dbase.getDB()
+        cursor = db.cursor()
+        sql = "update accountdetails set acc_type = '%s' , aadhar_no = '%s' where accountno = '%s'"%(accounttype,aadharno,accountno)
+        try:
+            cursor.execute(sql)
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            raise e
+
+    @staticmethod
+    def getDebitCards(customerid):
+        db = dbase.getDB()
+        cursor = db.cursor()
+        sql = "select debitcardno,acc_balance,debit_pin from accountdetails where customerid = '%s' and status = 'Live'"%(customerid)
         cursor.execute(sql)
-        db.commit()
+        cards = cursor.fetchall()
+        return cards
+
+    @staticmethod
+    def updateDebitPin(cardno,pin):
+        db = dbase.getDB()
+        cursor = db.cursor()
+        sql = "update accountdetails set debit_pin ='%s' where debitcardno = '%s'"%(pin,cardno)
+        try:
+            cursor.execute(sql)
+            db.commit()
+        except Exception as e:
+            print(e)
+            db.rollback()
+            raise(e)
+
+    @staticmethod
+    def performAccountTransfer(fromaccount,toaccount,amount):
+        db = dbase.getDB()
+        cursor = db.cursor()
+        try:
+            sql = "update accountdetails set acc_balance = acc_balance - %.2f where accountno = '%s'"%(amount,fromaccount)
+            cursor.execute(sql)
+            sql = "update accountdetails set acc_balance = acc_balance + %.2f where accountno = '%s'"%(amount,toaccount)
+            cursor.execute(sql)
+            sql = "insert into transactions(from_account,to_account,amount,date) values('%s','%s','%.2f','%s')"%(fromaccount,toaccount,amount,time.strftime('%Y-%m-%d %H:%M:%S'))
+            cursor.execute(sql)
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            raise(e)
+
+    @staticmethod
+    def getCreditTranx(customerid):
+        db = dbase.getDB()
+        cursor = db.cursor()
+        
+        sql ="""select  from_account,to_account,amount 
+            from accountdetails a
+            inner join transactions t
+            on a.accountno = t.to_account
+            where a.customerid = '%s'
+            and checked = 'no'
+            """%(customerid)
+        try:
+            cursor.execute(sql)
+            tranx = cursor.fetchall()
+            sql = """
+            update transactions 
+            set checked = 'yes'
+            from accountdetails a
+            inner join transactions t
+            on a.accountno = t.to_account
+            where a.customerid = '%s'
+            and checked = 'no'
+            """%(customerid)
+            cursor.execute(sql)
+
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            raise e
+        return tranx        
+
+    @staticmethod
+    def addRewardPoints(points,customerid):
+        db = dbase.getDB()
+        cursor = db.cursor()
+        sql = "update netbankusers set reward_points = reward_points + %d where customerid = '%s'"%(points,customerid)
+        try:
+            cursor.execute(sql)
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            raise e
+
+
+    @staticmethod
+    def updateRewardPoints(amount,accountno,customerid,bugs):
+        db = dbase.getDB()
+        cursor = db.cursor()
+        sql ="update accountdetails set acc_balance = acc_balance + %.2f where accountno = '%s'"%(amount,accountno)
+        sql2 = "update netbankusers set reward_points = 0 where customerid = '%s'"%(customerid)
+        try:
+            if not bugs:
+                cursor.execute(sql)
+            cursor.execute(sql2)
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            raise e  
+
+    @staticmethod
+    def getCreditTransaction(accountno):
+        db = dbase.getDB()
+        cursor = db.cursor()
+        sql = "select * from transactions where to_account = '%s'"%(accountno)
+        cursor.execute(sql)
+        tranx = cursor.fetchall()
+        return tranx
+    
+    @staticmethod
+    def getDebitTransaction(accountno):
+        db = dbase.getDB()
+        cursor = db.cursor()
+        sql = "select * from transactions where from_account = '%s'"%(accountno)
+        cursor.execute(sql)
+        tranx = cursor.fetchall()
+        return tranx
