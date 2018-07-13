@@ -254,7 +254,7 @@ ul.nav.nav-tabs.nav-fill{
                             <a class="nav-link active" href="/admin/update" >Update Account</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" id="loan">Rewards</a>
+                            <a class="nav-link" href="/admin/transaction" id="">Transactions</a>
                         </li>
                 </ul>
                 <hr>
@@ -276,56 +276,91 @@ ul.nav.nav-tabs.nav-fill{
                 <div id="results">
                         <div class="list-group" >
                                 {% if account %}
+                                <form id="accdetails">
                                      <div id="accountdetails" class="row" >
-                                         <div class="col-sm-3">
+                                         <div class="col-sm-3 ">
                                              <label>Customer ID :</label>
                                          </div>
                                          <div class="col-sm-3">    
                                              <p class="d-inline lead">{{account[1]}}</p>
+                                             <!-- <input readonly class="d-inline lead form-control-plaintext" value="{{account[1]}}" > -->
                                          </div>
                                          <div class="col-sm-6">
                                              <label>Applied On :</label>
                                              <p class="d-inline lead">{{account[7]}}</p>
                                          </div>
-                                         <div class="col-sm-3">
+                                         <div class="col-sm-3 ">
                                                 <label>Status :</label>
                                          </div>
                                          <div class="col-sm-9">
                                              <p class="lead">{{account[10] }}</p>
+                                             <!-- <input readonly class="d-inline lead form-control-plaintext" value="{{account[10]}}" > -->
+
                                          </div>
-                                         <div class="col-sm-3">
+                                         <div class="col-sm-3 d-flex align-items-center">
                                                 <label>Account type :</label>
                                          </div>
                                          <div class="col-sm-9">
-                                             <p class="lead">{{account[3] }}</p>
+                                             <!-- <p class="lead">{{account[3] }}</p> -->
+                                             
+                                            <div class="funkyradio row">
+                                                <div class="col-4">
+                                                    
+                                                    <div class="funkyradio-default">
+                                                        <input type="radio" name="accounttype" value="SAVINGS" id="radio1" checked/>
+                                                        <label for="radio1">{% if account[3] == 'SAVINGS'%}Savings{% else %}Current{% endif %}</label>
+                                                    </div>
+                                                    
+                                                    
+                                                    
+                                                </div>
+                                                <div class="col-4">
+                                            
+                                                    <div class="funkyradio-default">
+                                                        <input type="radio" name="accounttype" disabled value="CURRENT" id="radio2" />
+                                                        <label for="radio2">{% if account[3] == 'SAVINGS'%}Current{% else %}Savings{% endif %}</label>
+                                                    </div>
+                                                    
+                                                </div>    
+                                                <div class="col-1"></div>
+
+                                            </div>
+
                                          </div>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-3 ">
                                             <label>Branch Name :</label>
                                         </div>
                                         <div class="col-sm-9">
                                             {{account[5]}} <small>(Code : {{account[6]}})</small>
                                         </div>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-3 d-flex align-items-center">
                                             <label>Aadhar Link :</label>
                                         </div>
-                                        <div class="col-sm-9">
-                                            {{account[9]}} <small>(<i class="fas fa-check-square"></i> Verified)</small>
+                                        <div class="col-sm-4">
+                                            <!-- {{account[9]}}  -->
+                                            <input readonly name="aadharno" class="d-inline  form-control-plaintext" value="{{account[9]}}" >
+
                                         </div>
-                                         <div class="col-sm-3">
+                                        <div class="col-sm-5"></div>
+                                         <div class="col-sm-3 ">
                                                 <label>Address :</label>
                                         </div>
                                         <div class="col-sm-9">
                                                 <pre >{{account[4]}}</pre>
                                         </div>
                                         <p class="accountno" style="display:none">{{account[0]}}</p>
-                                        <br/>
+                                    </div>
+                                    <div class="row">  
+                                        
+                                        <br>
                                         <div class="col-sm-3">
-                                                <button type="button" id="edit-btn" class="btn btn-primary accept"><i class="far fa-edit"></i> Update</button>
+                                                <button type="button" id="edit-btn" class="btn btn-primary accept"><i class="far fa-edit"></i> Edit</button>
                                         </div>        
                                         <div class="col-sm-9">    
                                                 <button type="button" id="delete-btn" class="btn btn-secondary reject"><i class="far fa-trash-alt"></i> Delete</button>
                                         </div>  
                                      </div>
+                                    </form> 
             
                                 {% endif %}   
                             </div>
@@ -365,6 +400,79 @@ ul.nav.nav-tabs.nav-fill{
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
         <script>
 
+            $('#edit-btn').click(function(event){
+                event.preventDefault();
+                $('input:radio').removeAttr('disabled');
+                $("input:text[readonly='readonly']").removeAttr('readonly').removeClass('form-control-plaintext').addClass('form-control');
+                $('#delete-btn').hide();
+                $(this).html('<i class="far fa-edit"></i> Update');
+                
+
+                $('#edit-btn').click(function(event){
+                    event.preventDefault();
+                    data = {};
+                    $.map($('#accdetails').serializeArray(),function(ele,index){
+                    data[ele["name"]] = $.trim(ele["value"]);
+                    });
+                    data['accountno'] = '{{account[0]}}'
+                   
+                    
+                    $.ajax({
+                        
+                        type:'POST',
+                        url :'/updateaccount',
+                        processData:false,
+                        data:JSON.stringify(data),
+                        contentType:'application/json;charset=utf-8',
+                        success:function(response){
+                        var header = '<i class="fas fa-check-square"></i> Updated!';
+                        var body = response;
+                        // account_details =  JSON.parse(JSON.stringify(data));
+                        let reply = `<div class="modal-header">
+                                <h3>${header}</h3>
+                            </div>
+                            <div class="modal-body">
+                                    <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> ${body} </li></ol>  
+                            </div>
+                            `;
+ 
+                       
+                            $('.modal-content').html(reply); 
+                            $('#dataModal').modal("show");
+                          
+                        
+                        setTimeout(function(){
+                            window.location.href = '/admin/update/{{account[0]}}';
+                            // console.log(data);
+                        },2000);    
+                        
+                        
+                        },
+                        error:function(response){
+                            console.log("error");
+                            header = '<i class="fas fa-exclamation-triangle"></i> Error';
+                            body = response.responseJSON;
+                            var footer = '<div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div>';
+                            var reply1 = `<div class="modal-header">
+                                        <h3>${header}</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                            <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> ${body} </li></ol>  
+                                    </div>
+                                    ${footer}
+                                    `;
+                            
+                                
+                                $('.modal-content').html(reply1);
+                                $('#dataModal').modal("show");
+                        
+                        }
+                        
+
+                    });
+                })
+            });
+          
            $('#delete-btn').click(function(event){
                 event.preventDefault();
                 var data = {"accountno":"{{account[0]}}"};
@@ -410,11 +518,10 @@ ul.nav.nav-tabs.nav-fill{
                             </div>
                             ${footer}
                             `;
-                    setTimeout(function(){
                         
                         $('.modal-content').html(reply1);
                         $('#dataModal').modal("show");
-                    },2000);
+              
                 }
                     
 
@@ -429,18 +536,8 @@ ul.nav.nav-tabs.nav-fill{
                 data[ele["name"]] = $.trim(ele["value"]);
             });
             
-            var header = '<i class="far fa-check-square"></i> Searching';
-            var body = 'Searching Database';
             
-            var html = `<div class="modal-header">
-                            <h3>${header}</h3>
-                        </div>
-                        <div class="modal-body">
-                                <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> ${body} </li></ol>  
-                        </div>
-                        `;
-            $('.modal-content').html(html);
-            $('#dataModal').modal("show");
+            
             var account_details = {};
             var querystring = $.param(data);
             $.ajax({
@@ -460,9 +557,9 @@ ul.nav.nav-tabs.nav-fill{
                                 <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> ${body} </li></ol>  
                         </div>
                         `;
-                    setTimeout(function(){
+                    
                         $('.modal-content').html(reply);
-                    },2000);
+                        $('#dataModal').modal("show");
 
                     setTimeout(function(){
                         
@@ -483,10 +580,10 @@ ul.nav.nav-tabs.nav-fill{
                             </div>
                             ${footer}
                             `;
-                    setTimeout(function(){
-                        
+                   
                         $('.modal-content').html(reply1);
-                    },2000);
+                        $('#dataModal').modal("show");
+              
                 }
             });
 
