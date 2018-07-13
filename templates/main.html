@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/css?family=Tajawal:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:700|Quicksand" rel="stylesheet">
 
     <title>THE Bank</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
@@ -46,6 +47,13 @@
            height:80px;
            border-bottom:3px solid #006666 ;
         }
+
+        .card-head{
+            font-family: Merriweather,sans-serif;
+            size: 25px;
+            color:#006666;
+        }
+
         label,h3,h4{
             font-family: Tajawal,sans-serif;
             size: 19px;
@@ -196,6 +204,13 @@ ul.nav.nav-tabs.nav-fill{
     padding :0px 4px;
     font-family: Quicksand,sans-serif;
   }
+  .info-data label{
+      font-family: Merriweather,sans-serif;
+      color:#006666;
+  }
+  .info-data p{
+      font-family: Quicksand,sans-serif;
+  }
     </style>
 </head>
 <body>
@@ -235,7 +250,7 @@ ul.nav.nav-tabs.nav-fill{
                                </a> -->
                             <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"><i class="far fa-fw fa-user"></i> {{session['name']}}</button>   
                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                   <a class="dropdown-item" href=""><i class="fas fa-cog"> </i> Info</a>
+                                   <a class="dropdown-item" id="info-btn" href=""><i class="fas fa-cog"> </i> Info</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="/disconnect"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                                  
@@ -247,21 +262,21 @@ ul.nav.nav-tabs.nav-fill{
             </div>
       
         <ul class="nav nav-tabs nav-fill" style="height:auto;background-color: #e9ecef;">
-                <li class="nav-item" >
+                <!-- <li class="nav-item" >
                   <a class="nav-link" href="/snapshot" id="snapshot">SnapShot</a>
-                </li>
+                </li> -->
                 <li class="nav-item ">
-                  <a class="nav-link active " href="/main" id="accounts">Accounts</a>
+                <a class="nav-link active " href="/main" id="accounts"><i class="fas fa-address-book"></i> Accounts</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link"  href="/payments" id="payments">Payments</a>
+                <a class="nav-link "  href="/payments" id="payments"><i class="fas fa-exchange-alt"></i> Money Transfer</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link " href="/services" id="services">Services</a>
+                <a class="nav-link " href="/services" id="services"><i class="far fa-credit-card"></i> Cards</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                         <a class="nav-link " href="/investments" id="investments">Investments</a>
-                </li>
+                </li> -->
                 
               </ul>
     </div>
@@ -275,15 +290,17 @@ ul.nav.nav-tabs.nav-fill{
                 <li class="nav-item">
                     <a class="nav-link" href="/main/fd" id="fd">Fixed Deposit</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="/main/loan" id="loan">Loan</a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                         <a class="nav-link " href="/main/rewards" id="rewards">Rewards</a>
                 </li>
             </ul>
         
             <hr style="height:1px;border:none;background-color:#006666;" />
+            <h4 class="card-head">Accounts</h4>
+                <hr>
             <div id="op-account">
                 {% if not accounts  %}
                 <div class="card" style="width: 100%;">
@@ -310,11 +327,11 @@ ul.nav.nav-tabs.nav-fill{
                                     <label>Account Type </label>
                                     <p class="card-subtitle mb-2 text-info">{{account[3]}}</p>
                                 </div>
-                                <div class="col-2" style="border-right:1px solid #006666">
+                                <div class="col-3" style="border-right:1px solid #006666">
                                         <label>Balance </label>
-                                        <p class="card-subtitle mb-2 text-success">&#8377; {{account[2]}}</p>
+                                        <p class="card-subtitle mb-2 text-success"> &#8377; {{account[2]}}</p>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-1">
                                         <label>Status </label>
                                         <p class="card-subtitle mb-2 text-muted "> {{account[10]}}</p>
                                     </div>
@@ -397,7 +414,28 @@ ul.nav.nav-tabs.nav-fill{
 <script src = "{{url_for('static',filename='script1.js')}}"></script>
 <script>
 
-   
+   $('#info-btn').click(function(event){
+       event.preventDefault();
+       var html =` <div class="modal-header ">
+                      
+                      <h3><i class="fas fa-user-tie"></i> Info</h3>
+              </div>  
+              <div class="modal-body info-data row">  
+                    <div class="col-4"><label>Customerid <label></div>
+                    <div class="col-8"><p>{{session['customerid']}}</p></div>
+                    <div class="col-4"><label>Name <label></div>
+                    <div class="col-8"><p>{{session['name']}}</p></div>
+                    <div class="col-4"><label>Email <label></div>
+                    <div class="col-8"><p>{{session['email']}}</p></div>
+                    <div class="col-4"><label>Phone No <label></div>
+                    <div class="col-8"><p>{{session['mobileno']}}</p></div>
+              </div>  
+              <div class="modal-footer"> 
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>   
+              </div> `;
+        $('.modal-content').html(html);
+        $('#dataModal').modal("show");
+   });
 
     function getDate(){
             var today = new Date();
@@ -463,7 +501,7 @@ ul.nav.nav-tabs.nav-fill{
         </div>
         <div class="form-group">
           <label for="inputAddress2">Address 2</label>
-          <input type="text" class="form-control" name="address2" placeholder="Apartment, studio, or floor">
+          <input type="text" class="form-control" name="address2" placeholder="Apartment, studio, or floor" required>
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
@@ -510,18 +548,8 @@ ul.nav.nav-tabs.nav-fill{
             data[ele["name"]] = $.trim(ele["value"]);
         });
         
-        var header = '<i class="far fa-check-square"></i> Verifing..';
-        var body = 'Checking Inputs..';
         
-        var html = `<div class="modal-header">
-                        <h3>${header}</h3>
-                    </div>
-                    <div class="modal-body">
-                            <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> ${body} </li></ol>  
-                    </div>
-                    `;
-        $('.modal-content').html(html);
-        $('#dataModal').modal("show");
+        
         $.ajax({
             type:"POST",
             url:'/createacc',
@@ -538,10 +566,10 @@ ul.nav.nav-tabs.nav-fill{
                             <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> ${body} </li></ol>  
                     </div>
                     `;
-                setTimeout(function(){
+             
                     $('.modal-content').html(reply);
-                },2000);
-
+                    $('#dataModal').modal("show");
+            
                 setTimeout(function(){
                     window.location.href = '/main';
                     },3000);
@@ -560,10 +588,12 @@ ul.nav.nav-tabs.nav-fill{
                         ${footer}
                         `;
                 console.log(reply1);
-                setTimeout(function(){
+                
                     
                     $('.modal-content').html(reply1);
-                },2000);
+                    $('#dataModal').modal("show");
+
+             
             }
         });
     });
