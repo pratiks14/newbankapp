@@ -9,6 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link href="https://fonts.googleapis.com/css?family=Tajawal:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:700|Quicksand" rel="stylesheet">
 
     <title>THE Bank</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
@@ -56,11 +57,31 @@
 h5,h2{
   font-family:Tajawal,sans-serif;
 }
+
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 60%;
+    margin:0% 20%;
+}
+.modal-dialog {
+    display: table-cell;
+    vertical-align: middle;
+    border-radius: 20em;
+  }
+
+.modal-body h4,.modal-body h5{
+  font-family: Merriweather,sans-serif;
+  color:#006666;
+}
+.modal-body p,.modal-body li{
+  font-family: Quicksand,sans-serif;
+} 
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-        <a class="navbar-brand" href="#"><span class="badge badge-secondary"><i>EB</i></span>  ETA BANK</a>
+        <a class="navbar-brand" href="/"><span class="badge badge-secondary"><i>EB</i></span>  ETA BANK</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -69,25 +90,25 @@ h5,h2{
           <li class="nav-item active">
             <a class="nav-link" href="/">Personal <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link " href="#">Business</a>
-          </li>
-          <li class="nav-item">
+          </li> -->
+          <!-- <li class="nav-item">
             <a class="nav-link" href="#"><i class="fas fa-bell"></i> <span class="badge badge-light">0</span></a>
-          </li>
+          </li> -->
            <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
              <i class="fas fa-sign-in-alt"></i> Login
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item"  href="/netlogin  ">NetBanking</a>
-              <a class="dropdown-item"  href="../templates/mutualfundslogin.html">Mutual Funds</a>
-              <a class="dropdown-item"  href="../templates/demataccountlogin.html">Demat Account</a>
+              <a class="dropdown-item loginmain"  href="">NetBanking</a>
+              <!-- <a class="dropdown-item"  href="../templates/mutualfundslogin.html">Mutual Funds</a>
+              <a class="dropdown-item"  href="../templates/demataccountlogin.html">Demat Account</a> -->
               <a class="dropdown-item"  href="/adminlogin">Admin Login</a>
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">About Us</a>
+            <a class="nav-link" href="/aboutus">About Us</a>
           </li>
     
         </ul>
@@ -113,13 +134,13 @@ h5,h2{
                   <hr style="height:1px;border:none;color:#333;background-color:#333;" />
 
                   <p>with the ETA Family Banking plans</p>
-                  <button class="btn btn-light">Know more</button>
+                  <!-- <button class="btn btn-light">Know more</button> -->
               </div>
             
             
           </div>
           <div class="carousel-item">
-            <img class="d-block w-100 img-fluid" id="col-img" src="{{url_for('static',filename='offer2.jpeg')}}" alt="Second slide">
+            <img class="d-block w-100 img-fluid" id="col-img" src="{{url_for('static',filename='offer2.jpg')}}" alt="Second slide">
 
             <div class="carousel-caption d-none d-md-block">
                 <h5>VISIT NEW PLACES</h5>
@@ -128,7 +149,7 @@ h5,h2{
 
                 <p>With our holiday plan ,you also get 
                 moratorium period</p>
-                <button class="btn btn-light">Know more</button>
+                <!-- <button class="btn btn-light">Know more</button> -->
             </div>
           </div>
           <div class="carousel-item">
@@ -139,7 +160,7 @@ h5,h2{
                 <hr style="height:1px;border:none;color:#333;background-color:#333;" />
 
                 <p>Your family can get access to your account.</p>
-                <button class="btn btn-light">Update</button>
+                <!-- <button class="btn btn-light">Update</button> -->
             </div>
           </div>
         </div>
@@ -163,13 +184,13 @@ h5,h2{
           <div class="col-lg-3 col-sm-6">
               <div class="card" style="width: 14rem;height:100%">
                 <div class="card-body">
-                  <h5 class="card-title">Mutual Funds SIP</h5>
-                  <p class="card-text">Explore and invest in top  Mutual Funds through SIP.</p>
+                  <h5 class="card-title">FIXED DEPOSITS</h5>
+                  <p class="card-text">Get 12.5% interest on fixed deposit amount per annum.</p>
                 </div>
           
                 <div class="card-body d-flex align-items-end">
-                    <button href="#" class="btn btn-submit card-link">Apply</button>
-                    <button href="#" class="btn btn-info   card-link">Know more</button>
+                    <button id="fdapply" class="btn btn-submit card-link">Apply</button>
+                    <button id="fd" class="btn btn-info   card-link knowmore">Know more</button>
                   </div>
           </div>
 
@@ -181,13 +202,13 @@ h5,h2{
         <div class="col-lg-3 col-sm-6" >
             <div class="card" style="width: 14rem;height:100%">
               <div class="card-body">
-                <h5 class="card-title">PERSONAL LOANS</h5>
-                <p class="card-text">Personal loan for a variety of purposes, including travel, wedding expenses, home renovation, in a medical emergency or to buy a gadget.</p>
+                <h5 class="card-title">REWARDS</h5>
+                <p class="card-text">Get upto 100 reward points on each transaction.</p>
               </div>
         
               <div class="card-body d-flex align-items-end">
-                  <button href="#" class="btn btn-submit card-link">Apply</button>
-                  <button href="#" class="btn btn-info   card-link">Know more</button>
+                  <button id="rewardapply" class="btn btn-submit card-link">Apply</button>
+                  <button id="reward" class="btn btn-info   card-link knowmore">Know more</button>
                 </div>
         </div>
             <!-- <h3 class="display-6">PERSONAL LOANS</h3>
@@ -203,8 +224,8 @@ h5,h2{
                   </div>
             
                   <div class="card-body d-flex align-items-end">
-                      <button href="#" class="btn btn-submit card-link">Apply</button>
-                      <button href="#" class="btn btn-info   card-link">Know more</button>
+                      <button  class="btn btn-submit card-link cardapply">Apply</button>
+                      <button id="credit" class="btn btn-info   card-link knowmore">Know more</button>
                     </div>
             </div>
             <!-- <h3 class="display-6">CREDIT CARDS</h3>
@@ -217,13 +238,13 @@ h5,h2{
         <div class="col-lg-3 col-sm-6" >
             <div class="card" style="width: 14rem;height:100%">
               <div class="card-body">
-                <h5 class="card-title">APEX CARD <span class="badge badge-secondary"> NEW</span></h5>
-                <p class="card-text">ETA Bank prepaid APEX Cards offer a safe, easy, and cashless way to carry foreign currency.</p>
+                <h5 class="card-title">SAVINGSMAX <span class="badge badge-secondary"> NEW</span></h5>
+                <p class="card-text">Save up to Rs. 6170* when you open a Savings Account with ETA Bank</p>
               </div>
         
               <div class="card-body d-flex align-items-end">
-                  <button href="#" class="btn btn-submit card-link">Apply</button>
-                  <button href="#" class="btn btn-info   card-link">Know more</button>
+                  <button href="" class="btn btn-submit card-link loginmain">Apply</button>
+                  <button id="savings" class="btn btn-info   card-link knowmore">Know more</button>
                 </div>
         </div>
             <!-- <h3 class="display-6">APEX CARD <span class="badge badge-secondary"> NEW</span>
@@ -248,7 +269,7 @@ h5,h2{
           <p class="card-text">Watch top tennnis players content for most coveted grand slam title.</p>
         </div>
         <div class="card-body d-flex align-items-end">
-          <a href="#" class="card-link">Apply Now</a>
+          <a href="" class="card-link loginmain">Apply Now</a>
 
         </div>
       </div>
@@ -258,12 +279,11 @@ h5,h2{
           <div class="card" style="width: 100%;height:100%">
             <img class="card-img-top" src="{{url_for('static',filename='downpayment.jpg')}}" alt="Card image cap">
             <div class="card-body">
-              <h5 class="card-title">ETA BANK CAR LOAN</h5>
-              <p class="card-text">Now bring home your favourite car with exiting offers from ETA Bank.</p>
-            </div>
+              <h5 class="card-title">CAR WITH ETA BANK CARD</h5>
+              <p class="card-text">Now bring home your favourite car with exiting offers and 0% downpayment with ETA bank cards.</p>           </div>
       
             <div class="card-body d-flex align-items-end">
-              <a href="#" class="card-link">Apply Now</a>
+              <a href="" class="card-link loginmain">Apply Now</a>
             </div>
       </div>
       </div>
@@ -275,23 +295,40 @@ h5,h2{
           <p class="card-text">Register refer and transact on apex to win the voucher.</p>
         </div>
         <div class="card-body d-flex align-items-end">
-          <a href="#" class="card-link">Apply Now</a>
+          <a href="" class="card-link loginmain">Apply Now</a>
         </div>
       </div>
       </div>
       <div class="col-lg-3 col-sm-6">
           <div class="card" style="width: 100%;height:100%">
-            <img class="card-img-top" src="{{url_for('static',filename='pepperfry.jpg')}}" alt="Card image cap">
+            <img class="card-img-top" src="{{url_for('static',filename='pepperfry.jpeg')}}" alt="Card image cap">
             <div class="card-body">
               <h5 class="card-title">40% OFF WITH ETA BANK CARDS</h5>
-              <p class="card-text">Bring home your dream furniture with exiting offers with ETA Bank cards.</p>
+              <p class="card-text">Bring home your dream furniture with exciting offers with ETA Bank cards.</p>
             </div>
       
             <div class="card-body d-flex align-items-end">
-              <a href="#" class="card-link">Apply Now</a>
+              <a href="" class="card-link loginmain">Apply Now</a>
             </div>
           </div>
           </div>
+    </div>
+    <div class="modal fade" id="dataModal" role="dialog">  
+        <div class="vertical-alignment-helper">
+                <div class="modal-dialog">  
+                
+                <!-- Modal content-->  
+                <div class="modal-content ">  
+                    
+                    <div class="modal-body ">  
+                      </div>
+                    <div class="modal-footer"> 
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>  
+                </div>  
+                    
+                </div>  
+            </div>	
     </div>
     <hr class="my-4">
     <!-- Footer -->
@@ -333,28 +370,28 @@ h5,h2{
   
           <ul class="list-unstyled">
             <li>
-              <a href="#!">KYC Information</a>
+              <a href="" class="footertags">KYC Information</a>
             </li>
             <li>
-              <a href="#!">FAQS</a>
+              <a href="" class="footertags">FAQS</a>
             </li>
             <li>
-              <a href="#!">Carrers</a>
+              <a href="" class="footertags">Carrers</a>
             </li>
             <li>
-              <a href="#!">Download forms</a>
+              <a href="" class="footertags">Download forms</a>
             </li>
             <li>
-                <a href="#!">Donot call  registry</a>
+                <a href="" class="footertags">Donot call  registry</a>
               </li>
               <li>
-                <a href="#!">Social Media <i class="fab fa-facebook-f"></i> <i class="fab fa-linkedin"></i> <i class="fab fa-twitter"></i></a>
+                <a href="" class="footertags">Social Media <i class="fab fa-facebook-f"></i> <i class="fab fa-linkedin"></i> <i class="fab fa-twitter"></i></a>
               </li>
               <li>
-                <a href="#!">ThoughFactory</a>
+                <a class="footertags" href="">ThoughFactory</a>
               </li>
               <li>
-                <a href="#!">Premise of Branch</a>
+                <a class="footertags"href="">Premise of Branch</a>
               </li>
           </ul>
   
@@ -380,8 +417,100 @@ h5,h2{
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
 <script>
-//     $('.carousel').carousel({
-//   interval: 2000
-// })
+    $('.carousel').carousel({
+  interval: 3000
+})
+
+$('.footertags').click(function(event){
+  event.preventDefault();
+});
+
+$(".knowmore").click(function(event){
+  event.preventDefault();
+  let content = ''; 
+  if($(this).attr('id') === "fd"){
+    content = `
+    <h4>Fixed Deposits</h4>
+    <hr>
+    <p>Opt for a Fixed Deposit Account and let your savings grow for 7 days or a decade!</p>
+    <h5>Interest Rates</h5>
+    <p>Earn attractive interest for various tenures on your deposits</p>
+    <h5>Minimum Balance</h5>
+    <p>You can avail of ETA Bank Fixed Deposits for a minimum deposit of Rs 500 for General Customers.</p>
+    `;
+  }
+  
+  if($(this).attr('id') === "reward"){
+    content = `
+    <h4>ETA Bank Rewards</h4>
+    <hr>
+    <p>Earn upto 100 reward points per transaction done.1 Reward point is equal to Rs 1 and
+    can  be redeemed as cashback</p>
+    <h5>Reward Points</h4>
+    <p> For Transaction upto Rs 10,000 - get upto 50 reward points</p>
+    <p> For Transaction above Rs 10,000 - get upto 100 reward points</p>
+    `;
+  }
+
+  if($(this).attr('id') === "credit"){
+    content = `
+    <h4>Credit Cards</h4>
+    <hr>
+    <ul>
+    <li> 2 X Reward Points on online spends.Effective 1st July'2017</li>
+    <li> EasyEMI and e-wallet loading transactions will not accrue Reward points.</li>
+    <li> Reward points accrued will be reversed if a retail transaction is converted into SmartEMI. </li>
+      <li>Reward points accrued for Insurance transactions will have a maximum cap of 2,000 per transaction.</li>
+      <li>Zero Lost Card liability post reporting of the loss of card</li>
+    </ul>
+    `;
+
+  }
+
+  if($(this).attr('id') === "savings"){
+    content = `
+    <h4>Savings Account</h4>\
+    <hr>
+    <h5>Benifits</h5>
+    <ul>
+      <li>Lifetime Free Platinum Debit Card</li>
+      <li>Free Transactions across domestic ATMs</li>
+      <li>Insurance Benefits upto Rs.1.29 Cr</li>
+      <li>Exclusive Loan offers</li>
+    </ul>
+    `;
+    
+  }
+  $('.modal-body').html(content);
+  $('#dataModal').modal('show');
+});
+
+$('#fdapply').click(function(event){
+  event.preventDefault();
+  data = {};
+  data['loc'] = '/main/fd'
+  window.location.href = "/netlogin?" +$.param(data);
+});
+
+$('.loginmain').click(function(event){
+  event.preventDefault();
+  data = {};
+  data['loc'] = '/main'
+  window.location.href = "/netlogin?" +$.param(data);
+});
+
+$('#rewardapply').click(function(event){
+  event.preventDefault();
+  data = {};
+  data['loc'] = '/main/rewards'
+  window.location.href = "/netlogin?" +$.param(data);
+});
+
+$('.cardapply').click(function(event){
+  event.preventDefault();
+  data = {};
+  data['loc'] = '/services'
+  window.location.href = "/netlogin?" +$.param(data);
+});
 </script>
 </body>
