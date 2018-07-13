@@ -204,7 +204,9 @@ a:hover{
 </head>
 <body>
     <div class="container">
-        <div class="card card-container">
+            <div class="card card-container">
+
+                <small class="d-flex justify-content-end"><a href="#" id="back"><i class="fas fa-times-circle"></i></a></small>
             <!-- <img class="profile-img-card/" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
             <a  href="/"><h5 class="card-title text-center"><span class="badge badge-secondary"><i>EB</i></span>  ETA BANK</h5></a>
             <!-- <p id="profile-name" class="profile-name-card "> REGISTER</p>       -->
@@ -280,6 +282,11 @@ a:hover{
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
 <script>
+$('#back').click(function(event){
+    event.preventDefault();
+    window.history.back();
+
+});
 
 // window.onload = function(){
 //     $('#card-form').hide(); 
@@ -319,11 +326,8 @@ $('#register-form').submit(function(event)
              }
  		});
 
- 		$('#signModal .modal-header').html('<h3><i class="far fa-check-square"></i> Verifing..</h3>');
- 		$('#signModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> Checking Inputs..</li></ol>');
- 		$('#signModal .modal-footer').html('');
- 
- 		$("#signModal").modal("show");
+ 		
+ 	
         $.ajax({
  			type:"POST",
  			url:'/signup',
@@ -332,10 +336,11 @@ $('#register-form').submit(function(event)
  			contentType:'application/ajax; charset=utf-8',
  			success:function(result){
  				
-                setTimeout(function(){
+               
                     $('#signModal .modal-header').html('<h3><i class="fas fa-check-square"></i> Successful</h3>');
                 $('#signModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> '+ result+ '</li></ol>');
-                    },2000);
+                $("#signModal").modal("show");
+               
 
 
                 setTimeout(function(){
@@ -343,11 +348,11 @@ $('#register-form').submit(function(event)
                     },2000);
  			},
  			error:function(response){
- 				setTimeout(function(){
+ 			
  					$('#signModal .modal-header').html('<h3><i class="fas fa-exclamation-triangle"></i> Error</h3>');
  					$('#signModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> '+response.responseJSON+'</li></ol>');
  					$('#signModal .modal-footer').html('<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>');
- 						},2000);
+                    $("#signModal").modal("show");
  			}
 		});
     }
