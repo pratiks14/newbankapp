@@ -178,25 +178,25 @@ body, html {
     <div class="container">
         <div class="card card-container">
             <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
-            <h5 class="card-title text-center"><span class="badge badge-secondary"><i>EB</i></span>  ETA BANK</h5>
+            <h5 class="card-title text-center" id="homepage" style="cursor:pointer;"><span class="badge badge-secondary"><i>EB</i></span>  ETA BANK</h5>
             <p id="profile-name" class="profile-name-card"></p>
-            <ul class="nav nav-pills nav-fill" >
+            <!-- <ul class="nav nav-pills nav-fill" >
                     <li class="nav-item ">
                             <p class="profile-name-card"  ><a class="nav-link active" id="id-btn" href="">Login-Id</a></p>
                     </li>
                     <li class="nav-item" >
                             <p class="profile-name-card" ><a class="nav-link " id="card-btn" href="">Debit-Card</a></p>
                     </li>
-            </ul>        
+            </ul>         -->
             <form class="form-signin " id="id-form">
                 <span id="reauth-email" class="reauth-email"></span>
                 <input type="text" name="customerid" id="inputID" class="form-control" placeholder="Login Id" required >
                 <input type="password" name="password" id="inputPin" class="form-control" placeholder="Password" required>
-                <div id="remember" class="checkbox">
+                <!-- <div id="remember" class="checkbox">
                     <label>
                         <input type="checkbox" value="remember-me"> Remember me
                     </label>
-                </div>
+                </div> -->
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
             <!-- /form -->
             <!-- <a href="" class="forgot-password" disabled>
@@ -207,7 +207,7 @@ body, html {
                 First time user? Register
             </a>
             </form>
-            <form class="form-signin " id="card-form">
+            <!-- <form class="form-signin " id="card-form">
                     <span id="reauth-email" class="reauth-email"></span>
                     <input type="text" name="cardno" id="inputNumber" class="form-control" placeholder="Card No" required>
                     <input type="password" name="pin" id="inputPassword" class="form-control" placeholder="4 Digit PIN" required>
@@ -217,7 +217,7 @@ body, html {
                         </label>
                     </div>
                     <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
-            </form>
+            </form> -->
         </div><!-- /card-container -->
         <div class="modal fade" id="loginModal" role="dialog">  
             <div class="vertical-alignment-helper">
@@ -244,26 +244,31 @@ body, html {
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
 <script>
+
+$('#homepage').click(function(Event){
+    event.preventDefault();
+    window.location.href = '/';
+});
 // $(window).load(function(){
 //     $('#card-form').hide();
 // });
-window.onload = function(){
-    $('#card-form').hide(); 
-};
-$('#card-btn').click(function(event){
-    event.preventDefault();
-    $('#card-form').show();
-    $('#id-form').hide();
-    $('#id-btn').removeClass('active');
-    $('#card-btn').addClass('active');
-});
-$('#id-btn').click(function(event){
-    event.preventDefault();
-    $('#id-form').show();
-    $('#card-form').hide();
-    $('#card-btn').removeClass('active');
-    $('#id-btn').addClass('active');
-});
+// window.onload = function(){
+//     $('#card-form').hide(); 
+// };
+// $('#card-btn').click(function(event){
+//     event.preventDefault();
+//     $('#card-form').show();
+//     $('#id-form').hide();
+//     $('#id-btn').removeClass('active');
+//     $('#card-btn').addClass('active');
+// });
+// $('#id-btn').click(function(event){
+//     event.preventDefault();
+//     $('#id-form').show();
+//     $('#card-form').hide();
+//     $('#card-btn').removeClass('active');
+//     $('#id-btn').addClass('active');
+// });
 $('#id-form').submit(function(event)
  	{
  		event.preventDefault();
@@ -278,11 +283,8 @@ $('#id-form').submit(function(event)
  		
  		});
  
- 		$('#loginModal .modal-header').html('<h3><i class="far fa-check-square"></i> Verifing..</h3>');
- 		$('#loginModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> Checking Inputs..</li></ol>');
- 		$('#loginModal .modal-footer').html('');
- 
- 		$("#loginModal").modal("show");
+ 	
+ 	
  		$.ajax({
  			type : 'POST',
  			url : '/idlogin',
@@ -293,23 +295,25 @@ $('#id-form').submit(function(event)
  			{
  				
                 // $(".container").hide();
-                setTimeout(function(){
-                    $('#loginModal .modal-header').html('<h3><i class="fas fa-check-square"></i> Successfull</h3>');
+  
+                $('#loginModal .modal-header').html('<h3><i class="fas fa-check-square"></i> Successfull</h3>');
                 $('#loginModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> '+result+'</li></ol>');
-                    },2000);
+                $("#loginModal").modal("show");
+           
                     
                 setTimeout(function(){
-                        window.location.href = '/main';
+                        window.location.href = '{{location}}';
                     },3000);
  				
  				
  			},
  			error:function(response){
- 				setTimeout(function(){
+ 			
  					$('#loginModal .modal-header').html('<h3><i class="fas fa-exclamation-triangle"></i> Error</h3>');
  					$('#loginModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> '+response.responseJSON+'</li></ol>');
  					$('#loginModal .modal-footer').html('<button type="button" class="btn" data-dismiss="modal">Close</button>');
- 						},2000);
+                    $("#loginModal").modal("show");
+
  			}
  			// statusCode: {
  				
@@ -319,72 +323,7 @@ $('#id-form').submit(function(event)
  			// 	}
  			// }
  		});
-     });
-$('#card-form').submit(function(event)
- 	{
- 		event.preventDefault();
- 		data  = {};
- 		$.map($('#card-form').serializeArray(),function(ele,index){
-            if (ele["name"] == "password"){
-                data[ele["name"]] = ele["value"];
-             }
-             else{
- 			    data[ele["name"]] = $.trim(ele["value"]);
-             }
- 		
- 		});
- 
- 		$('#loginModal .modal-header').html('<h3><i class="far fa-check-square"></i> Verifing..</h3>');
- 		$('#loginModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> Checking Inputs..</li></ol>');
- 		$('#loginModal .modal-footer').html('');
- 
- 		$("#loginModal").modal("show");
- 		$.ajax({
- 			type : 'POST',
- 			url : '/login',
- 			processData:false,
- 			data :JSON.stringify(data),
- 			contentType: 'application/ajax; charset=utf-8',
- 			success:function(result)
- 			{
- 				if(result)
- 				{
- 					// $(".container").hide();
- 					setTimeout(function(){
- 						$('#loginModal .modal-header').html('<h3><i class="fas fa-check-square"></i> Successfull</h3>');
- 					$('#loginModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> '+result+'</li></ol>');
- 						},2000);
- 						
- 
- 					setTimeout(function(){
- 							window.location.href = '/main';
- 						},3000);
- 				}
- 				else
- 				{
- 					setTimeout(function(){
- 						$('#loginModal .modal-header').html('<h3><i class="fas fa-exclamation-triangle"> Error</h3>');
- 						$('#loginModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> Invalid Credentials!!</li></ol>');
- 						$('#loginModal .modal-footer').html('<button type="button" class="btn " data-dismiss="modal">Close</button>');
- 						},2000);
- 					
- 				}
- 			},
- 			error:function(response){
- 				setTimeout(function(){
- 					$('#loginModal .modal-header').html('<h3><i class="fas fa-exclamation-triangle"></i> Error</h3>');
- 					$('#loginModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> '+response.responseJSON+'</li></ol>');
- 					$('#loginModal .modal-footer').html('<button type="button" class="btn" data-dismiss="modal">Close</button>');
- 						},2000);
- 			}
- 			// statusCode: {
- 				
- 			// 	401:function(){
- 					
- 					
- 			// 	}
- 			// }
- 		});
-     });     
+    });
+
 </script>
 </body>
