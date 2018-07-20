@@ -8,30 +8,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link href="https://fonts.googleapis.com/css?family=Tajawal:700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Merriweather:700|Quicksand" rel="stylesheet">
-
-    <title>THE Bank</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <!-- Custom CSS -->
-    <!-- <link href="templates/css/sb-admin.css" rel="stylesheet"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='style1.css')}}"> -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>ETA Bank</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='bootstrap.min.css')}}">
     
-    <!-- Morris Charts CSS -->
-    <!-- <link href="css/plugins/morris.css" rel="stylesheet"> -->
-
-    <!-- Custom Fonts -->
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">    <title>Hello, world!</title>
-
+    
+    <link rel="stylesheet" href="{{url_for('static',filename='fontawesome/css/all.min.css')}}" >   
+    <!-- <link rel="stylesheet" href="..\static\fontawesome\css\all.min.css" >    -->
     <style>
+      @font-face {
+        font-family: Tajawal;
+        src: url("{{url_for('static',filename='fonts/Tajawal/Tajawal-Bold.ttf')}}");
+    }
+    @font-face {
+        font-family: Merriweather;
+        src: url("{{url_for('static',filename='fonts/Merriweather/Merriweather-Bold.ttf')}}");
+    }
+    @font-face {
+        font-family: Quicksand;
+        src: url("{{url_for('static',filename='fonts/Quicksand/Quicksand-Regular.ttf')}}");
+    }
    body{
     /* background-color: #E7E7EF; */
     height: 100%;
@@ -147,10 +143,10 @@ Tel: (0505) 2422 1111
   
   </footer>
   <!-- Footer -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-
+  <script src="{{url_for('static', filename='jquery.min.js')}}" ></script>
+  <script src="{{url_for('static', filename='popper.min.js')}}" ></script>
+  <script src="{{url_for('static', filename='bootstrap.min.js')}}" ></script>
+  
 <script>
 //     $('.carousel').carousel({
 //   interval: 2000
