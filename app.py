@@ -1,24 +1,28 @@
 from flask import Flask,render_template,request
 from flask import redirect,jsonify,url_for,flash
 from flask import session as login_session
-
+from flask import Request
+import os
 import string
 import json
-import locale
 from datetime import timedelta
 # import httplib2
 from flask import make_response
-import pyodbc
 import re
 import time
+from datetime import datetime as dt
 import sys
 from accverification import Verification
 from generator import Generator
 from db import dbase
 import random
-
+import time
+import logging
+from logging.handlers import RotatingFileHandler
+import os
 
 app = Flask(__name__)
+app.secret_key = "my_app_secretkey"
 state=sorted(["Andhra Pradesh","Arunachal Pradesh ","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman and Nicobar Islands","Chandigarh","Dadra and Nagar Haveli","Daman and Diu","Lakshadweep","Delhi","Puducherry"])	
 
 bug_list = [False] * 10
@@ -27,14 +31,86 @@ with open(filename, 'r') as f:
 	bugdata = json.load(f)
 no_of_bugs = int(bugdata['no_of_bugs'])
 bug_list = Generator.generateBugIndex(no_of_bugs,len(bug_list),bug_list)
+file_handler = RotatingFileHandler('C:\\Users\\pratik.shetty\\Desktop\\logs.log', 'a', 1 * 1024 * 1024, 10)
+file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+
+
+app.logger.setLevel(logging.INFO)
+app.logger.addHandler(file_handler)
+app.logger.info(str(bug_list))
+
+
+@app.route('/remoteuser')
+def registerRemoteUser():
+	
+	# login_session['remote_user'] = request.environ['REMOTE_ADDR']
+	
+	
+	file_handler = RotatingFileHandler('C:\\Users\\pratik.shetty\\Desktop\\logs.log', 'a', 1 * 1024 * 1024, 10)
+	file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+	app.logger.setLevel(logging.INFO)
+	file_handler.setLevel(logging.INFO)
+	app.logger.addHandler(file_handler)
+	# app.logger.info(str(request.environ['LOGON_USER']))
+	# app.logger.info(str(request.environ['REMOTE_USER']))
+	username = request.environ['REMOTE_USER']
+	
+	dbname = "bank_"+ '_'.join(request.environ['REMOTE_USER'].split('\\')[1].split('.')) +'.db'
+	app.logger.info(dbname)
+	f= open("dbname","w+")
+	f.close()
+	try:
+		message = dbase.initDB(dbname)
+	except Exception as e:
+		file_handler = RotatingFileHandler('C:\\Users\\pratik.shetty\\Desktop\\logs.log', 'a', 1 * 1024 * 1024, 10)
+		file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+
+
+		app.logger.setLevel(logging.INFO)
+		app.logger.addHandler(file_handler)
+		app.logger.info(e)
+		message = 'exists'	
+	login_session['remote_user'] = dbname
+	username = ' '.join([name[0].upper()+name[1:] for name in request.environ['REMOTE_USER'].split('\\')[1].split('.')])
+	if message == "exists":
+		return render_template('setdatabase.html',username = username)
+	else:
+		return render_template('setnewdatabase.html',username = username)
+
+
+@app.route('/createnew')
+def creatNewDB():
+	try:
+		dbase.createNewDB()
+	except Exception as e:
+		file_handler = RotatingFileHandler('C:\\Users\\pratik.shetty\\Desktop\\logs.log', 'a', 1 * 1024 * 1024, 10)
+		file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+		app.logger.setLevel(logging.INFO)
+		file_handler.setLevel(logging.INFO)
+		app.logger.addHandler(file_handler)
+		app.logger.info(str(e))
+		response = make_response(json.dumps('Some Error Occured'), 400)
+		response.headers['Content-Type'] = 'application/json'
+		return response
+	response = make_response(json.dumps('Created'), 200)
+	response.headers['Content-Type'] = 'application/json'
+	return response
+
 
 @app.route('/')
 def showIndex():
-    return render_template('index2.html')
+	dbname = "bank_"+ '_'.join(request.environ['REMOTE_USER'].split('\\')[1].split('.')) +'.db'
+	if "remote_user" in login_session and login_session['remote_user'] == dbname:
+		return render_template('index2.html')
+	return redirect("/remoteuser")
+	
 
 
 @app.route('/netlogin')
 def netLoginPage():
+	# print("remote_user" not in login_session)
+	if "remote_user" not in login_session:
+		return redirect("/remoteuser")
 	location = request.args.get('loc')
 
 	return render_template('netbanklogin.html',location=location)
@@ -44,16 +120,14 @@ def netLoginPage():
 
 @app.route('/register')
 def getRegisterForm():
+	if "remote_user" not in login_session:
+		return redirect("/remoteuser")
 	customerid = Generator.generateCustomerid()
 	login_session['customerid'] = customerid
 	return render_template('register.html',customerid=customerid)
 
 def checkCustomerIdExists(customerid):
-	filename = 'dbconfig.json'
-	with open(filename, 'r') as f:
-		dbdata = json.load(f)
-	
-	db = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+dbdata['server']+';DATABASE='+dbdata['database']+';UID='+dbdata['username']+';PWD='+ dbdata['password'])
+	db = dbase.getDB()
 	cursor = db.cursor()
 	sql = "select * from netbankusers where customerid = '%s'" % (customerid,)
 	cursor.execute(sql)
@@ -66,11 +140,7 @@ def checkCustomerIdExists(customerid):
 		return False
 
 def emailExists(email):
-	filename = 'dbconfig.json'
-	with open(filename, 'r') as f:
-		dbdata = json.load(f)
-	
-	db = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+dbdata['server']+';DATABASE='+dbdata['database']+';UID='+dbdata['username']+';PWD='+ dbdata['password'])
+	db = dbase.getDB()
 	cursor = db.cursor()
 	sql = "select * from netbankusers where emailid = '%s'"%(email,)
 	cursor.execute(sql)
@@ -83,11 +153,7 @@ def emailExists(email):
 		return False	
 
 def mobilenoExists(number):
-	filename = 'dbconfig.json'
-	with open(filename, 'r') as f:
-		dbdata = json.load(f)
-	
-	db = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+dbdata['server']+';DATABASE='+dbdata['database']+';UID='+dbdata['username']+';PWD='+ dbdata['password'])
+	db = dbase.getDB()
 	cursor = db.cursor()
 	sql = "select * from netbankusers where mobileno = '%s'"%(number,)
 	cursor.execute(sql)
@@ -100,15 +166,15 @@ def mobilenoExists(number):
 
 def validateEmail(email):
 	if re.match(r"^[@a-zA-Z0-9]+\.com$",email) == None:
-		response = make_response(json.dumps('Invalid Email Format'), 401)
+		response = make_response(json.dumps('Invalid Email Format'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	elif len(email) > 49 :
-		response = make_response(json.dumps('Email too long'), 401)
+		response = make_response(json.dumps('Email too long'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	elif emailExists(email):
-		response = make_response(json.dumps('Email already registered'), 401)
+		response = make_response(json.dumps('Email already registered'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	
@@ -117,11 +183,11 @@ def validateEmail(email):
 def validateMobile(number):
 	if re.match(r"^[0-9]{10}$",number)==None:
 		if not bug_list[1]:		
-			response = make_response(json.dumps('Invalid Mobile Number'), 401)
+			response = make_response(json.dumps('Invalid Mobile Number'), 400)
 			response.headers['Content-Type'] = 'application/json'
 			return response
 	elif mobilenoExists(number):
-		response = make_response(json.dumps('Mobile No already linked to a CustomerId!'), 401)
+		response = make_response(json.dumps('Mobile No already linked to a CustomerId!'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	
@@ -130,7 +196,7 @@ def validateMobile(number):
 def validatePassword(pwrd):
 	if len(pwrd) < 6:
 		if not bugs_list[2]:
-			response = make_response(json.dumps('Password length less than 6'), 401)
+			response = make_response(json.dumps('Password length less than 6'), 400)
 			response.headers['Content-Type'] = 'application/json'
 			return response
 	
@@ -138,7 +204,7 @@ def validatePassword(pwrd):
 
 def validateName(name):
 	if len(name) == 0:
-		response = make_response(json.dumps('Provide a valid name!'), 401)
+		response = make_response(json.dumps('Provide a valid name!'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	else:
@@ -147,7 +213,7 @@ def validateName(name):
 def register(params):
 
 	if  "customerid" not in login_session:
-		response = make_response(json.dumps('Session Expired!!'), 401)
+		response = make_response(json.dumps('Session Expired!!'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	name_list = params['name'].split(' ')
@@ -162,11 +228,7 @@ def register(params):
 	current_login = time.strftime('%Y-%m-%d %H:%M:%S')
 
 	try:
-		filename = 'dbconfig.json'
-		with open(filename, 'r') as f:
-			dbdata = json.load(f)
-		
-		db = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+dbdata['server']+';DATABASE='+dbdata['database']+';UID='+dbdata['username']+';PWD='+ dbdata['password'])
+		db = dbase.getDB()
 		cursor = db.cursor()
 		sql="""insert into netbankusers(customerid,emailid,mobileno,name,password,login_time)
 		values('%s','%s','%s','%s','%s',
@@ -188,6 +250,8 @@ def register(params):
 
 @app.route('/signup', methods=['POST'])
 def signup():
+	if "remote_user" not in login_session:
+		return redirect("/remoteuser")
 	params = json.loads(request.data.decode('utf-8'))
 	
 	response = validateName(params['name'])
@@ -227,11 +291,7 @@ def signup():
 
 
 def setLoginTime():
-	filename = 'dbconfig.json'
-	with open(filename, 'r') as f:
-		dbdata = json.load(f)
-	
-	db = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+dbdata['server']+';DATABASE='+dbdata['database']+';UID='+dbdata['username']+';PWD='+ dbdata['password'])
+	db = dbase.getDB()
 	cursor = db.cursor()
 	sql = "update netbankusers set login_time = '%s' where customerid = '%s'"%(time.strftime('%Y-%m-%d %H:%M:%S'),login_session['customerid'])
 	try:
@@ -244,6 +304,8 @@ def setLoginTime():
 
 @app.route('/idlogin',methods=['POST'])
 def idlogin():
+	if "remote_user" not in login_session:
+		return redirect("/remoteuser")
 	params = json.loads(request.data.decode('utf-8'))
 	customerid = params['customerid']
 	password = params['password']
@@ -272,13 +334,15 @@ def idlogin():
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	else:
-		response = make_response(json.dumps('Invalid Credentials.'), 401)
+		response = make_response(json.dumps('Invalid Credentials.'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 
 
 @app.route('/adminlogin')
 def adminLoginPage():
+	# if "remote_user" not in login_session:
+	# 	return redirect("/remoteuser")
 	return render_template('adminlogin.html')
 
 @app.route('/login',methods=['POST'])
@@ -287,6 +351,7 @@ def login():
 	password = params['password']
 	if password == "admin@123":
 		login_session.clear()
+		login_session['remote_user'] ="bank_"+ '_'.join(request.environ['REMOTE_USER'].split('\\')[1].split('.')) +'.db'
 		login_session['name'] = "Admin"
 		login_session['customerid'] = "admin@123"
 
@@ -294,7 +359,7 @@ def login():
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	else:
-		response = make_response(json.dumps('Invalid Credentials.'), 401)
+		response = make_response(json.dumps('Invalid Credentials.'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 
@@ -305,7 +370,7 @@ def acceptRequest():
 	try:
 		dbase.acceptAccCreation(accountno)
 	except:
-		response = make_response(json.dumps('Some Error Occured!Try Again'), 401)
+		response = make_response(json.dumps('Some Error Occured!Try Again'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	response = make_response(json.dumps('Account opened!'), 200)
@@ -320,7 +385,7 @@ def rejectRequest():
 	try:
 		dbase.rejectAccCreation(accountno)
 	except:
-		response = make_response(json.dumps('Some Error Occured!Try Again'), 401)
+		response = make_response(json.dumps('Some Error Occured!Try Again'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	response = make_response(json.dumps('Account closed!'), 200)
@@ -334,9 +399,12 @@ def admin():
 		return redirect("/adminlogin")
 	accounts = dbase.getAppliedAccounts()
 	if accounts is not None:
+		accounts2 = []
 		for account in accounts:
-			account[7] = account[7].strftime("%d %b %Y")
-	return render_template('admin.html',accounts = accounts)
+			account = list(account)
+			account[7] = time.strftime("%d %b %Y",time.strptime(account[7],"%Y-%m-%d %H:%M:%S"))
+			accounts2.append(account)
+	return render_template('admin.html',accounts = accounts2)
 
 
 @app.route('/admin/update')
@@ -360,7 +428,8 @@ def verifyAccount():
 @app.route('/admin/update/<accountno>')
 def fetchAccount(accountno):
 	account = dbase.getAccountDetails(accountno)
-	account[7] = account[7].strftime("%d %b %Y")
+	account = list(account)
+	account[7] = time.strftime("%d %b %Y",time.strptime(account[7],"%Y-%m-%d %H:%M:%S"))
 	return render_template('updateaccount.html',account = account)
 
 
@@ -373,7 +442,7 @@ def deleteAccount():
 			dbase.deleteAccount(params['accountno'])
 	except Exception as e:
 		print(e)
-		response = make_response(json.dumps('Some Error Occured!Try Again'), 401)
+		response = make_response(json.dumps('Some Error Occured!Try Again'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	response = make_response(json.dumps('Account Deleted Successfully'), 200)
@@ -394,7 +463,7 @@ def updateAccount():
 			dbase.updateAccountDetails(accountno,accounttype,aadharno)
 	except Exception as e:
 		print(e)
-		response = make_response(json.dumps('Some Error Occured!Try Again'), 401)
+		response = make_response(json.dumps('Some Error Occured!Try Again'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	response = make_response(json.dumps('Account Updated Successfully'), 200)
@@ -423,17 +492,13 @@ def fetchTransaction(accountno):
 
 
 def getLastlogin():
-	filename = 'dbconfig.json'
-	with open(filename, 'r') as f:
-		dbdata = json.load(f)
-	
-	db = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+dbdata['server']+';DATABASE='+dbdata['database']+';UID='+dbdata['username']+';PWD='+ dbdata['password'])
+	db = dbase.getDB()
 	cursor = db.cursor()
 	sql = "select login_time from netbankusers where customerid ='%s'"%(login_session["customerid"],)
 	
 	cursor.execute(sql)	
 	user = cursor.fetchone()
-	return user[0]
+	return dt.strptime(user[0],"%Y-%m-%d %H:%M:%S")
 
 
 @app.route('/main')
@@ -458,9 +523,12 @@ def showMain():
 
 	accounts = dbase.getAccounts(login_session['customerid'])
 	if accounts is not None:
+		accounts2 = []
 		for account in accounts:
-			account[7] = account[7].strftime("%d %b %Y")
-	return render_template('main.html',accounts = accounts,last_login=login_session['last_login'],states=state)
+			account = list(account)
+			account[7] = time.strftime("%d %b %Y",time.strptime(account[7],"%Y-%m-%d %H:%M:%S"))
+			accounts2.append(account)
+	return render_template('main.html',accounts = accounts2,last_login=login_session['last_login'],states=state)
 
 
 @app.route('/createacc',methods=['POST'])
@@ -488,7 +556,7 @@ def createAccount():
 		except Exception as e:
 			print(e)
 			db.rollback()
-			response = make_response(json.dumps('Some Error Occured!'), 401)
+			response = make_response(json.dumps('Some Error Occured!'), 400)
 			response.headers['Content-Type'] = 'application/json'
 			return response
 		response = make_response(json.dumps('Applied for <b>'+params['accounttype'].upper()+'</b> account.'), 200)
@@ -515,7 +583,7 @@ def updatePin():
 	try:
 		dbase.updateDebitPin(params['debitcardno'],params['pin'])	
 	except:
-		response = make_response(json.dumps("Some Error Occured"),401)
+		response = make_response(json.dumps("Some Error Occured"),400)
 		response.headers['Content-Type'] = 'application/json'
 		return  response	
 	response = make_response(json.dumps("Debit pin updated"),200)
@@ -541,7 +609,7 @@ def showPayments():
 def accTransfer():
 	params = json.loads(request.data.decode('utf-8'))
 	if params['fromaccount'] == params['toaccount']:
-		response = make_response(json.dumps('Amount cannot be transferred to same Account.'),401)
+		response = make_response(json.dumps('Amount cannot be transferred to same Account.'),400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	
@@ -566,7 +634,7 @@ def accTransfer():
 
 	except Exception as e:
 		print(e)
-		response = make_response(json.dumps('Some Error Occured .Try Again'),401)
+		response = make_response(json.dumps('Some Error Occured .Try Again'),400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	
@@ -584,10 +652,13 @@ def showfd():
 
 	accounts = dbase.getDepositAccounts(login_session['customerid'])
 	if accounts is not None:
+		accounts2 = []
 		for account in accounts:
-			account[6] = account[6].strftime("%d %b %Y")
+			account = list(account)
+			account[6] = time.strftime("%d %b %Y",time.strptime(account[6],"%Y-%m-%d %H:%M:%S"))
+			accounts2.append(account)
 
-	return render_template('fd.html',accounts=accounts,last_login=login_session['last_login'])	
+	return render_template('fd.html',accounts=accounts2,last_login=login_session['last_login'])	
 
 @app.route('/getOperAccount')
 def getOperAccount():
@@ -608,7 +679,7 @@ def getOperAccount():
 
 	except Exception as e:
 		print(e)
-		response = make_response(json.dumps('Some error Occured!'), 401)
+		response = make_response(json.dumps('Some error Occured!'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	account_list = json.dumps(account_list)
@@ -644,7 +715,7 @@ def createDeposit():
 			db.rollback()
 			print(e)
 			sys.exc_traceback
-			response = make_response(json.dumps('Some error Occured!'), 401)
+			response = make_response(json.dumps('Some error Occured!'), 400)
 			response.headers['Content-Type'] = 'application/json'
 			return response
 		response = make_response(json.dumps("Deposit Account Created"), 200)
@@ -678,7 +749,7 @@ def redeemRewards():
 	amount = params['amount']
 	accountno = params['accountno']
 	if int(amount) <10:
-		response = make_response(json.dumps('Reward Points should be 10 or greater!'), 401)
+		response = make_response(json.dumps('Reward Points should be 10 or greater!'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	
@@ -687,7 +758,7 @@ def redeemRewards():
 		login_session['reward_points']=0
 	except Exception as e:
 		print(e)	
-		response = make_response(json.dumps('Some Error Occured!Try Again'), 401)
+		response = make_response(json.dumps('Some Error Occured!Try Again'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	message = "Amount &#8377;" + amount +" is <b>credited</b> to accountno : <b>"+accountno+"</b>"
@@ -700,8 +771,30 @@ def redeemRewards():
 @app.route('/disconnect')
 def disconnect():
 	login_session.clear()
-	print("customerid" in login_session)
+	file_handler = RotatingFileHandler('C:\\Users\\pratik.shetty\\Desktop\\logs.log', 'a', 1 * 1024 * 1024, 10)
+	file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+	app.logger.setLevel(logging.INFO)
+	
+	file_handler.setLevel(logging.INFO)
+	
+	app.logger.addHandler(file_handler)
+	app.logger.info(request.environ['REMOTE_USER'].split('\\')[1])
+	login_session['remote_user'] ="bank_"+ '_'.join(request.environ['REMOTE_USER'].split('\\')[1].split('.')) +'.db'
+
 	return redirect('/')
+
+
+@app.errorhandler(500)
+def internal_error(exception):
+	app.logger.exception(exception)
+	file_handler = RotatingFileHandler('C:\\Users\\pratik.shetty\\Desktop\\logs.log', 'a', 1 * 1024 * 1024, 10)
+	file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+
+
+	app.logger.setLevel(logging.INFO)
+	app.logger.addHandler(file_handler)
+	app.logger.info(exception)
+	return render_template('500.html'), 500 
 
 @app.before_request
 def setSessionModified():
@@ -712,4 +805,5 @@ if __name__ == '__main__':
 	app.secret_key = "my_app_secretkey"
 	# app.permanent_session_lifetime = timedelta(minutes=15)
 	app.debug = True
-	app.run(host='localhost', port=5000)
+	# app.run(host='localhost', port=4000)
+	app.run()
