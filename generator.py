@@ -2,6 +2,19 @@ from db import dbase
 import random
 
 class Generator():
+
+    @staticmethod
+    def generateBugIndex(no_of_bugs,max_bugs,bug_list):
+        if no_of_bugs> max_bugs:
+            no_of_bugs = max_bugs
+        bugs_created = 0     
+        while bugs_created < no_of_bugs:
+            randindex = random.randint(0,max_bugs-1)
+            if bug_list[randindex] == False:
+                bug_list[randindex] = True
+                bugs_created +=1
+        return bug_list
+
     @staticmethod   
     def generateCustomerid():
         db = dbase.getDB()
@@ -14,6 +27,15 @@ class Generator():
             account = cursor.fetchone()
             if account is None:
                 return customerid	
+
+    @staticmethod
+    def calculateRewardPoints(amount):
+        if amount > 10000:
+            points = random.randint(1,100)
+        else:
+            points = random.randint(1,50)
+        return points    
+
 
     @staticmethod
     def generateAccountNumber():
