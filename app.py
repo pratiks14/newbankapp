@@ -20,10 +20,19 @@ import time
 import logging
 from logging.handlers import RotatingFileHandler
 import os
+from werkzeug.utils import secure_filename
+import csv
+
+
+UPLOAD_FOLDER = 'uploads'
+ALLOWED_EXTENSIONS = set(['csv'])
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app = Flask(__name__)
 app.secret_key = "my_app_secretkey"
-state=sorted(["Andhra Pradesh","Arunachal Pradesh ","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman and Nicobar Islands","Chandigarh","Dadra and Nagar Haveli","Daman and Diu","Lakshadweep","Delhi","Puducherry"])	
+state=sorted(["Andhra Pradesh","Arunachal Pradesh ","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman and Nicobar Islands","Chandigarh","Dadra and Nagar Haveli","Daman and Diu","Lakshadweep","Delhi","Puducherry"])
 
 bug_list = [False] * 10
 filename = 'bugconfig.json'
@@ -40,12 +49,39 @@ app.logger.addHandler(file_handler)
 app.logger.info(str(bug_list))
 
 
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/adminconfig', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            groups = []
+
+            for row in file:
+            	content = str(row,'utf-8')
+            	groups.append(content.split(',')[1].strip())
+            return ','.join(set(groups))
+    return render_template('adminconfig.html')
+
 @app.route('/remoteuser')
 def registerRemoteUser():
-	
+
 	# login_session['remote_user'] = request.environ['REMOTE_ADDR']
-	
-	
+
+
 	file_handler = RotatingFileHandler('C:\\Users\\pratik.shetty\\Desktop\\logs.log', 'a', 1 * 1024 * 1024, 10)
 	file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
 	app.logger.setLevel(logging.INFO)
@@ -54,7 +90,7 @@ def registerRemoteUser():
 	# app.logger.info(str(request.environ['LOGON_USER']))
 	# app.logger.info(str(request.environ['REMOTE_USER']))
 	username = request.environ['REMOTE_USER']
-	
+
 	dbname = "bank_"+ '_'.join(request.environ['REMOTE_USER'].split('\\')[1].split('.')) +'.db'
 	app.logger.info(dbname)
 	f= open("dbname","w+")
@@ -69,7 +105,7 @@ def registerRemoteUser():
 		app.logger.setLevel(logging.INFO)
 		app.logger.addHandler(file_handler)
 		app.logger.info(e)
-		message = 'exists'	
+		message = 'exists'
 	login_session['remote_user'] = dbname
 	username = ' '.join([name[0].upper()+name[1:] for name in request.environ['REMOTE_USER'].split('\\')[1].split('.')])
 	if message == "exists":
@@ -103,7 +139,7 @@ def showIndex():
 	if "remote_user" in login_session and login_session['remote_user'] == dbname:
 		return render_template('index2.html')
 	return redirect("/remoteuser")
-	
+
 
 
 @app.route('/netlogin')
@@ -134,7 +170,7 @@ def checkCustomerIdExists(customerid):
 	account = cursor.fetchone()
 
 	if account is not None :
-	
+
 		return account
 	else:
 		return False
@@ -150,7 +186,7 @@ def emailExists(email):
 	if account is not None:
 		return True
 	else:
-		return False	
+		return False
 
 def mobilenoExists(number):
 	db = dbase.getDB()
@@ -158,11 +194,11 @@ def mobilenoExists(number):
 	sql = "select * from netbankusers where mobileno = '%s'"%(number,)
 	cursor.execute(sql)
 	account =cursor.fetchone()
-	
+
 	if account is not None:
 		return True
 	else:
-		return False	
+		return False
 
 def validateEmail(email):
 	if re.match(r"^[@a-zA-Z0-9]+\.com$",email) == None:
@@ -177,12 +213,12 @@ def validateEmail(email):
 		response = make_response(json.dumps('Email already registered'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
-	
+
 	return None
 
 def validateMobile(number):
 	if re.match(r"^[0-9]{10}$",number)==None:
-		if not bug_list[1]:		
+		if not bug_list[1]:
 			response = make_response(json.dumps('Invalid Mobile Number'), 400)
 			response.headers['Content-Type'] = 'application/json'
 			return response
@@ -190,7 +226,7 @@ def validateMobile(number):
 		response = make_response(json.dumps('Mobile No already linked to a CustomerId!'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
-	
+
 	return None
 
 def validatePassword(pwrd):
@@ -199,8 +235,8 @@ def validatePassword(pwrd):
 			response = make_response(json.dumps('Password length less than 6'), 400)
 			response.headers['Content-Type'] = 'application/json'
 			return response
-	
-	return None	
+
+	return None
 
 def validateName(name):
 	if len(name) == 0:
@@ -208,7 +244,7 @@ def validateName(name):
 		response.headers['Content-Type'] = 'application/json'
 		return response
 	else:
-		return None	
+		return None
 
 def register(params):
 
@@ -233,10 +269,10 @@ def register(params):
 		sql="""insert into netbankusers(customerid,emailid,mobileno,name,password,login_time)
 		values('%s','%s','%s','%s','%s',
 		'%s')"""%(login_session['customerid'],login_session['email'],login_session['mobileno'],login_session['name'],params['password'],current_login)
-	
 
 
-	
+
+
 		cursor.execute(sql)
 		db.commit()
 	except Exception as e:
@@ -245,7 +281,7 @@ def register(params):
 		exc_type, exc_value, exc_traceback = sys.exc_info() # most recent (if any) by default
 		print(exc_traceback.tb_lineno)
 		raise Exception(e)
-	
+
 	login_session['last_login'] = last_login
 
 @app.route('/signup', methods=['POST'])
@@ -253,11 +289,11 @@ def signup():
 	if "remote_user" not in login_session:
 		return redirect("/remoteuser")
 	params = json.loads(request.data.decode('utf-8'))
-	
+
 	response = validateName(params['name'])
 	if response is not None:
 		return response
-	
+
 	response = validateEmail(params['email'])
 	if response is not None:
 		return response
@@ -274,7 +310,7 @@ def signup():
 		# login_session.permanent = True
 
 	except Exception as e:
-		print(e)		
+		print(e)
 		exc_type, exc_value, exc_traceback = sys.exc_info() # most recent (if any) by default
 		print(exc_traceback.tb_lineno)
 
@@ -282,8 +318,8 @@ def signup():
 		response = make_response(json.dumps('Some Error Occured.Try Again!'), 402)
 		response.headers['Content-Type'] = 'application/json'
 		return response
-	
-	
+
+
 	response = make_response(json.dumps('Registration Successfull!! Logging in.....'), 200)
 	response.headers['Content-Type'] = 'application/json'
 	return response
@@ -299,7 +335,7 @@ def setLoginTime():
 		db.commit()
 	except Exception as e:
 		db.rollback()
-		print(e)	
+		print(e)
 
 
 @app.route('/idlogin',methods=['POST'])
@@ -316,7 +352,7 @@ def idlogin():
 		return response
 
 	account = checkCustomerIdExists(customerid)
-	
+
 
 	if account and account[4] == password:
 		login_session['email'] = account[1]
@@ -329,7 +365,7 @@ def idlogin():
 		if bug_list[2]:
 			login_session['last_login'] = ''
 		setLoginTime()
-		
+
 		response = make_response(json.dumps('Login Successfull!! Logging in.....'), 200)
 		response.headers['Content-Type'] = 'application/json'
 		return response
@@ -419,7 +455,7 @@ def verifyAccount():
 	accountno = request.args.get('accountno')
 	response = Verification.verifyAccountExists(accountno)
 	if response is not None:
-		return response	
+		return response
 
 	response = make_response(json.dumps('got account'), 200)
 	response.headers['Content-Type'] = 'application/json'
@@ -447,7 +483,7 @@ def deleteAccount():
 		return response
 	response = make_response(json.dumps('Account Deleted Successfully'), 200)
 	response.headers['Content-Type'] = 'application/json'
-	return response	
+	return response
 
 @app.route('/updateaccount',methods=['POST'])
 def updateAccount():
@@ -486,7 +522,7 @@ def fetchTransaction(accountno):
 		final_statement.append(statement)
 	for tranx in debitTranx:
 		statement =  "Rs "+str(tranx[3])+" debited  from Account to Account No: "+tranx[1]+" on " +tranx[5].strftime("%I:%M %p , %d %b %Y")
-		final_statement.append(statement)	
+		final_statement.append(statement)
 	# print(final_statement)
 	return render_template('transactions.html',statements = final_statement)
 
@@ -495,8 +531,8 @@ def getLastlogin():
 	db = dbase.getDB()
 	cursor = db.cursor()
 	sql = "select login_time from netbankusers where customerid ='%s'"%(login_session["customerid"],)
-	
-	cursor.execute(sql)	
+
+	cursor.execute(sql)
 	user = cursor.fetchone()
 	return dt.strptime(user[0],"%Y-%m-%d %H:%M:%S")
 
@@ -510,14 +546,14 @@ def showMain():
 	dbase.deleteRejectedAccounts(login_session['customerid'])
 	if rejected_account is not None:
 		for account in rejected_account:
-			message = "Your application for <b>" + account[3].lower() + "</b> account has been rejected!" 
+			message = "Your application for <b>" + account[3].lower() + "</b> account has been rejected!"
 			flash(message)
 	creditTranxList = dbase.getCreditTranx(login_session['customerid'])
 	for tranx in creditTranxList:
 		message = "Account: "+tranx[1]+" is <b>credited</b> by &#8377;"+str(tranx[2])+" to Account: "+tranx[0]
 		flash(message)
 
-	
+
 	# except Exception as e:
 	# 	print(e)
 
@@ -541,18 +577,18 @@ def createAccount():
 		print("accountcreation")
 		accountNumber = Generator.generateAccountNumber()
 		debitcardno = Generator.generateDebitCard()
-		mail_address = params['address']+', \n'+params['address2']+', \n'+params['city']+', '+params['state']+' Zip-'+params['zip'] 
+		mail_address = params['address']+', \n'+params['address2']+', \n'+params['city']+', '+params['state']+' Zip-'+params['zip']
 		print(mail_address)
 		db = dbase.getDB()
 		cursor = db.cursor()
 		sql = """insert into accountdetails(accountno,customerid,acc_type,mail_address,branch_name,branch_code,created_date,aadhar_no,debitcardno) values
 				('%s','%s','%s','%s','%s','%s','%s','%s',
-				'%s')"""%(accountNumber,login_session['customerid'],params['accounttype'],mail_address,params['branchname'],params['branchcode'],time.strftime('%Y-%m-%d %H:%M:%S'),params['aadharno'],debitcardno)			
+				'%s')"""%(accountNumber,login_session['customerid'],params['accounttype'],mail_address,params['branchname'],params['branchcode'],time.strftime('%Y-%m-%d %H:%M:%S'),params['aadharno'],debitcardno)
 		try:
 			cursor.execute(sql)
-			
+
 			db.commit()
-			
+
 		except Exception as e:
 			print(e)
 			db.rollback()
@@ -561,7 +597,7 @@ def createAccount():
 			return response
 		response = make_response(json.dumps('Applied for <b>'+params['accounttype'].upper()+'</b> account.'), 200)
 		response.headers['Content-Type'] = 'application/json'
-		return response	
+		return response
 
 
 @app.route('/services')
@@ -581,11 +617,11 @@ def updatePin():
 	if response is not None:
 		return response
 	try:
-		dbase.updateDebitPin(params['debitcardno'],params['pin'])	
+		dbase.updateDebitPin(params['debitcardno'],params['pin'])
 	except:
 		response = make_response(json.dumps("Some Error Occured"),400)
 		response.headers['Content-Type'] = 'application/json'
-		return  response	
+		return  response
 	response = make_response(json.dumps("Debit pin updated"),200)
 	response.headers['Content-Type'] = 'application/json'
 	return response
@@ -612,13 +648,13 @@ def accTransfer():
 		response = make_response(json.dumps('Amount cannot be transferred to same Account.'),400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
-	
+
 	if bug_list[6]:
 		params['toaccount'] = params['fromaccount']
 	response = Verification.validateAccTransfer(params)
 	if response is not None:
 		return response
-	try:	
+	try:
 		dbase.performAccountTransfer(params['fromaccount'],params['toaccount'],float(params['amount']))
 		message = "Amount &#8377;" +params['amount']+" has been <b>debited</b> from Account no :" +params['fromaccount']
 		flash(message)
@@ -630,19 +666,19 @@ def accTransfer():
 			flash(message)
 		except Exception as e:
 			print(e)
-			print("reward points not added to "+ login_session['customerid'])	
+			print("reward points not added to "+ login_session['customerid'])
 
 	except Exception as e:
 		print(e)
 		response = make_response(json.dumps('Some Error Occured .Try Again'),400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
-	
-		
+
+
 	response = make_response(json.dumps('Amount Transferred!'),200)
 	response.headers['Content-Type'] = 'application/json'
 	return response
-	
+
 
 
 @app.route('/main/fd')
@@ -658,7 +694,7 @@ def showfd():
 			account[6] = time.strftime("%d %b %Y",time.strptime(account[6],"%Y-%m-%d %H:%M:%S"))
 			accounts2.append(account)
 
-	return render_template('fd.html',accounts=accounts2,last_login=login_session['last_login'])	
+	return render_template('fd.html',accounts=accounts2,last_login=login_session['last_login'])
 
 @app.route('/getOperAccount')
 def getOperAccount():
@@ -686,7 +722,7 @@ def getOperAccount():
 	print(account_list)
 	response = make_response(account_list, 200)
 	response.headers['Content-Type'] = 'application/json'
-	return response				 
+	return response
 
 @app.route('/createdeposit',methods=['POST'])
 def createDeposit():
@@ -705,7 +741,7 @@ def createDeposit():
 						"""%(depositno,login_session['customerid'],float(params['amount']),params['accountno'],params['depositperiod'],params['deductiondate'],time.strftime('%Y-%m-%d %H:%M:%S'))
 
 				cursor.execute(sql)
-			
+
 			sql = "update accountdetails set acc_balance =acc_balance - %.2f where accountno = '%s'"%(float(params['amount']),params['accountno'])
 			cursor.execute(sql)
 			db.commit()
@@ -731,7 +767,7 @@ def aboutUs():
 # def showLoan():
 # 	if "customerid" not in login_session:
 # 		return redirect("/netlogin")
-# 	return render_template('loan.html',last_login=login_session['last_login'].strftime("%I:%M %p %a, %d %b %Y"))	
+# 	return render_template('loan.html',last_login=login_session['last_login'].strftime("%I:%M %p %a, %d %b %Y"))
 
 
 @app.route('/main/rewards')
@@ -739,7 +775,7 @@ def showRewards():
 	if "customerid" not in login_session:
 		return redirect("/netlogin/main")
 	accounts = dbase.getLiveAccounts(login_session['customerid'])
-	return render_template('rewards.html',accounts=accounts,last_login=login_session['last_login'])	
+	return render_template('rewards.html',accounts=accounts,last_login=login_session['last_login'])
 
 @app.route('/redeemreward',methods=['POST'])
 def redeemRewards():
@@ -752,12 +788,12 @@ def redeemRewards():
 		response = make_response(json.dumps('Reward Points should be 10 or greater!'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
-	
+
 	try:
 		dbase.updateRewardPoints(float(amount),accountno,login_session['customerid'],bug_list[8])
 		login_session['reward_points']=0
 	except Exception as e:
-		print(e)	
+		print(e)
 		response = make_response(json.dumps('Some Error Occured!Try Again'), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
@@ -774,9 +810,9 @@ def disconnect():
 	file_handler = RotatingFileHandler('C:\\Users\\pratik.shetty\\Desktop\\logs.log', 'a', 1 * 1024 * 1024, 10)
 	file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
 	app.logger.setLevel(logging.INFO)
-	
+
 	file_handler.setLevel(logging.INFO)
-	
+
 	app.logger.addHandler(file_handler)
 	app.logger.info(request.environ['REMOTE_USER'].split('\\')[1])
 	login_session['remote_user'] ="bank_"+ '_'.join(request.environ['REMOTE_USER'].split('\\')[1].split('.')) +'.db'
@@ -794,7 +830,7 @@ def internal_error(exception):
 	app.logger.setLevel(logging.INFO)
 	app.logger.addHandler(file_handler)
 	app.logger.info(exception)
-	return render_template('500.html'), 500 
+	return render_template('500.html'), 500
 
 @app.before_request
 def setSessionModified():
