@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>THE Bank</title>
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:700|Quicksand" rel="stylesheet">
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <style>
+        body{
+    /* background-color: #E7E7EF; */
+    height: 100%;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(rgb(104, 145, 162), rgb(207, 230, 212));
+}
+        .title{
+            font-family: Tajawal,sans-serif;
+
+        }
+        .head{
+
+            background-color: azure;
+        }
+        .bank-head{
+           height:80px;
+           border-bottom:3px solid #006666 ;
+        }
+        label{
+            font-family: Merriweather,sans-serif;
+            size: 19px;
+
+        }
+        input[type="text"]:not([readonly]),select{
+            font-family: Tajawal,sans-serif;
+            font-size:1.17em;
+            font-weight: bold;
+        }
+        footer{
+            border-top:2px solid #006666;
+        }
+
+        nav-item:hover{
+            background-color: rgb(104, 145, 162)
+        }
+        .container{
+            margin-top:30px;
+        }
+        .funkyradio div {
+  clear: both;
+  overflow: hidden;
+}
+
+.funkyradio label {
+  width: 100%;
+  border-radius: 3px;
+  border: 1px solid #D1D3D4;
+  font-weight: normal;
+}
+
+.funkyradio input[type="radio"]:empty,
+.funkyradio input[type="checkbox"]:empty {
+  display: none;
+}
+
+.funkyradio input[type="radio"]:empty ~ label,
+.funkyradio input[type="checkbox"]:empty ~ label {
+  position: relative;
+  line-height: 2.5em;
+  text-indent: 3.25em;
+  margin-top: 0em;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.funkyradio input[type="radio"]:empty ~ label:before,
+.funkyradio input[type="checkbox"]:empty ~ label:before {
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  content: '';
+  width: 2.5em;
+  background: #D1D3D4;
+  border-radius: 3px 0 0 3px;
+}
+
+.funkyradio input[type="radio"]:hover:not(:checked) ~ label,
+.funkyradio input[type="checkbox"]:hover:not(:checked) ~ label {
+  color: #777;
+}
+
+.funkyradio input[type="radio"]:hover:not(:checked) ~ label:before,
+.funkyradio input[type="checkbox"]:hover:not(:checked) ~ label:before {
+  content: '\2714';
+  text-indent: .9em;
+  color: #C2C2C2;
+}
+
+.funkyradio input[type="radio"]:not(:checked) ~ label,
+.funkyradio input[type="checkbox"]:not(:checked) ~ label {
+  color: #777;
+}
+
+.funkyradio input[type="radio"]:checked ~ label,
+.funkyradio input[type="checkbox"]:checked ~ label {
+  color: #333;
+}
+
+.funkyradio input[type="radio"]:checked ~ label:before,
+.funkyradio input[type="checkbox"]:checked ~ label:before {
+  content: '\2714';
+  text-indent: .9em;
+  color: #333;
+  background-color: #ccc;
+}
+
+.funkyradio input[type="radio"]:focus ~ label:before,
+.funkyradio input[type="checkbox"]:focus ~ label:before {
+  box-shadow: 0 0 0 3px #777;
+}
+
+.funkyradio-default input[type="radio"]:checked ~ label:before,
+.funkyradio-default input[type="checkbox"]:checked ~ label:before {
+  color: #777;
+  background-color: #006666;
+}
+
+/* .funkyradio-primary input[type="radio"]:checked ~ label:before,
+.funkyradio-primary input[type="checkbox"]:checked ~ label:before {
+  color: #fff;
+  background-color: #337ab7;
+}
+
+.funkyradio-success input[type="radio"]:checked ~ label:before,
+.funkyradio-success input[type="checkbox"]:checked ~ label:before {
+  color: #fff;
+  background-color: #5cb85c;
+}
+
+.funkyradio-danger input[type="radio"]:checked ~ label:before,
+.funkyradio-danger input[type="checkbox"]:checked ~ label:before {
+  color: #fff;
+  background-color: #d9534f;
+}
+
+.funkyradio-warning input[type="radio"]:checked ~ label:before,
+.funkyradio-warning input[type="checkbox"]:checked ~ label:before {
+  color: #fff;
+  background-color: #f0ad4e;
+}
+
+.funkyradio-info input[type="radio"]:checked ~ label:before,
+.funkyradio-info input[type="checkbox"]:checked ~ label:before {
+  color: #fff;
+  background-color: #5bc0de;
+} */
+
+.nav-link,.nav-link:hover {
+    color:#006666 ;
+}
+.nav-pills > .nav-item > .active{
+    background-color: #006666 !important;
+}
+.nav-tabs > .nav-item > .active{
+    background-repeat: no-repeat;
+    background-image: linear-gradient(rgb(123, 168, 187),rgb(104, 145, 162));
+    color:#fff;
+}
+ul.nav.nav-tabs.nav-fill{
+    border-radius: 5px;
+}
+.dropdown-item{
+    margin:0px;
+}
+
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 50%;
+    margin: 0 22%;
+}
+.modal-dialog {
+    display: table-cell;
+    vertical-align: middle;
+    border-radius: 20em;
+  }
+
+  .jumbohead{
+    font-family: 'Quicksand', sans-serif;
+
+  }
+  pre{
+    font-family: 'Quicksand', sans-serif;
+  }
+  #custom-text{
+    margin-left: 10px;
+    margin-right: 10px;
+    font-family:Quicksand,sans-serif;
+    color :#aaa;
+  }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+      <div class="jumbotron" style="min-height: 100vh">
+
+  <h1 class="display-4">Test configuration</h1>
+
+  <hr class="my-4">
+  <form id="upload-file" method="post" enctype="multipart/form-data">
+    <fieldset>
+        <!-- <label for="file">Select a file</label> -->
+        <input name="file" id="real-file" style="display:none" type="file">
+
+    </fieldset>
+  </form>
+  <button type="button" id="custom-btn" class="btn btn-secondary">Select Config File(*.csv)</button>
+  <span id="custom-text">No file chosen,yet </span>
+  <button id="upload-file-btn" class="btn btn-info" type="button">Upload</button>
+
+</div>
+<form id="bugsform">
+  <label> group1</label><button class="btn btn-info">Members</button>
+
+</form>
+      </div>
+    </div>
+    <div class="modal fade" id="dataModal" role="dialog">
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog">
+
+            <!-- Modal content-->
+                <div class="modal-content">
+                        <!-- <div class="modal-header ">
+
+                                <h3><i class="far fa-check-square"></i> Verifing..</h3>
+                        </div>
+                        <div class="modal-body">
+                        <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> Checking Inputs..</li></ol>
+                        </div>
+                        <div class="modal-footer">
+                        </div>  -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script>
+const realFileBtn = $('#real-file');
+const customBtn = $('#custom-btn');
+const customText = $('#custom-text');
+
+customBtn.click(function(event){
+  event.preventDefault();
+  realFileBtn.click();
+});
+
+realFileBtn.change(function(e){
+  e.preventDefault();
+  if (realFileBtn.val()){
+    customText.html(realFileBtn.val().match( /[\/\\]([\w\d\s\.\-\(\)]+)$/)[1]);
+    customText.css("color","#555");
+  }
+  else{
+    customText.html('No file chosen, yet.');
+    customText.css("color","#aaa");
+  }
+});
+
+$(function() {
+    $('#upload-file-btn').click(function() {
+        var form_data = new FormData($('#upload-file')[0]);
+        $.ajax({
+            type: 'POST',
+            url: '/adminconfig',
+            data: form_data,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(data) {
+              var html = `
+                <form>
+                </form>
+              `;
+              console.log("success");
+
+            },
+            error:function(response){
+                  console.log("error");
+                  header = '<i class="fas fa-exclamation-triangle"></i> Error';
+                  body = response.responseJSON;
+                  var footer = '<div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div>';
+                  var reply1 = `<div class="modal-header">
+                              <h3>${header}</h3>
+                          </div>
+                          <div class="modal-body">
+                                  <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> ${body} </li></ol>
+                          </div>
+                          ${footer}
+                          `;
+                  // console.log(reply1);
+
+                      $('.modal-content').html(reply1);
+                      $('#dataModal').modal("show");
+                    }
+        });
+    });
+});
+</script>
+</body>
+</html>
