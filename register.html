@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>THE Bank</title>
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:700|Quicksand" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Atomic+Age|Montserrat" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
+
+    <style>
+        body{
+    /* background-color: #E7E7EF; */
+    height: 100%;
+    background-repeat: no-repeat;
+    background-image: #eee;
+    padding:0px;
+    margin:0px;
+    min-width:100vw;
+}
+        
+        #bankname{
+            font-family: 'Exo 2', sans-serif;
+        }
+        #logo{
+            font-family: 'Atomic Age', cursive;
+            color:#d00404;
+            border:1px solid white;
+            border-radius: 4px;
+        }
+
+        
+        .card-title{
+            font-family: 'Montserrat', sans-serif;
+            
+
+
+        }
+        .card-title2{
+            font-family: 'Open Sans Condensed', sans-serif;
+        }
+        .head{
+            background-color: #555;
+        }
+        #gradient{
+            background-image: linear-gradient(#555,#eee);
+            height:10px;
+        }
+        .number{
+            border:1px solid #aaa;
+            font-family: 'Montserrat', sans-serif;
+            width:20px;
+            height:20px;
+            border-radius:50%;
+            padding:2px 5px;
+            margin-left:20px;
+            background-color: #aaa;
+            color:#eee;
+        }
+        .active .number{
+            background-color: #eee;
+            color:#111;
+            border:1px solid #eee;
+        }
+        .done .number{
+            background-color: #5b7632;
+            color:#eee;
+            border:1px solid #5b7632;
+        }
+        .active > .row >div:first-child{
+            background-color:#555;
+        }
+        .active .triangle{
+            width:0px;
+            height:0px;
+            border-top:25px solid transparent;
+            border-left : 50px solid #555;
+            border-bottom:25px solid transparent;
+        }
+        .active .breadcrumbtext{
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color:#eee;
+            display:inline;
+            margin:10px;
+        }
+        .breadcrumbtext{
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color:#555;
+            display:inline;
+            margin:10px;
+        }
+        .content{
+            margin-top:30px;
+            /* font-family: 'Montserrat', sans-serif; */
+            font-size:16px;
+        }
+        form  div:nth-child(n+1){
+            display:flex;
+            justify-content: flex-end;
+            
+        }
+        
+    </style>
+</head>
+<body>
+<div class="head" style="height:30px">
+</div>
+<div class="row" style="border-bottom:1px solid black">
+    <div class="col-4 " style="padding:30px;">
+        <h3 id="bankname">INFYBank  <span id="logo">IB</span></h3>
+    </div>
+    <div class ="col-8">
+
+    </div>
+</div>
+<div id="gradient">
+
+</div>
+<div class="col-12 " style = "font-size:25px;background-color:#eee;padding-bottom:2px">
+    <p>Registration</p>
+</div>
+<div class="bread-crumb" style="padding:30px;">
+    <div class="row" style="width:100%;height:50px;background-color:#eee;border:1px solid #ddd;">
+        <div class="col-4 ">
+            <div class="row">
+                <div class="col-10  done" style="padding:10px">
+                    <div class="number d-inline"> 1</div>
+                    <div class="breadcrumbtext"> Verify Identity</div>
+                </div>
+                <div class='col-2 ' style="padding:0px">
+                    <div class="triangle"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-4 done">
+            <div class="row">
+                <div class="col-10  " style="padding:10px">
+                    <div class="number d-inline"> 2</div>
+                    <div class="breadcrumbtext"> Choose Security Question</div>
+                </div>
+                <div class='col-2 ' style="padding:0px">
+                    <div class="triangle"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 active" >
+            <div class="row" style="height:100%">
+                <div class="col-12" style="padding:10px;height:100%;">
+                    <div class="number d-inline"> 3</div>
+                    <div class="breadcrumbtext"> Confirmation</div>
+                </div>
+                
+            </div>
+        
+    </div>
+</div>
+<div class="content">
+    <p>If you already have an INFYBank account and wish to register for Personal Internet Banking, you will be required to utilize your  Security Number.</p>
+    <p>You need to provide an account details(loan account/ Savings account/ Credit Card/ Insurance).</p>
+    <form class="row ">
+        <div class="col-4 ">
+                <label style="margin-right:10px;"> <span style="color:#d00404">*</span>Required Field </label>
+        </div>
+        <div class="col-8"></div>
+        <br>
+        <br>
+        <div class="col-4">
+            <label><span style="color:#d00404">*</span>Verification Method :</label>
+        </div>
+        <div class="col-8 ">
+            <div class="row">
+                <div class="col-6">
+                    <select name="verificationtype">
+                        <option value="loanaccount">Loan Account</option>
+                        <option value="savingsaccount">Savings Account</option>
+                        <option value="creditcard">Credit Card</option>
+                        <option value="Insurance">Insurance</option>
+                    </select>
+                </div>
+                <div class="col-6">
+
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="col-4">
+                <label><span style="color:#d00404">*</span>Security  :</label>
+
+        </div>
+        
+        
+
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script>
+    
+</script>
+</body>
+</html>
