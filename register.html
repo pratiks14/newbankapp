@@ -18,14 +18,21 @@
     <style>
         body{
     /* background-color: #E7E7EF; */
-    height: 100%;
-    background-repeat: no-repeat;
-    background-image: #eee;
-    padding:0px;
-    margin:0px;
-    min-width:100vw;
-}
-        
+        height: 100%;
+        background-repeat: no-repeat;
+        background-image: #eee;
+        padding:0px;
+        margin:0px;
+        min-width:100vw;
+        box-sizing: border-box;
+        }
+    .pointer{
+            cursor:pointer;
+        }
+        .hover-underline:hover{
+            text-decoration: underline;
+        }
+
         #bankname{
             font-family: 'Exo 2', sans-serif;
         }
@@ -36,10 +43,10 @@
             border-radius: 4px;
         }
 
-        
+
         .card-title{
             font-family: 'Montserrat', sans-serif;
-            
+
 
 
         }
@@ -103,12 +110,44 @@
             /* font-family: 'Montserrat', sans-serif; */
             font-size:16px;
         }
-        form  div:nth-child(n+1){
+        form  >div:nth-child(2n+1){
             display:flex;
             justify-content: flex-end;
-            
+            align-items: center;
         }
-        
+
+        form > div:nth-child(2n){
+/*            display:flex;
+*/            align-items: center;
+        }
+        select{
+            background-image: linear-gradient(#fff,#eee);
+            height:30px;
+            border:1px solid #ddd;
+            color:#777;
+            width:200px;
+            border-radius:2px;
+            cursor:pointer;
+/*            padding:0 25%;
+*/        }
+        input{
+            height:40px;
+            border:1px solid #aaa;
+            border-radius: 3px;
+            padding:7px;
+            font-size:18px;
+            font-family: 'Montserrat', sans-serif;
+            width:200px;
+        }
+        select:focus,button:focus,input:focus{
+            outline: none !important;
+
+        }
+        .inputcheck{
+            color:#bbb;
+        }
+
+
     </style>
 </head>
 <body>
@@ -116,7 +155,7 @@
 </div>
 <div class="row" style="border-bottom:1px solid black">
     <div class="col-4 " style="padding:30px;">
-        <h3 id="bankname">INFYBank  <span id="logo">IB</span></h3>
+        <h3 id="bankname" class="pointer">INFYBank  <span id="logo">IB</span></h3>
     </div>
     <div class ="col-8">
 
@@ -130,10 +169,10 @@
 </div>
 <div class="bread-crumb" style="padding:30px;">
     <div class="row" style="width:100%;height:50px;background-color:#eee;border:1px solid #ddd;">
-        <div class="col-4 ">
+        <div class="col-4 active">
             <div class="row">
-                <div class="col-10  done" style="padding:10px">
-                    <div class="number d-inline"> 1</div>
+                <div class="col-10 " style="padding:10px">
+                    <div class="number d-inline" style="padding:1px 6px"> 1</div>
                     <div class="breadcrumbtext"> Verify Identity</div>
                 </div>
                 <div class='col-2 ' style="padding:0px">
@@ -142,7 +181,7 @@
             </div>
         </div>
 
-        <div class="col-4 done">
+        <div class="col-4 ">
             <div class="row">
                 <div class="col-10  " style="padding:10px">
                     <div class="number d-inline"> 2</div>
@@ -153,22 +192,22 @@
                 </div>
             </div>
         </div>
-        <div class="col-4 active" >
+        <div class="col-4 " >
             <div class="row" style="height:100%">
                 <div class="col-12" style="padding:10px;height:100%;">
                     <div class="number d-inline"> 3</div>
                     <div class="breadcrumbtext"> Confirmation</div>
                 </div>
-                
+
             </div>
-        
+
     </div>
 </div>
 <div class="content">
     <p>If you already have an INFYBank account and wish to register for Personal Internet Banking, you will be required to utilize your  Security Number.</p>
     <p>You need to provide an account details(loan account/ Savings account/ Credit Card/ Insurance).</p>
     <form class="row ">
-        <div class="col-4 ">
+        <div class="col-4 " >
                 <label style="margin-right:10px;"> <span style="color:#d00404">*</span>Required Field </label>
         </div>
         <div class="col-8"></div>
@@ -177,29 +216,45 @@
         <div class="col-4">
             <label><span style="color:#d00404">*</span>Verification Method :</label>
         </div>
-        <div class="col-8 ">
-            <div class="row">
-                <div class="col-6">
-                    <select name="verificationtype">
+        <div class="col-8 row">
+
+                <div class="col-6 ">
+                    <select name="verificationtype" >
                         <option value="loanaccount">Loan Account</option>
                         <option value="savingsaccount">Savings Account</option>
                         <option value="creditcard">Credit Card</option>
                         <option value="Insurance">Insurance</option>
                     </select>
                 </div>
-                <div class="col-6">
 
-                </div>
-            </div>
+
         </div>
         <br>
         <br>
         <div class="col-4">
-                <label><span style="color:#d00404">*</span>Security  :</label>
+                <label><span style="color:#d00404">*</span>Security Number :</label>
 
         </div>
-        
-        
+        <div class="col-8 row">
+
+                <div class="col-6 " style="vertical-align: middle">
+                    <input type="password" style="font-family: auto" name="securitynumber" >
+                </div>
+                <div class="col-6">
+
+                </div>
+
+        </div>
+        <div class="col-4">
+        </div>
+         <div class="col-8 ">
+            <small><i class="far fa-check-circle inputcheck"></i> Only Numbers are allowed </small>
+            <br>
+            <small><i class="far fa-check-circle inputcheck"></i> Length must be 9 characters </small>
+            <br>
+            <small><i class="far fa-check-circle inputcheck"></i> Length must be 9 characters </small>
+         </div>
+
 
     </form>
 </div>
@@ -208,7 +263,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 <script>
-    
+    $('#bankname').click(function(){
+        window.location.href = '/';
+    });
 </script>
 </body>
 </html>
