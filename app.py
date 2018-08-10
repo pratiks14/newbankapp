@@ -7,10 +7,14 @@ import string
 import json
 from datetime import timedelta
 # import httplib2
+import traceback
 from flask import make_response,Response
+from flask_restful import Resource,Api
+from model import Validation,Operations
 
 app = Flask(__name__)
 app.secret_key = "my_app_secretkey"
+api = Api(app)
 
 
 
@@ -18,9 +22,72 @@ app.secret_key = "my_app_secretkey"
 def main():
     return   render_template('home.html')
 
-@app.route('/register')
+@app.route('/register',methods=['POST','GET','DELETE'])
 def register():
-    return render_template('register.html')
+	if request.method == 'POST':
+		try:
+			params = request.form
+			# print(params['registerno'])
+			resp = Operations.validate(params)
+			return resp
+			
+		except Exception as e:
+			print(e)
+			traceback.print_exc()
+			response = make_response(json.dumps('Error'), 400)
+			response.headers['Content-Type'] = 'application/json'
+			return response
+	if request.method == 'DELETE':
+		params = json.loads(request.data.decode('utf-8'))
+		securitynumber = params['securitynumber']
+		
+
+	return render_template('register.html')
+
+@app.route('/checkusername',methods=['POST'])
+def checkUsername():
+	params = json.loads(request.data.decode('utf-8'))
+	username  = params['username']
+	resp = Validation.username(username)
+	
+	return resp
+	
+
+@app.route('/login',methods=['GET','POST'])
+def login():
+	if request.method == 'POST':
+		try:
+			params = json.loads(request.data.decode('utf-8'))
+			resp = Operations.loginValidate(params)
+			return resp
+		except Exception as e:
+			traceback.print_exc()
+			response = make_response(json.dumps('Some Error Occured! Refresh and Try again '), 400)
+			response.headers['Content-Type'] = 'application/json'
+			return response
+
+
+	return render_template('login.html')
+
+@app.route('/disconnect')
+def disconnect():
+	login_session.clear()
+	return redirect('/')
+
+@app.route('/main')
+def rendermain():
+	if "username" not in login_session:
+		return redirect('/')
+	customerDetailsDict = {}
+	try:
+		customerDetailsDict = Operations.getCustomerDetailsDict(login_session['ssn'])
+		customerDetailsDict['error'] = 'No'
+	except Exception as e:
+		print(e)
+		traceback.print_exc()
+		customerDetailsDict['error'] = 'error'
+	return render_template('index.html',customerDetails = customerDetailsDict)
+
 
 if __name__ == '__main__':
 	app.secret_key = "my_app_secretkey"
