@@ -9,10 +9,10 @@
     <link href="https://fonts.googleapis.com/css?family=Merriweather:700|Quicksand" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Atomic+Age|Montserrat" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet"> 
+     <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='fontawesome/css/all.min.css')}}" >   
 
 
     <style>
@@ -23,9 +23,10 @@
         background-image: #eee;
         padding:0px;
         margin:0px;
-        min-width:100vw;
+        width:100vw;
         box-sizing: border-box;
         }
+        
     .pointer{
             cursor:pointer;
         }
@@ -125,7 +126,7 @@
             height:30px;
             border:1px solid #ddd;
             color:#777;
-            width:200px;
+            width:300px;
             border-radius:2px;
             cursor:pointer;
 /*            padding:0 25%;
@@ -137,7 +138,7 @@
             padding:7px;
             font-size:18px;
             font-family: 'Montserrat', sans-serif;
-            width:200px;
+            width:300px;
         }
         select:focus,button:focus,input:focus{
             outline: none !important;
@@ -147,32 +148,51 @@
             color:#bbb;
         }
 
-
+       button{
+            /* background-color:#aaa; */
+           padding:5px 20px;
+            border:1px solid #fff;
+            color:#eee;
+            cursor:pointer
+        }
+        .vertical-alignment-helper {
+            display:table;
+            height: 100%;
+            width: 80%;
+            margin:0% 10%;
+            padding: 50px;
+        }
+        .modal-dialog {
+            display: table-cell;
+            vertical-align: middle;
+            border-radius: 20em;
+        }
+        
     </style>
 </head>
 <body>
 <div class="head" style="height:30px">
 </div>
-<div class="row" style="border-bottom:1px solid black">
+<div class="row" style="border-bottom:1px solid black;margin:0px;width:100vw;">
     <div class="col-4 " style="padding:30px;">
         <h3 id="bankname" class="pointer">INFYBank  <span id="logo">IB</span></h3>
     </div>
-    <div class ="col-8">
+    <div class ="col-8" >
 
     </div>
 </div>
 <div id="gradient">
 
 </div>
-<div class="col-12 " style = "font-size:25px;background-color:#eee;padding-bottom:2px">
+<div class="col-12 " style = "font-size:25px;background-color:#eee;padding-bottom:2px;">
     <p>Registration</p>
 </div>
 <div class="bread-crumb" style="padding:30px;">
     <div class="row" style="width:100%;height:50px;background-color:#eee;border:1px solid #ddd;">
-        <div class="col-4 active">
+        <div class="col-3 active">
             <div class="row">
                 <div class="col-10 " style="padding:10px">
-                    <div class="number d-inline" style="padding:1px 6px"> 1</div>
+                    <div class="number d-inline" style="padding:1px 6px">1</div>
                     <div class="breadcrumbtext"> Verify Identity</div>
                 </div>
                 <div class='col-2 ' style="padding:0px">
@@ -180,22 +200,32 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-4 ">
+        <div class="col-3 ">
             <div class="row">
                 <div class="col-10  " style="padding:10px">
-                    <div class="number d-inline"> 2</div>
-                    <div class="breadcrumbtext"> Choose Security Question</div>
+                    <div class="number d-inline">2</div>
+                    <div class="breadcrumbtext"> Set up Login</div>
                 </div>
                 <div class='col-2 ' style="padding:0px">
                     <div class="triangle"></div>
                 </div>
             </div>
         </div>
-        <div class="col-4 " >
+        <div class="col-3 ">
+            <div class="row">
+                <div class="col-10  " style="padding:10px 0px">
+                    <div class="number d-inline">3</div>
+                    <div class="breadcrumbtext"> Security Question</div>
+                </div>
+                <div class='col-2 ' style="padding:0px">
+                    <div class="triangle"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 " >
             <div class="row" style="height:100%">
                 <div class="col-12" style="padding:10px;height:100%;">
-                    <div class="number d-inline"> 3</div>
+                    <div class="number d-inline">4</div>
                     <div class="breadcrumbtext"> Confirmation</div>
                 </div>
 
@@ -206,7 +236,7 @@
 <div class="content">
     <p>If you already have an INFYBank account and wish to register for Personal Internet Banking, you will be required to utilize your  Security Number.</p>
     <p>You need to provide an account details(loan account/ Savings account/ Credit Card/ Insurance).</p>
-    <form class="row ">
+    <form class="row " style="margin:0px;width:100%;">
         <div class="col-4 " >
                 <label style="margin-right:10px;"> <span style="color:#d00404">*</span>Required Field </label>
         </div>
@@ -221,16 +251,20 @@
                 <div class="col-6 ">
                     <select name="verificationtype" >
                         <option value="loanaccount">Loan Account</option>
-                        <option value="savingsaccount">Savings Account</option>
+                        <option value="debitcard">Debit Card</option>
                         <option value="creditcard">Credit Card</option>
-                        <option value="Insurance">Insurance</option>
+                        <option value="insurance">Insurance</option>
                     </select>
                 </div>
 
 
         </div>
+        <!-- page 3 -->
+        
+        <!-- page 3 -->
         <br>
         <br>
+        
         <div class="col-4">
                 <label><span style="color:#d00404">*</span>Security Number :</label>
 
@@ -238,34 +272,389 @@
         <div class="col-8 row">
 
                 <div class="col-6 " style="vertical-align: middle">
-                    <input type="password" style="font-family: auto" name="securitynumber" >
+                    <input type="password"  name="securitynumber" required>
                 </div>
-                <div class="col-6">
+                <div class="col-6 verification" style="display:none">
+                    <small><i class="far fa-check-circle inputcheck"></i> Only Numbers are allowed </small>
+                    <br>
+                    <small><i class="far fa-check-circle inputcheck"></i> Length must be 6 characters </small>
 
                 </div>
 
         </div>
+        <br>
+        <br>
+        <!-- <br>
+        <br> -->
         <div class="col-4">
+            <label id="number"><span style="color:#d00404">*</span >Account Number :</label>
+
         </div>
-         <div class="col-8 ">
-            <small><i class="far fa-check-circle inputcheck"></i> Only Numbers are allowed </small>
-            <br>
-            <small><i class="far fa-check-circle inputcheck"></i> Length must be 9 characters </small>
-            <br>
-            <small><i class="far fa-check-circle inputcheck"></i> Length must be 9 characters </small>
-         </div>
+        <div class="col-8 row">
 
+            <div class="col-6 " style="vertical-align: middle">
+                <input type="text"  name="number" required>
+            </div>
+            <div class="col-6 verification" style="display:none">
+                <small><i class="far fa-check-circle inputcheck"></i> Only Numbers are allowed </small>
+                <br>
+                <small><i class="far fa-check-circle inputcheck"></i> Length must be 16 characters </small>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="col-4">
+            <label id="code"><span style="color:#d00404">*</span>4 Digit Code :</label>
 
+        </div>
+        
+        <div class="col-8 row">
+
+                <div class="col-6 " style="vertical-align: middle">
+                    <input type="password"  name="password" required>
+                </div>
+                <div class="col-6 verification" style="display:none">
+                    <small><i class="far fa-check-circle inputcheck"></i> Only Numbers are allowed </small>
+                    <br>
+                    <small><i class="far fa-check-circle inputcheck"></i> Length must be 4 characters </small>
+
+                </div>
+
+        </div>
+        
+        <!-- page 4 -->
+        
+        <!-- page 4 end -->
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="col-4">
+            <label id="code"><span style="color:#d00404">*</span>Email :</label>
+
+        </div>
+        
+        <div class="col-8 row">
+
+                <div class="col-6 " style="vertical-align: middle">
+                    <input type="text"  name="email" required>
+                </div>
+                <div class="col-6 verification" style="display:none">
+                    <small><i class="far fa-check-circle inputcheck"></i> Email id format : something@something.com</small>
+                    
+
+                </div>
+
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="col-4">
+            <label id="code"><span style="color:#d00404">*</span>Mobile Number :</label>
+
+        </div>
+        
+        <div class="col-8 row">
+
+                <div class="col-6 " style="vertical-align: middle">
+                    <input type="text"  name="mobileno" required>
+                </div>
+                <div class="col-6 verification" style="display:none">
+                    <small><i class="far fa-check-circle inputcheck"></i> Only Numbers are allowed </small>
+                    <br>
+                    <small><i class="far fa-check-circle inputcheck"></i> Length must be 10 characters </small>
+
+                </div>
+
+        </div>
+        <br>
+        <br>
+        
     </form>
 </div>
+<div class="modal fade" id="dataModal" role="dialog">  
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog">  
+        
+        <!-- Modal content-->  
+            <div class="modal-content ">  
+                
+                  
+                 
+            </div> 
+            
+        </div>  
+    </div>	
+</div>
+<br>
+<hr style="border:1px solid #aaa">
+<div class="row d-flex navbuttons">
+    <div class="col-6">
+        <button class="cancel" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;">Cancel</button>
+    </div>
+    <div class="col-6 d-flex justify-content-end">
+        <button class="continue" style="background-image:linear-gradient(#d00100,#900404,#d00100)" >Continue</button>
+    </div>
+</div>
+<script src="{{url_for('static', filename='jquery.min.js')}}" ></script>
+<script src="{{url_for('static', filename='popper.min.js')}}" ></script>
+<script src="{{url_for('static', filename='bootstrap.min.js')}}" ></script>
+<script src="{{url_for('static', filename='registerscript.js')}}"></script>
+<script src="{{url_for('static', filename='registerscript2.js')}}"></script>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 <script>
+$(window).on('load',function(){
+    window.sessionStorage.clear();
+});
+
     $('#bankname').click(function(){
         window.location.href = '/';
     });
+    $('select[name=verificationtype]').on('change',function(e){
+        e.preventDefault();
+        if($(this).val() == 'insurance')
+        {
+            $('#number').html('<span style="color:#d00404">*</span >Insurance Number :');
+            $('#code').html('<span style="color:#d00404">*</span >4 Digit Code :');
+        }
+        else if($(this).val() == 'creditcard' || $(this).val()=='debitcard')
+        {
+            $('#number').html('<span style="color:#d00404">*</span >Card Number :');
+            $('#code').html('<span style="color:#d00404">*</span >PIN  :');
+        }
+        else{
+            $('#number').html('<span style="color:#d00404">*</span >Account Number :');
+            $('#code').html('<span style="color:#d00404">*</span >4 Digit Code :');
+        }
+    });
+    $('form').delegate('input','focus',function(){
+    
+        $(this).parent().parent().find('.verification').show();
+    });
+    $('form').delegate('input','focusout',function(){
+        
+        $(this).parent().parent().find('.verification').hide();
+        
+    });
+
+    $('form').delegate('input[name=username]','keyup',function(){
+        var val = $(this).val();
+        data = {};
+        data['username'] = val;
+        $.ajax({
+            type:'POST',
+            url :'/checkusername',
+            data : JSON.stringify(data),
+            processData:false,
+            contentType:'application/json',
+            success:function(data){
+                var result = '<small><i class="far fa-check-circle" style="color:green;"></i> '+data+' </small>';
+                $('input[name="username"]').parent().parent().find('.verification').html(result);
+                $('input[name="username"]').css('border','1px solid green');
+            },
+            error:function(data){
+                var result = '<small><i class="fas fa-exclamation-circle"></i> '+data.responseJSON+'</small>';
+                $('input[name="username"]').parent().parent().find('.verification').html(result);
+                $('input[name="username"]').css('border','1px solid #aaa');
+            }
+        });
+    });
+    $('form').delegate('input[name=userpassword]','keyup',function(){
+        var val = $(this).val();
+        var valid = true;
+        if (val.toLowerCase() != val && val.toUpperCase() != val){
+            $(this).parent().parent().find('.verification small:nth-child(3) i').css('color','green');
+            
+        }
+        else{
+            $(this).parent().parent().find('.verification').find('small:nth-child(3) i').css('color','#bbb');
+            valid = false;
+        }
+        if(val.length >= 6){
+            $(this).parent().parent().find('.verification small:nth-child(1) i').css('color','green');
+        }
+        else{
+            $(this).parent().parent().find('.verification small:nth-child(1) i').css('color','#bbb');
+            valid = false;
+        }
+        if(val.match(/\d+/g) != null){
+            $(this).parent().parent().find('.verification small:nth-child(5) i').css('color','green');
+        }
+        else{
+            $(this).parent().parent().find('.verification small:nth-child(5) i').css('color','#bbb');
+            valid = false;
+        }
+        if (valid){
+            $(this).css('border','1px solid green');
+
+        }
+        else{
+            $(this).css('border','1px solid #aaa');
+
+        }
+    });
+    $('.cancel').click(function(e){
+        e.preventDefault();
+        var modalbody = `
+        <div class="modal-body ">  
+                    <h5>Do you want to cancel the registration process ?</h5>
+                    <button type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Dont Cancel</button>
+                    <button type="button" style="background-image:linear-gradient(#d00100,#900404,#d00100)" class="redirecthome" >Cancel</button>
+                </div>`;
+        $('.modal-content').html(modalbody);
+        $('#dataModal').modal('show');
+        $('.redirecthome').click(function(event){
+            event.preventDefault();
+            window.location.href = '/';
+            // if($.trim($('.active .number').html()) != '1' ){
+            //     var data = {};
+            //     data['securitynumber'] = window.sessionStorage['securitynumber'];
+            //     $.ajax({
+            //         url:'/register',
+            //         type:'DELETE',
+            //         processData:false,
+            //         data: JSON.stringify(data),
+            //         contentType : 'application/json;',
+            //         success:function(data){
+            //             window.location.href = '/';
+            //         },
+            //         error:function(){
+            //             var modalcontent = `
+            //                 <div class="modal-body ">  
+            //                 <h5><i class="fas fa-exclamation-circle"></i> Some Error Occured Try Again</h5>
+            //                 </div>
+            //                 <div class="modal-footer d-flex justify-content-start">
+            //                 <button type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Close</button>
+            //                 </div>`;
+            //             $('.modal-content').html(modalcontent);
+            //             $('#dataModal').modal('show');
+            //         }
+            //     });
+
+            // }
+        });
+    });
+
+    $('.navbuttons').delegate('.continue','click',function(e){
+        e.preventDefault();
+        data = {};
+        var formData = new FormData($('form')[0]);
+        var empty = false;
+        for (var [key, value] of formData.entries()) { 
+            if (value == ''){
+                empty = true;
+                break;
+            }
+        }
+
+        // $.map($('form').serializeArray(),function(ele,index){
+        //     if (ele["type"] == "password"){
+        //         data[ele["name"]] = ele["value"];
+        //      }
+        //      else{
+ 		// 	    data[ele["name"]] = $.trim(ele["value"]);
+        //      }
+ 		
+ 		// });
+        if(empty){
+            var modalcontent = `
+                                <div class="modal-body ">  
+                                <h5><i class="fas fa-exclamation-circle"></i> Fill all the Inputs before continuing</h5>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-start">
+                                <button type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Close</button>
+                                </div>`;
+            $('.modal-content').html(modalcontent);
+            $('#dataModal').modal('show');
+        }
+        else{
+            formData.append("registerno",1)
+            $.ajax({
+                type:'POST',
+                url:'/register',
+                processData:false,
+                contentType:false,
+                data:formData,
+                success :function(data){
+                    
+                    for(var [key,value] of formData.entries() ){
+                        window.sessionStorage[key] = value;
+                    }
+                    $('.content p:nth-child(1)').html('Enter username and password of your choice to logon to Netbanking.');
+                    $('.content p:nth-child(2)').html('Password must contain atleast 1 Uppercase and lowercase along with a numerical character.');
+                    var form = `
+                    <div class="col-4 " >
+                        <label style="margin-right:10px;"> <span style="color:#d00404">*</span>Required Field </label>
+                    </div>
+                    <div class="col-8"></div>
+                    <br>
+                    <br>
+                    <div class="col-4">
+                        <label ><span style="color:#d00404">*</span>Username :</label>
+
+                    </div>
+                    
+                    <div class="col-8 row">
+
+                            <div class="col-4 " style="vertical-align: middle">
+                                <input type="text"  style="width:100%" name="username" required>
+                            </div>
+                            <div class="col-8 verification" style="display:none">
+                                <small><i class="far fa-check-circle inputcheck"></i> Must have atleast 3 characters </small>
+                                
+
+                            </div>
+
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="col-4">
+                        <label ><span style="color:#d00404">*</span>Password :</label>
+
+                    </div>
+                    
+                    <div class="col-8 row">
+
+                            <div class="col-4 " style="vertical-align: middle">
+                                <input type="password" style="width:100%" name="userpassword" required>
+                            </div>
+                            <div class="col-8 verification" style="display:none">
+                                <small><i class="far fa-check-circle inputcheck"></i> Must have atleast 6 characters </small>
+                                <br>
+                                <small><i class="far fa-check-circle inputcheck"></i> Must contain atleast 1 Uppercase and lowercase character </small>
+                                <br>
+                                <small><i class="far fa-check-circle inputcheck"></i> Must contain atleast 1 Numerical character </small>
+                            </div>
+
+                    </div>
+                    `;
+                    $('form').html(form);
+                    var nextactive = $('.bread-crumb .active').next();
+                    $('.bread-crumb .active').removeClass('active').addClass('done');
+                    nextactive.addClass('active');
+                    $('.continue').removeClass('continue').addClass('continue2');
+                    
+                },
+                error:function(data){
+                    var modalcontent = `
+                                <div class="modal-body ">  
+                                <h5><i class="fas fa-exclamation-circle"></i> `+data.responseJSON+`</h5>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-start">
+                                <button type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Close</button>
+                                </div>`;
+                    $('.modal-content').html(modalcontent);
+                    $('#dataModal').modal('show');
+                }
+            });
+        }
+    });
+   
 </script>
 </body>
 </html>
