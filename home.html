@@ -25,25 +25,25 @@
     padding:0px;
     margin:0px;
 }
-/* width */
-::-webkit-scrollbar {
-    width: 10px;
-}
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
 
-/* Track */
-::-webkit-scrollbar-track {
-    background: #f1f1f1; 
-}
- 
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #888; 
-}
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888; 
+    }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #555; 
-}
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+    }
         .head-nav{
             background-color: black;
             color :#eee;
@@ -71,6 +71,9 @@
             padding: 0px;
             margin:0px;
 
+        }
+        #logon-btn:hover{
+            background-color: #700404
         }
         .head-nav .row{
             padding:0px;
@@ -598,11 +601,16 @@
     });
     $('#register').click(function(event){
         event.preventDefault();
-        window.location.href = '/register'
+        window.location.href = '/register';
     });
     $('#bankname').click(function(){
-        window.location.href = '/'
+        window.location.href = '/';
     });
+    $('#logon-btn').click(function(){
+        window.location.href = '/login';
+    });
+
+
 </script>
 </body>
 </html>
