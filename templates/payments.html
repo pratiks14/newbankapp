@@ -1,450 +1,405 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <title>ETA Bank</title>
+
+    <title>THE Bank</title>
+    <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Atomic+Age|Montserrat" rel="stylesheet">
+     <!-- Bootstrap Core CSS -->
+     <link href="{{url_for('static',filename='gijgo.min.css')}}" rel="stylesheet"  />
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='bootstrap.min.css')}}">
-    
-    
     <link rel="stylesheet" href="{{url_for('static',filename='fontawesome/css/all.min.css')}}" >   
-    <!-- <link rel="stylesheet" href="..\static\fontawesome\css\all.min.css" >    -->
-    <style>
-      @font-face {
-        font-family: Tajawal;
-        src: url("{{url_for('static',filename='fonts/Tajawal/Tajawal-Bold.ttf')}}");
-    }
-    @font-face {
-        font-family: Merriweather;
-        src: url("{{url_for('static',filename='fonts/Merriweather/Merriweather-Bold.ttf')}}");
-    }
-    @font-face {
-        font-family: Quicksand;
-        src: url("{{url_for('static',filename='fonts/Quicksand/Quicksand-Regular.ttf')}}");
-    }
-        body{
+<style>
+     body{
     /* background-color: #E7E7EF; */
     height: 100%;
     background-repeat: no-repeat;
-    background-image: linear-gradient(rgb(104, 145, 162), rgb(207, 230, 212));
-}
-        .title{
-            font-family: Tajawal,sans-serif;
-            
-        }
-        .head{
-            
-            background-color: azure;
-        }
-        .bank-head{
-           height:80px;
-           border-bottom:3px solid #006666 ;
-        }
-        #moneytransfer{
-            font-family: Merriweather,sans-serif;
-            color:#006666;
-        }
-
-        input[type="text"]:not([readonly]),select{
-            font-family: Tajawal,sans-serif;
-            font-size:1.17em;
-            font-weight: bold;
-        }
-        footer{
-            border-top:2px solid #006666;
-        }
-
-        nav-item:hover{
-            background-color: rgb(104, 145, 162)
-        }
-        .container{
-            margin-top:30px;
-        }
-        .funkyradio div {
-  clear: both;
-  overflow: hidden;
+    background-color: #fff;
+    padding:0px;
+    margin:0px;
+    box-sizing: border-box;
 }
 
-.funkyradio label {
-  width: 100%;
-  border-radius: 3px;
-  border: 1px solid #D1D3D4;
-  font-weight: normal;
+.head-nav{
+    background-color:#111;
+    color :#eee;
+    height : 50px;
+}
+#bankname{
+    font-family: 'Exo 2', sans-serif;
+}
+#logo{
+    font-family: 'Atomic Age', cursive;
+    color:#d00404;
+    border:1px solid white;
+    border-radius: 4px;
+    background-color: #eee
 }
 
-.funkyradio input[type="radio"]:empty,
-.funkyradio input[type="checkbox"]:empty {
-  display: none;
+    /* width */
+    ::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888; 
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+    }
+
+
+.headtext{
+    font-size: 12px;
+}
+#logon-btn{
+    background-color: #d00404;
+    height:50px !important;
+    color:#eee;
+    font-size: 12px;
+    padding: 0px;
+    margin:0px;
+    width:100%;
+
 }
 
-.funkyradio input[type="radio"]:empty ~ label,
-.funkyradio input[type="checkbox"]:empty ~ label {
-  position: relative;
-  line-height: 2.5em;
-  text-indent: 3.25em;
-  margin-top: 0em;
-  cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-}
-
-.funkyradio input[type="radio"]:empty ~ label:before,
-.funkyradio input[type="checkbox"]:empty ~ label:before {
-  position: absolute;
-  display: block;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  content: '';
-  width: 2.5em;
-  background: #D1D3D4;
-  border-radius: 3px 0 0 3px;
-}
-
-.funkyradio input[type="radio"]:hover:not(:checked) ~ label,
-.funkyradio input[type="checkbox"]:hover:not(:checked) ~ label {
-  color: #777;
-}
-
-.funkyradio input[type="radio"]:hover:not(:checked) ~ label:before,
-.funkyradio input[type="checkbox"]:hover:not(:checked) ~ label:before {
-  content: '\2714';
-  text-indent: .9em;
-  color: #C2C2C2;
-}
-
-.funkyradio input[type="radio"]:not(:checked) ~ label,
-.funkyradio input[type="checkbox"]:not(:checked) ~ label {
-  color: #777;
-}
-
-.funkyradio input[type="radio"]:checked ~ label,
-.funkyradio input[type="checkbox"]:checked ~ label {
-  color: #333;
-}
-
-.funkyradio input[type="radio"]:checked ~ label:before,
-.funkyradio input[type="checkbox"]:checked ~ label:before {
-  content: '\2714';
-  text-indent: .9em;
-  color: #333;
-  background-color: #ccc;
-}
-
-.funkyradio input[type="radio"]:focus ~ label:before,
-.funkyradio input[type="checkbox"]:focus ~ label:before {
-  box-shadow: 0 0 0 3px #777;
-}
-
-.funkyradio-default input[type="radio"]:checked ~ label:before,
-.funkyradio-default input[type="checkbox"]:checked ~ label:before {
-  color: #777;
-  background-color: #006666;
-}
-
-/* .funkyradio-primary input[type="radio"]:checked ~ label:before,
-.funkyradio-primary input[type="checkbox"]:checked ~ label:before {
-  color: #fff;
-  background-color: #337ab7;
-}
-
-.funkyradio-success input[type="radio"]:checked ~ label:before,
-.funkyradio-success input[type="checkbox"]:checked ~ label:before {
-  color: #fff;
-  background-color: #5cb85c;
-}
-
-.funkyradio-danger input[type="radio"]:checked ~ label:before,
-.funkyradio-danger input[type="checkbox"]:checked ~ label:before {
-  color: #fff;
-  background-color: #d9534f;
-}
-
-.funkyradio-warning input[type="radio"]:checked ~ label:before,
-.funkyradio-warning input[type="checkbox"]:checked ~ label:before {
-  color: #fff;
-  background-color: #f0ad4e;
-}
-
-.funkyradio-info input[type="radio"]:checked ~ label:before,
-.funkyradio-info input[type="checkbox"]:checked ~ label:before {
-  color: #fff;
-  background-color: #5bc0de;
-} */
-
-.nav-link,.nav-link:hover {
-    color:#006666 ;
-}
-.nav-pills > .nav-item > .active{
-    background-color: #006666 !important;
-}
-.nav-tabs > .nav-item > .active{
-    background-repeat: no-repeat;
-    background-image: linear-gradient(rgb(123, 168, 187),rgb(104, 145, 162));
-    color:#fff;
-}
-ul.nav.nav-tabs.nav-fill{
-    border-radius: 5px;
-}
-.dropdown-item{
+.head-nav .row{
+    padding:0px;
     margin:0px;
 }
+.head-nav img{
+    width:25px;
+    height:18px;
+}
+.head-nav {
+    padding-right: 0px;
+    padding-left: 0px;
+    margin: 0px;
+}
+.pointer{
+    cursor:pointer;
+}
+.hover-underline:hover{
+    text-decoration: underline;
+}
+.nav-item{
+    color:#aaa;
+    height:100%;
+    display: flex ;
+    align-items: center;
+    justify-content: center;
+    cursor:pointer;
+    background-color: #fff;
 
+}
+.nav-text{
+    display: flex ;
+    align-items: flex-start;
+    justify-content: center;
+    width:200%;
+    padding:7px 0px;
+    font-family: 'Exo 2', sans-serif;
+    border-right :1px solid #eee;
+    margin-bottom:0px;
+    color:#aaa;
+    /* margin-right:-1px; */
+}
+.nav{
+    height: 70px;
+    /* border-bottom: 2px solid #eee; */
+}
+.nav-item:hover{
+    /* background-color: #eee; */
+    /* border-bottom:2px solid #ddd; */
+    color:#333;
+}
+.nav-item.active{
+    /* background-color: #eee; */
+    border-bottom:2px solid #ddd;
+    
+}
+.active .nav-text{
+    color:#333;
+}
+.cardcontent-head h5{
+    color:#eee;
+    background-color: #555;
+    padding:7px;
+    display: inline;
+    
+}
+h4,h5,h6{
+    font-family: Montserrat,sans-serif;
+    font-weight: normal;
+
+}
 .vertical-alignment-helper {
     display:table;
     height: 100%;
-    width: 50%;
-    margin: 0 22%;
+    width: 80%;
+    margin:0% 10%;
+    padding: 50px;
 }
 .modal-dialog {
     display: table-cell;
     vertical-align: middle;
     border-radius: 20em;
-  }
-
- 
-    </style>
-</head>
-<body>
-    <div class="container-fluid">
-        <div class="row head">
-            <div class="col-6 d-flex justify-content-start align-items-center">
-                <p ><span class="title">Last Login :</span>  {{last_login}}</p>
-            </div>
-            <div class="col-6 d-flex justify-content-end align-items-center">
-                <p><span class="title">Customer Service :</span>   15-6656-555 / 15-500-5555</p>
-            </div>
-        </div>
+}
+.dropdowncontent{
+    position:absolute;
+    z-index:100;
+    top:50px;
+    left:0px;
+    border: 1px solid #555;
+    width:100%;
+    display: None;
+}
+.dropdowncontent ul{
+    padding: 3px 5px;
+    margin:0px;
+    font-family: Montserrat,sans-serif;
+}
+.dropdowncontent li{
+    margin:4px 2px;
+    background-color:#d00404;
+    padding: 3px;
+    text-align: center;
+    cursor:pointer;
     
-            <div class="row bank-head" style="background-color: #e3f2fd">
-                <div class="col-4 d-flex justify-content-start align-items-center">
-                        <h4><span class="badge badge-secondary lead"><i>EB</i></span>  ETA BANK</h4>
-                </div>
-                <div class="col-5 d-flex justify-content-end align-items-center">
-                        {% with messages =get_flashed_messages() %}
-                <a class="nav-link "  id="navbarDropdownMenuLink2" data-toggle = "dropdown" href="#"><i class="fas fa-bell"></i> <span class="badge badge-light">{{ messages|length }}</span></a>
-                
-                    {% if messages %}
-                <ul class="dropdown-menu alert-dropdown dropdown-menu-middle" aria-labelledby="navbarDropdownMenuLink2">
-                    {% for message in messages %}
-                    <li>
-                        <p style="cursor:pointer" class="dropdown-item">{{ message|safe }}</p>
-                    </li>
-                   {% endfor %}
-                
-                 </ul>
-                    {% endif %} 
-                    {% endwith %}
-                </div>
-                <div class="col-3 d-flex justify-content-end align-items-center">
-                        <!-- <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="far fa-fw fa-user"></i> {{session['name']}} <b class="caret"></b>
-                               </a> -->
-                            <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"><i class="far fa-fw fa-user"></i> {{session['name']}}</button>   
-                               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                   <a class="dropdown-item" id="info-btn" href=""><i class="fas fa-cog"> </i> Info</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/disconnect"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
-                                 
-                               </div>
+}
+.dropdowncontent li:hover{
+    background-color:#700404;
+}
+a{
+    color:#eee;
+}
+a:hover{
+    text-decoration: None;
+    color:inherit;
+}
+.pay{
+    color:#eee;
+    background-color: rgb(36, 133, 36);
+    /* padding:2px 3px; */
+    border-radius: 2px;
+}
 
-                              
+.mybtn{
+    background-color: #555;
+    color:#eee;
+    border:none;
+    padding:7px 20px;
+    cursor: pointer;
+    
+}
+input,select{
+    outline:none !important;
+}
+select{
+    padding:6px 10px;
+    width:48%;
+    border:1px solid #eee;
+    border-radius: 4px;
+    color:#777;
+    font-family:  Montserrat,sans-serif;
+
+}
+button:focus,input:focus {outline:0;}
+
+.card-body h3:nth-child(1){
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: normal;
+    border-right:1px dotted gray;
+    /* border-left:1px dotted gray; */
+
+    width:48%;
+}
+.card-body h4:nth-child(2){
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #3e505d;
+    padding:4px 7px;
+    color:#eee;
+}
+hr{
+    margin-left: 0px;
+    border-style: dotted;
+    border-color: #aaa;
+    
+}
+
+</style>
+</head>
+
+<body>
+    <div class="row" style="width:100%;margin:0px;">
+        <div class="col-11 head-nav">
+            <div class="row d-flex align-items-center" style="height:100%;padding-left:2px;">
+                <div class="col-3 " >
+                    <h4 id="bankname">INFYBank  <span id="logo">IB</span></h4>
+                </div>
+                <div class="col-5">
+
+                </div>
+                <div class="col-4 row  headtext">
                     
-                </div>
-            </div>
-      
-        <ul class="nav nav-tabs nav-fill" style="height:auto;background-color: #e9ecef;">
-                <li class="nav-item ">
-                        <a class="nav-link " href="/main" id="accounts"><i class="fas fa-address-book"></i> Accounts</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link active"  href="/payments" id="payments"><i class="fas fa-exchange-alt"></i> Money Transfer</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link " href="/services" id="services"><i class="far fa-credit-card"></i> Cards</a>
-                      </li>
                 
-              </ul>
-    </div>
-    <div class="container">
-        <div class="jumbotron" id="firstspace" style="min-height:65vh;">
-            {% if accounts | length == 0%}
-                <div class="card">
-                    <div class="card-body">
-                        <p style="font-family:Quicksand" >You Dont have any account with us</p>
-                        <button class="btn btn-sm btn-info" id="gotoaccount">Click Here</button> to open an account.
+                    <div class="col-3">
                     </div>
-                </div>
-            {% else %}
-           <div class="card">
-               <div class="card-body" id="moneytransfer">
-                   <h4>Account Transfer :</h4>
-                   <hr/>
-                   <form class="form-group" id="acctransfer">
-                       <div class="row">
-                            <div class=col-4>
-                                <label>FROM</label>
-                               
-                                
-                                        <select class="form-control" name="fromaccount">
-                                        {% for account in accounts %}
-                                        <option value="{{account[0]}}">{{account[0]}} </option>
-                                        {% endfor %}
-                                            </select>
-                                    
-                                    
-                                
-
-                            </div>
-                            <div class="col-3 d-flex justify-content-center align-items-end">
-                                <h4><i class="fas fa-exchange-alt"></i></h4>
-                            </div>
-                            <div class"col-5 d-flex justify-content-end">
-                                    <label class="d-flex justify-content-end">TO</label>
-                                    <input type="text" class="form-control" name="toaccount" placeholder="Account Number" required>
-                            </div>
-                            <div class="col-4">
-                                <label>Amount</label>
-
-                                    
-                                            <div class="input-group mb-2">
-                                                <div class="input-group-prepend">
-                                                <div class="input-group-text">&#8377;</div>
-                                                </div>
-                                                <input type="text" class="form-control" name="amount" placeholder="Amount" required>
-                                                
-                                            </div>
-                                            <small class="d-block">(Min. amount INR 500 and Intergral multiples of 500)</small>
-                                   
-                            </div>
-                            <div class="col-8"></div>
-                            <br>
-                            <div class="col-12">
-                                <button class="btn  btn-secondary" type="submit" style="background-color: #006666">Transfer</button>
-                            </div>
-                       </div>
-                    </form>
-               </div>
-           </div>
-           {% endif %}
-
-        </div>
-    </div>
-    <div class="modal fade" id="dataModal" role="dialog">  
-        <div class="vertical-alignment-helper">
-            <div class="modal-dialog">  
-            
-            <!-- Modal content-->  
-                <div class="modal-content">  
-                        <!-- <div class="modal-header ">
-                      
-                                <h3><i class="far fa-check-square"></i> Verifing..</h3>
-                        </div>  
-                        <div class="modal-body">  
-                        <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> Checking Inputs..</li></ol>  
-                        </div>  
-                        <div class="modal-footer">    
-                        </div>  -->
-                </div>  
+                    <div class="col-3">
+                    </div>
+                    
+                       
+                    <div class="col-2 pointer" >
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="col-4 pointer hover-underline" id="register">
+                        Alerts <i class="fas fa-angle-right" ></i>
+                    </div>
+                            
                 
-            </div>  
-        </div>	
+                </div>
+               
+                
+            </div>
+        </div>
+        <div class="col-1 d-flex align-items-center justify-content-center pointer dropdown" id="logon-btn" style="height:100%">
+            <p style="margin-bottom: 0px" class="" > {% if session['customername'] | length > 8 %}{{session['customername'][:8] + '..'}}{% else %}{{session['username']}}{% endif %} <i class="fas fa-chevron-circle-down"></i></p>
+            <div class="dropdowncontent">
+                <ul style="list-style:None">
+                    <li><i class="far fa-user"></i> Info</li>
+                    <li><i class="fas fa-power-off"></i> <a href="/disconnect">Log out</a></li>
+                </ul>
+            </div>
+        </div>
+</div>
+<ul class="nav  nav-fill" style="width:100%;margin:0px;">
+    <li class="nav-item active" id="tab1">
+             <a href="/main" class="nav-text">Accounts</a>
+    </li>
+    <li class="nav-item " id="tab1">
+        <a href="/moneytransfer" class="nav-text">Money Transfer</a>
+    </li>
+    <li class="nav-item" id="tab1">
+        <p class="nav-text">Payments</p>
+    </li>
+    <li class="nav-item" id="tab1">
+        <p class="nav-text">Loans</p>
+    </li>
+</ul>
+<div class="currcont container" style="padding:10% 0;">
+    <div class="card" style="background-color:#ddd">
+        <div class="card-body" style="padding:2%">
+            <!-- <div class="d-inline-block" style="width:2%;"></div> -->
+            <h3 class="d-inline-block" >AMOUNT</h3>
+            <h4 class="d-inline-block" style="">&#8377; 8000</h4>
+            <hr style="">
+            {% if accounts | length > 0 %}
+            <h5 style="font-weight:bold;">Select Account</h5>
+            <select name="fromaccount">
+                {% for account in accounts %}
+                <option value="{{account[1]}}">{{account[1]}}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <br>
+            <button class="mybtn pay" style="background-color: rgb(31, 117, 31);">PAY</button>
+            {% else %}
+            <p style="font-family:'Segoe UI'" >You Dont have any account with us</p>
+            {% endif %}
+
+        </div>
     </div>
-    <footer>
-        <div class="footer-copyright text-center py-3 text-secondary">© 2018 Copyright:<a target="_blank" href="/"> etabank.com</a>
-        </div>
-        <div style="height:80px;background-color:azure" class=" d-flex justify-content-center align-items-center">
-                <p><i class="fab fa-facebook-f"></i> <i class="fab fa-linkedin"></i> <i class="fab fa-twitter"></i></p>
+   
+</div>     
+<div class="modal fade" id="dataModal" role="dialog">  
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog">  
+        
+        <!-- Modal content-->  
+            <div class="modal-content ">  
+                
+                    
+                    
+            </div> 
             
-        </div>
-    </footer>
-    <script src="{{url_for('static', filename='jquery.min.js')}}" ></script>
-        <script src="{{url_for('static', filename='popper.min.js')}}" ></script>
-        <script src="{{url_for('static', filename='bootstrap.min.js')}}" ></script>
-        <script>
-    $('#gotoaccount').click(function(event){
+        </div>  
+    </div>	
+</div>
+            <script src="{{url_for('static', filename='jquery.min.js')}}" ></script>
+            <script src="{{url_for('static', filename='popper.min.js')}}" ></script>
+            <script src="{{url_for('static', filename='bootstrap.min.js')}}" ></script>
+<script>
+
+  
+    $('.nav-item').hover(function(event){
         event.preventDefault();
-        window.location.href = '/main';
+        $(this).prev().find('.nav-text').css("border-right","none");
+        var tab = $(this).attr('id');
+        var idname = '#tab-content'+tab.charAt(tab.length-1)
+        $(idname).show();
+       
+        
+    },function(event){
+        event.preventDefault();
+        $(this).prev().find('.nav-text').css("border-right","1px solid #eee");
+        var tab = $(this).attr('id');
+        var idname = '#tab-content'+tab.charAt(tab.length-1)
+        $(idname).hide();
     });
 
-    $('#info-btn').click(function(event){
-       event.preventDefault();
-       var html =` <div class="modal-header ">
-                      
-                      <h3><i class="fas fa-user-tie"></i> Info</h3>
-              </div>  
-              <div class="modal-body info-data row">  
-                    <div class="col-4"><label>Customerid <label></div>
-                    <div class="col-8"><p>{{session['customerid']}}</p></div>
-                    <div class="col-4"><label>Name <label></div>
-                    <div class="col-8"><p>{{session['name']}}</p></div>
-                    <div class="col-4"><label>Email <label></div>
-                    <div class="col-8"><p>{{session['email']}}</p></div>
-                    <div class="col-4"><label>Phone No <label></div>
-                    <div class="col-8"><p>{{session['mobileno']}}</p></div>
-              </div>  
-              <div class="modal-footer"> 
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>   
-              </div> `;
-        $('.modal-content').html(html);
-        $('#dataModal').modal("show");
-   });
-
-    $('#acctransfer').submit(function(event){
+    $('.pay').click(function(event){
         event.preventDefault();
         data = {};
-        $.map($('#acctransfer').serializeArray(),function(ele,index){
-            data[ele['name']] = $.trim(ele['value']);
-        });
-   
-
+        data['fromaccount'] = $('select').val();
         $.ajax({
-            type:'POST',
-            url:'/acctransfer',
-            processData:false,
+            url:window.location.href,
+            type:POST,
             data:JSON.stringify(data),
-            contentType:'application/json,charset=utf-8',
-            success:function(resp){
-                let header = '<i class="fas fa-check-square"></i> Completed';
-                let body = resp;
-                let reply = `<div class="modal-header">
-                <h3>${header}</h3>
-                </div>
-                <div class="modal-body">
-                        <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> ${body} </li></ol>  
-                </div>
-                `;
-                $('.modal-content').html(reply);
-                $('#dataModal').modal("show");
-
-                setTimeout(function(){
-                    window.location.href = '/payments';
-                },1000);
-
+            processData:false,
+            contentType:'application/json',
+            suceess:function(data){
+                var modalcontent = `
+                                <div class="modal-body ">  
+                                <h5><i class="far fa-check-square" style="color:green"></i> Payment made</h5>
+                                <hr>
+                                <p>Redirecting to main page</p>
+                                </div>`;
             },
-            error:function(resp){
-                header = '<i class="fas fa-exclamation-triangle"></i> Error';
-                body = resp.responseJSON;
-                var footer = '<div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div>';
-                var reply1 = `<div class="modal-header">
-                            <h3>${header}</h3>
-                        </div>
-                        <div class="modal-body">
-                                <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> ${body} </li></ol>  
-                        </div>
-                        ${footer}
-                        `;
-                console.log(reply1);    
-                $('.modal-content').html(reply1);
-                $('#dataModal').modal("show");
+            error:function(data){
+                var modalcontent = `
+                                <div class="modal-body ">  
+                                <h5><i class="fas fa-exclamation-circle"></i> `+data.responseJSON+`</h5>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-start">
+                                <button class="mybtn" type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Close</button>
+                                </div>`;
+                $('.modal-content').html(modalcontent);
+                $('#dataModal').modal('show');
             }
         });
+
+
     });
 
+    
+   
+
+   
+   
 </script>
 </body>
+
 </html>
