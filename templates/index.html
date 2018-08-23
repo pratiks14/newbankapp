@@ -1,1 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>THE Bank</title>
+    <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Atomic+Age|Montserrat" rel="stylesheet">
+     <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='fontawesome/css/all.min.css')}}" >   
+<style>
+     body{
+    /* background-color: #E7E7EF; */
+    height: 100%;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    padding:0px;
+    margin:0px;
+}
+
+.head-nav{
+    background-color:#111;
+    color :#eee;
+    height : 50px;
+}
+#bankname{
+    font-family: 'Exo 2', sans-serif;
+}
+#logo{
+    font-family: 'Atomic Age', cursive;
+    color:#d00404;
+    border:1px solid white;
+    border-radius: 4px;
+    background-color: #eee
+}
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888; 
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+    }
+
+
+.headtext{
+    font-size: 12px;
+}
+#logon-btn{
+    background-color: #d00404;
+    height:50px !important;
+    color:#eee;
+    font-size: 12px;
+    padding: 0px;
+    margin:0px;
+    width:100%;
+
+}
+
+.head-nav .row{
+    padding:0px;
+    margin:0px;
+}
+.head-nav img{
+    width:25px;
+    height:18px;
+}
+.head-nav {
+    padding-right: 0px;
+    padding-left: 0px;
+    margin: 0px;
+}
+.pointer{
+    cursor:pointer;
+}
+.hover-underline:hover{
+    text-decoration: underline;
+}
+.nav-item{
+    color:#aaa;
+    height:100%;
+    display: flex ;
+    align-items: center;
+    justify-content: center;
+    cursor:pointer;
+    background-color: #fff;
+
+}
+.nav-text{
+    display: flex ;
+    align-items: flex-start;
+    justify-content: center;
+    width:200%;
+    padding:7px 0px;
+    font-family: 'Exo 2', sans-serif;
+    border-right :1px solid #eee;
+    margin-bottom:0px;
+    color:#aaa;
+    /* margin-right:-1px; */
+}
+.active .nav-text{
+    color:#333;
+}
+.nav{
+    height: 70px;
+    /* border-bottom: 2px solid #eee; */
+}
+.nav-item:hover{
+    /* background-color: #eee; */
+    /* border-bottom:2px solid #ddd; */
+    color:#333;
+}
+.nav-item.active{
+    /* background-color: #eee; */
+    border-bottom:2px solid #ddd;
+    color:#333;
+}
+.cardcontent-head h5{
+    color:#eee;
+    background-color: #555;
+    padding:7px;
+    display: inline;
+    
+}
+h4,h5,h6{
+    font-family: Montserrat,sans-serif;
+    font-weight: normal;
+
+}
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 80%;
+    margin:0% 10%;
+    padding: 50px;
+}
+.modal-dialog {
+    display: table-cell;
+    vertical-align: middle;
+    border-radius: 20em;
+}
+.dropdowncontent{
+    position:absolute;
+    z-index:100;
+    top:50px;
+    left:0px;
+    border: 1px solid #555;
+    width:100%;
+    display: None;
+}
+.dropdowncontent ul{
+    padding: 3px 5px;
+    margin:0px;
+    font-family: Montserrat,sans-serif;
+}
+.dropdowncontent li{
+    margin:4px 2px;
+    background-color:#d00404;
+    padding: 3px;
+    text-align: center;
+    cursor:pointer;
+    
+}
+.dropdowncontent li:hover{
+    background-color:#700404;
+}
+a{
+    color:#eee;
+}
+a:hover{
+    text-decoration: None;
+    color:inherit;
+}
+.pay{
+    color:#eee;
+    background-color: rgb(31, 117, 31);
+    padding:2px 3px;
+    border-radius: 2px;
+    float: right;
+}
+        
+</style>
+</head>
+
+<body>
+    <div class="row" style="width:100%;margin:0px;">
+        <div class="col-11 head-nav">
+            <div class="row d-flex align-items-center" style="height:100%;padding-left:2px;">
+                <div class="col-3 " >
+                    <h4 id="bankname">INFYBank  <span id="logo">IB</span></h4>
+                </div>
+                <div class="col-5">
+
+                </div>
+                <div class="col-4 row  headtext">
+                    
+                
+                    <div class="col-3">
+                    </div>
+                    <div class="col-3">
+                    </div>
+                    
+                       
+                    <div class="col-2 pointer" >
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="col-4 pointer hover-underline" id="register">
+                        Alerts <i class="fas fa-angle-right" ></i>
+                    </div>
+                            
+                
+                </div>
+               
+                
+            </div>
+        </div>
+        <div class="col-1 d-flex align-items-center justify-content-center pointer dropdown" id="logon-btn" style="height:100%">
+            <p style="margin-bottom: 0px" class="" > {% if session['customername'] | length > 8 %}{{session['customername'][:8] + '..'}}{% else %}{{session['username']}}{% endif %} <i class="fas fa-chevron-circle-down"></i></p>
+            <div class="dropdowncontent">
+                <ul style="list-style:None">
+                    <li><i class="far fa-user"></i> Info</li>
+                    <li><i class="fas fa-power-off"></i> <a href="/disconnect">Log out</a></li>
+                </ul>
+            </div>
+        </div>
+</div>
+<ul class="nav  nav-fill" style="width:100%;margin:0px;">
+    <li class="nav-item active" id="tab1">
+             <a href="/main" class="nav-text">Accounts</a>
+    </li>
+    <li class="nav-item " id="tab1">
+        <a href="/moneytransfer" class="nav-text">Money Transfer</a>
+    </li>
+    <li class="nav-item" id="tab1">
+        <a href="/payments" class="nav-text">Payments</a>
+    </li>
+    <li class="nav-item" id="tab1">
+        <p class="nav-text">Loans</p>
+    </li>
+</ul>
+<div class="currcont container" >
+    <div class="card" style="margin-top:20px;">
+        <div class="card-body" style="background-color: #3e505d;padding:10px;">
+            <h4 style="color:#eee" class="d-inline"> Credit Cards <span class="badge badge-secondary">{{customerDetails['creditcards'] | length}}</span> </h4>
+            <h4 class="d-inline-block  pointer" style="float:right;color:#eee"><i class="fas dropcircle fa-chevron-circle-down"></i></h4>
+        </div>
+
+        
+
+        <div class="card-body" style="border:1px solid #3e505d;display:none;">
+            {% if customerDetails['creditcards'] | length > 0 %}
+
+            <div class="row cardcontent-head" >
+                <div class="col-3 " style="border-right:1px solid #aaa">
+                    <h5>Card Number</h5>
+                </div>
+                <div class="col-3 " style="border-right:1px solid #aaa">
+                        <h5>Card Holder</h5>
+                </div>
+                <div class="col-3 " style="border-right:1px solid #aaa" >
+                    <h5>Credit Limit</h5>
+                </div>
+                <div class="col-3 " >
+                    <h5>You Owe</h5>
+                </div>
+            </div>
+            <hr style="height:0px;border:1px solid #aaa">
+
+            {% for creditcard in customerDetails['creditcards']%}
+            <div class="row" data-card-no="{{creditcard['cardnumber']}}">
+                <div class="col-3 " >
+                    <p>{{creditcard['cardnumber'][:4]+"********"+creditcard['cardnumber'][-4:]}} <i class="fas fa-external-link-square-alt pointer" style="color:#555" id="{{'creditcard/' + creditcard['cardnumber']}}"></i></p>
+                </div>
+                <div class="col-3 " >
+                    <p>{{creditcard['cardholder'].upper()}}</p>
+                </div>
+                <div class="col-3 " >
+                    <p>&#8377; {{creditcard['creditlimit']}}</p>
+                </div>
+                <div class="col-3 " >
+                    <p>&#8377; {{creditcard['amountdue']}} <span class="pay credit pointer">PAY</span></p>
+                </div>
+            </div>
+            <div class="modal fade infoModal" role="dialog">  
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog">  
+                    
+                    <!-- Modal content-->  
+                        <div class="modal-content ">  
+                            
+                                
+                                
+                        </div> 
+                        
+                    </div>  
+                </div>	
+            </div>
+            {% endfor %}
+
+            {% else %}
+
+            <h6><i class="far fa-frown"></i> You Dont't have any Credit Cards with us</h6>
+
+            {% endif %}
+           
+        </div>
+       
+    </div>
+    
+    <div class="card" style="margin-top:20px;">
+            <div class="card-body" style="background-color: #3e505d;padding:10px;">
+                <h4 style="color:#eee" class="d-inline"> Debit Cards <span class="badge badge-secondary">{{customerDetails['debitcards'] | length}}</span> </h4>
+                <h4 class="d-inline-block  pointer" style="float:right;color:#eee"><i class="fas dropcircle fa-chevron-circle-down"></i></h4>
+            </div>
+
+            
+            <div class="card-body" style="border:1px solid #3e505d;display:none;">
+                    {% if customerDetails['debitcards'] | length > 0 %}
+                <div class="row cardcontent-head" >
+                    <div class="col-3 " style="border-right:1px solid #aaa">
+                        <h5>Card Number</h5>
+                    </div>
+                    <div class="col-3 " style="border-right:1px solid #aaa">
+                            <h5>Account Number</h5>
+                    </div>
+                    <div class="col-3 " style="border-right:1px solid #aaa" >
+                        <h5>Account Type</h5>
+                    </div>
+                    <div class="col-3 " >
+                        <h5>Available Balance</h5>
+                    </div>
+                </div>
+                <hr style="height:0px;border:1px solid #aaa">
+                {% for debitcard in customerDetails['debitcards']%}
+            <div class="row">
+                <div class="col-3 " >
+                    <p>{{debitcard['cardnumber'][:4]+"********"+debitcard['cardnumber'][-4:]}} <i class="fas fa-external-link-square-alt pointer" style="color:#555" id="{{'debitcard/' + debitcard['cardnumber']}}"></i></p>
+                </div>
+                <div class="col-3 " >
+                    <p>{{debitcard['accountnumber']}}</p>
+                </div>
+                <div class="col-3 " >
+                    <p>{{debitcard['accounttype']}}</p>
+                </div>
+                <div class="col-3 " >
+                    <p>&#8377; {{debitcard['accountbalance']}}</p>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+
+            <h6><i class="far fa-frown"></i> You Dont't have any Accounts with us</h6>
+
+            {% endif %}
+        </div>
+    </div>
+    <div class="card" style="margin-top:20px;">
+        <div class="card-body" style="background-color: #3e505d;padding:10px;">
+            <h4 style="color:#eee" class="d-inline"> Loan Accounts <span class="badge badge-secondary">{{ customerDetails['loanaccounts'] | length}}</span> </h4>
+            <h4 class="d-inline-block  pointer" style="float:right;color:#eee"><i class="fas dropcircle fa-chevron-circle-down"></i></h4>
+        </div>
+        <div class="card-body" style="border:1px solid #3e505d;display:none;">
+                {% if customerDetails['loanaccounts'] | length > 0 %}
+            <div class="row cardcontent-head" >
+                <div class="col-3 " style="border-right:1px solid #aaa">
+                    <h5>Loan Number</h5>
+                </div>
+                <div class="col-3 " style="border-right:1px solid #aaa">
+                    <h5>Customer Name</h5>
+                </div>
+                <div class="col-3 " style="border-right:1px solid #aaa" >
+                    <h5>Loan Type</h5>
+                </div>
+                <div class="col-3 " >
+                    <h5>Loan Amount</h5>
+                </div>
+            </div>
+            <hr style="height:0px;border:1px solid #aaa">
+            {% for loanaccount in customerDetails['loanaccounts']%}
+            <div class="row">
+                <div class="col-3 " >
+                    <p>{{loanaccount['loannumber']}}</p>
+                </div>
+                <div class="col-3 " >
+                    <p>{{loanaccount['customername']}}</p>
+                </div>
+                <div class="col-3 " >
+                    <p> {{loanaccount['loantype']}}</p>
+                </div>
+                <div class="col-3 " >
+                    <p>&#8377; {{loanaccount['loanamount']}} </p>
+                </div>
+            </div>
+        {% endfor %}
+            {% else %}
+
+            <h6><i class="far fa-frown"></i> You haven't borrowed loan from us</h6>
+
+            {% endif %}
+        </div>  
+    </div>
+    <div class="card" style="margin:20px 0px;">
+            <div class="card-body" style="background-color: #3e505d;padding:10px;">
+                <h4 style="color:#eee" class="d-inline"> Insurance <span class="badge badge-secondary">{{ customerDetails['insurances'] | length}}</span> </h4>
+                <h4 class="d-inline-block  pointer" style="float:right;color:#eee"><i class="fas dropcircle fa-chevron-circle-down"></i></h4>
+            </div>
+            <div class="card-body" style="border:1px solid #3e505d;display:none;">
+                    {% if customerDetails['insurances'] | length > 0 %}
+                <div class="row cardcontent-head" >
+                    <div class="col-3 " style="border-right:1px solid #aaa">
+                        <h5>Insurance No.</h5>
+                    </div>
+                    <div class="col-3 " style="border-right:1px solid #aaa">
+                        <h5>Insurance Type</h5>
+                    </div>
+                    <div class="col-3 " style="border-right:1px solid #aaa" >
+                        <h5>Premium</h5>
+                    </div>
+                    <div class="col-3 " >
+                        <h5>Due Date</h5>
+                    </div>
+                </div>
+                <hr style="height:0px;border:1px solid #aaa">
+                {% for insurance in customerDetails['insurances']%}
+                <div class="row">
+                    <div class="col-3 " >
+                        <p>{{insurance['number']}}</p>
+                    </div>
+                    <div class="col-3 " >
+                        <p>{{insurance['insurancetype']}}</p>
+                    </div>
+                    <div class="col-3 " >
+                        <p>&#8377; {{insurance['premium']}}</p>
+                    </div>
+                    <div class="col-3 " >
+                        <p> {{insurance['duedate']}} <span class="pay insurance pointer">PAY</span></p>
+                    </div>
+                </div>
+            {% endfor %}
+                {% else %}
+    
+                <h6><i class="far fa-frown"></i> You haven't borrowed loan from us</h6>
+    
+                {% endif %}
+            </div>
+    </div>
+</div>     
+<div class="modal fade" id="dataModal" role="dialog">  
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog">  
+        
+        <!-- Modal content-->  
+            <div class="modal-content ">  
+                
+                    
+                    
+            </div> 
+            
+        </div>  
+    </div>	
+</div>
+            <script src="{{url_for('static', filename='jquery.min.js')}}" ></script>
+            <script src="{{url_for('static', filename='popper.min.js')}}" ></script>
+            <script src="{{url_for('static', filename='bootstrap.min.js')}}" ></script>
+            <script src="{{url_for('static', filename='accountdetails.js')}}"></script>
+
+<script>
+    $(window).on('load',function(){
+        if("{{customerDetails['error']}}" == 'error'){
+            var modalcontent = `
+            <div class="modal-body ">  
+            <h5><i class="fas fa-exclamation-circle"></i> Error Occured !Refresh and Try again</h5>
+            </div>
+            <div class="modal-footer d-flex justify-content-start">
+            <button type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Close</button>
+            </div>`;
+            $('.modal-content').html(modalcontent);
+            $('#dataModal').modal('show');
+        }
+    });
+
+    $('.dropdown').click(function(){
+        $(this).find('.dropdowncontent').slideToggle();
+        if($(this).find('p i').hasClass('fa-chevron-circle-down')){
+            $(this).find('p i').removeClass('fa-chevron-circle-down').addClass('fa-chevron-circle-up');
+        }
+        else{
+            $(this).find('p i').removeClass('fa-chevron-circle-up').addClass('fa-chevron-circle-down');
+
+        }
+    });
+
+    $('.nav-item').hover(function(event){
+        event.preventDefault();
+        $(this).prev().find('.nav-text').css("border-right","none");
+        var tab = $(this).attr('id');
+        var idname = '#tab-content'+tab.charAt(tab.length-1)
+        $(idname).show();
+       
+        
+    },function(event){
+        event.preventDefault();
+        $(this).prev().find('.nav-text').css("border-right","1px solid #eee");
+        var tab = $(this).attr('id');
+        var idname = '#tab-content'+tab.charAt(tab.length-1)
+        $(idname).hide();
+    });
+
+    $('.container').delegate('.dropcircle','click',function(){
+        $(this).parent().parent().next().slideToggle();
+        if($(this).hasClass('fa-chevron-circle-down')){
+            $(this).removeClass('fa-chevron-circle-down').addClass('fa-chevron-circle-up');
+        }
+        else{
+            $(this).removeClass('fa-chevron-circle-up').addClass('fa-chevron-circle-down');
+
+        }
+    });
+
+    $('.fa-external-link-square-alt').click(function(){
+        window.location.href = '/accounts/'+ $(this).prop('id');
+    });
+
+    $('.pay').click(function(){
+        if($(this).hasClass('credit')){
+
+            window.location.href = '/payment/creditcard/'+$(this).parent().parent().parent().attr('data-card-no');
+        }
+    });
+</script>
+</body>
+
+</html>
 
