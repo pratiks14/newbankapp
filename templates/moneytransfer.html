@@ -1,1 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>THE Bank</title>
+    <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Atomic+Age|Montserrat" rel="stylesheet">
+     <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='fontawesome/css/all.min.css')}}" >   
+<style>
+     body{
+    /* background-color: #E7E7EF; */
+    height: 100%;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    padding:0px;
+    margin:0px;
+}
+input:-webkit-autofill {
+    color: #2a2a2a !important;
+}
+.head-nav{
+    background-color:#111;
+    color :#eee;
+    height : 50px;
+}
+#bankname{
+    font-family: 'Exo 2', sans-serif;
+}
+#logo{
+    font-family: 'Atomic Age', cursive;
+    color:#d00404;
+    border:1px solid white;
+    border-radius: 4px;
+    background-color: #eee
+}
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888; 
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+    }
+
+
+.headtext{
+    font-size: 12px;
+}
+#logon-btn{
+    background-color: #d00404;
+    height:50px !important;
+    color:#eee;
+    font-size: 12px;
+    padding: 0px;
+    margin:0px;
+    width:100%;
+
+}
+
+.head-nav .row{
+    padding:0px;
+    margin:0px;
+}
+.head-nav img{
+    width:25px;
+    height:18px;
+}
+.head-nav {
+    padding-right: 0px;
+    padding-left: 0px;
+    margin: 0px;
+}
+.pointer{
+    cursor:pointer;
+}
+.hover-underline:hover{
+    text-decoration: underline;
+}
+.nav-item{
+    color:#aaa;
+    height:100%;
+    display: flex ;
+    align-items: center;
+    justify-content: center;
+    cursor:pointer;
+    background-color: #fff;
+
+}
+.nav-text{
+    display: flex ;
+    align-items: flex-start;
+    justify-content: center;
+    width:200%;
+    padding:7px 0px;
+    font-family: 'Exo 2', sans-serif;
+    border-right :1px solid #eee;
+    margin-bottom:0px;
+    color:#aaa
+    /* margin-right:-1px; */
+}
+.active .nav-text{
+    color:#333;
+}
+.nav{
+    height: 70px;
+    /* border-bottom: 2px solid #eee; */
+}
+.nav-item:hover{
+    /* background-color: #eee; */
+    /* border-bottom:2px solid #ddd; */
+    color:#333;
+}
+.nav-item.active{
+    /* background-color: #eee; */
+    border-bottom:2px solid #ddd;
+    color:#333;
+}
+.cardcontent-head h5{
+    color:#eee;
+    background-color: #555;
+    padding:7px;
+    display: inline;
+    
+}
+h4,h5,h6{
+    font-family: Montserrat,sans-serif;
+    font-weight: normal;
+
+}
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 80%;
+    margin:0% 10%;
+    padding: 50px;
+}
+.modal-dialog {
+    display: table-cell;
+    vertical-align: middle;
+    border-radius: 20em;
+}
+.dropdowncontent{
+    position:absolute;
+    z-index:100;
+    top:50px;
+    left:0px;
+    border: 1px solid #555;
+    width:100%;
+    display: None;
+}
+.dropdowncontent ul{
+    padding: 3px 5px;
+    margin:0px;
+    font-family: Montserrat,sans-serif;
+}
+.dropdowncontent li{
+    margin:4px 2px;
+    background-color:#d00404;
+    padding: 3px;
+    text-align: center;
+    cursor:pointer;
+    
+}
+.dropdowncontent li:hover{
+    background-color:#700404;
+}
+a{
+    color:#eee;
+}
+a:hover{
+    text-decoration: None;
+    color:inherit;
+}
+.pay{
+    color:#eee;
+    background-color: rgb(31, 117, 31);
+    padding:2px 3px;
+    border-radius: 2px;
+    float: right;
+}
+label{
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+.mybtn{
+    background-color: #555;
+    color:#eee;
+    border:none;
+    padding:7px 10px;
+    cursor: pointer;
+    
+}
+        
+</style>
+</head>
+
+<body>
+    <div class="row" style="width:100%;margin:0px;">
+        <div class="col-11 head-nav">
+            <div class="row d-flex align-items-center" style="height:100%;padding-left:2px;">
+                <div class="col-3 " >
+                    <h4 id="bankname">INFYBank  <span id="logo">IB</span></h4>
+                </div>
+                <div class="col-5">
+
+                </div>
+                <div class="col-4 row  headtext">
+                    
+                
+                    <div class="col-3">
+                    </div>
+                    <div class="col-3">
+                    </div>
+                    
+                       
+                    <div class="col-2 pointer" >
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="col-4 pointer hover-underline" id="register">
+                        Alerts <i class="fas fa-angle-right" ></i>
+                    </div>
+                            
+                
+                </div>
+               
+                
+            </div>
+        </div>
+        <div class="col-1 d-flex align-items-center justify-content-center pointer dropdown" id="logon-btn" style="height:100%">
+            <p style="margin-bottom: 0px" class="" > {% if session['customername'] | length > 8 %}{{session['customername'][:8] + '..'}}{% else %}{{session['username']}}{% endif %} <i class="fas fa-chevron-circle-down"></i></p>
+            <div class="dropdowncontent">
+                <ul style="list-style:None">
+                    <li><i class="far fa-user"></i> Info</li>
+                    <li><i class="fas fa-power-off"></i> <a href="/disconnect">Log out</a></li>
+                </ul>
+            </div>
+        </div>
+</div>
+<ul class="nav  nav-fill" style="width:100%;margin:0px;">
+    <li class="nav-item " id="tab1">
+             <a href="/main" class="nav-text">Accounts</a>
+    </li>
+    <li class="nav-item active" id="tab1">
+        <a href="/moneytransfer" class="nav-text">Money Transfer</a>
+    </li>
+    <li class="nav-item " id="tab1">
+        <a href="/payments" class="nav-text">Payments</a>
+    </li>
+    <li class="nav-item" id="tab1">
+        <p class="nav-text">Loans</p>
+    </li>
+</ul>
+<div class="currcont container" >
+    <div class="jumbotron" id="firstspace" style="min-height:65vh;margin-top:20px;">
+        {% if accounts | length == 0%}
+            <div class="card">
+                <div class="card-body">
+                    <p style="font-family:'Segoe UI'" >You Dont have any account with us</p>
+                </div>
+            </div>
+        {% else %}
+       <div class="card">
+           <div class="card-body" id="moneytransfer">
+               <h4 style="background-color:#3e505d;padding:7px;color:#eee;display:inline-block">Account Transfer </h4>
+               <hr/>
+               <form class="form-group" id="acctransfer" autocomplete="off">
+                   <div class="row">
+                        <div class=col-4>
+                            <label>FROM</label>
+                           
+                            
+                                    <select class="form-control" name="fromaccount">
+                                    {% for account in accounts %}
+                                    <option value="{{account[1]}}">{{account[1]}} </option>
+                                    {% endfor %}
+                                        </select>
+                                
+                                
+                            
+
+                        </div>
+                        <div class="col-3 d-flex justify-content-center align-items-end">
+                            <h4><i class="fas fa-exchange-alt"></i></h4>
+                        </div>
+                        <div class"col-5 d-flex justify-content-end">
+                                <label class="d-flex justify-content-end">TO</label>
+                                <input type="text" class="form-control" name="toaccount" placeholder="Account Number" required>
+                        </div>
+                        <div class="col-4">
+                            <label>Amount</label>
+
+                                
+                                        <div class="input-group mb-2">
+                                            <div class="input-group-prepend">
+                                            <div class="input-group-text">&#8377;</div>
+                                            </div>
+                                            <input type="text" class="form-control" name="amount" placeholder="Amount" required>
+                                            
+                                        </div>
+                                        <small class="d-block">(Min. amount INR 500 and Intergral multiples of 500)</small>
+                               
+                        </div>
+                        <div class="col-8"></div>
+                        <br>
+                        <div class="col-12">
+                            <button class="mybtn" type="submit" style="background-color: #555">Transfer</button>
+                        </div>
+                   </div>
+                </form>
+           </div>
+       </div>
+       {% endif %}
+
+    </div>
+</div>     
+<div class="modal fade" id="dataModal" role="dialog">  
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog">  
+        
+        <!-- Modal content-->  
+            <div class="modal-content ">  
+                
+                    
+                    
+            </div> 
+            
+        </div>  
+    </div>	
+</div>
+            <script src="{{url_for('static', filename='jquery.min.js')}}" ></script>
+            <script src="{{url_for('static', filename='popper.min.js')}}" ></script>
+            <script src="{{url_for('static', filename='bootstrap.min.js')}}" ></script>
+            <script src="{{url_for('static', filename='accountdetails.js')}}"></script>
+
+<script>
+    
+
+    $('.dropdown').click(function(){
+        $(this).find('.dropdowncontent').slideToggle();
+        if($(this).find('p i').hasClass('fa-chevron-circle-down')){
+            $(this).find('p i').removeClass('fa-chevron-circle-down').addClass('fa-chevron-circle-up');
+        }
+        else{
+            $(this).find('p i').removeClass('fa-chevron-circle-up').addClass('fa-chevron-circle-down');
+
+        }
+    });
+
+    $('.nav-item').hover(function(event){
+        event.preventDefault();
+        $(this).prev().find('.nav-text').css("border-right","none");
+        var tab = $(this).attr('id');
+        var idname = '#tab-content'+tab.charAt(tab.length-1)
+        $(idname).show();
+       
+        
+    },function(event){
+        event.preventDefault();
+        $(this).prev().find('.nav-text').css("border-right","1px solid #eee");
+        var tab = $(this).attr('id');
+        var idname = '#tab-content'+tab.charAt(tab.length-1)
+        $(idname).hide();
+    });
+
+    $('.container').delegate('.dropcircle','click',function(){
+        $(this).parent().parent().next().slideToggle();
+        if($(this).hasClass('fa-chevron-circle-down')){
+            $(this).removeClass('fa-chevron-circle-down').addClass('fa-chevron-circle-up');
+        }
+        else{
+            $(this).removeClass('fa-chevron-circle-up').addClass('fa-chevron-circle-down');
+
+        }
+    });
+
+    $('#acctransfer').submit(function(event){
+        event.preventDefault();
+        var formData = new FormData($(this)[0]);
+        var empty = false;
+        for (var [key, value] of formData.entries()) { 
+            if (value == ''){
+                empty = true;
+                break;
+            }
+        }
+        if(empty){
+            var modalcontent = `
+                                <div class="modal-body ">  
+                                <h5><i class="fas fa-exclamation-circle"></i> Fill all the Inputs before continuing</h5>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-start">
+                                <button type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Close</button>
+                                </div>`;
+            $('.modal-content').html(modalcontent);
+            $('#dataModal').modal('show');
+        }
+        else{
+            $.ajax({
+                type:'POST',
+                url:'/moneytransfer',
+                processData:false,
+                contentType:false,
+                data:formData,
+                success:function(data){
+                    var modalcontent = `
+                    <div class="modal-body ">  
+                        <h5><i class="far fa-check-square" style="color:green"></i> Transfered</h5>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-start">
+                    <button type="button" class="mybtn" style="background-color:#555;color:#eee;" data-dismiss="modal" >Close</button>
+                    </div>`;
+                    $('.modal-content').html(modalcontent);
+                    $('#dataModal').modal('show');
+                },
+                error:function(data){
+                    var modalcontent = `
+                    <div class="modal-body ">  
+                    <h5><i class="fas fa-exclamation-circle"></i> `+data.responseJSON+`</h5>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-start">
+                    <button type="button" class="mybtn" style="background-color:#555;color:#eee;" data-dismiss="modal" >Close</button>
+                    </div>`;
+                    $('.modal-content').html(modalcontent);
+                    $('#dataModal').modal('show');
+                }
+            });
+        }
+    });
+
+    
+</script>
+</body>
+
+</html>
