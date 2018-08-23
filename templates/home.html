@@ -1,1 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>THE Bank</title>
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:700|Quicksand" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Atomic+Age|Montserrat" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
+
+    <style>
+    
+        body{
+    /* background-color: #E7E7EF; */
+    height: 100%;
+    background-repeat: no-repeat;
+    background-image: #eee;
+    padding:0px;
+    margin:0px;
+}
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888; 
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+    }
+        .head-nav{
+            background-color: black;
+            color :#eee;
+            height : 50px;
+        }
+        #bankname{
+            font-family: 'Exo 2', sans-serif;
+        }
+        #logo{
+            font-family: 'Atomic Age', cursive;
+            color:#d00404;
+            border:1px solid white;
+            border-radius: 4px;
+            background-color: #eee
+        }
+
+        .headtext{
+            font-size: 12px;
+        }
+        #logon-btn{
+            background-color: #d00404;
+            height:50px !important;
+            color:#eee;
+            font-size: 12px;
+            padding: 0px;
+            margin:0px;
+
+        }
+        #logon-btn:hover{
+            background-color: #700404
+        }
+        .head-nav .row{
+            padding:0px;
+            margin:0px;
+        }
+        .head-nav img{
+            width:25px;
+            height:18px;
+        }
+        .head-nav {
+            padding-right: 0px;
+            padding-left: 0px;
+            margin: 0px;
+        }
+        .pointer{
+            cursor:pointer;
+        }
+        .nav-item{
+            color:#333;
+            height:100%;
+            display: flex ;
+            align-items: center;
+            justify-content: center;
+            cursor:pointer;
+
+        }
+        .nav-text{
+            display: flex ;
+            align-items: flex-start;
+            justify-content: center;
+            width:100%;
+            padding:7px 0px;
+            font-family: 'Exo 2', sans-serif;
+            border-right :1px solid #eee;
+            margin-bottom:0px;
+            /* margin-right:-1px; */
+        }
+        .nav{
+            height: 70px;
+            border-bottom: 2px solid #eee;
+        }
+        .nav-item:hover{
+            background-color: #eee;
+            color:#333;
+           
+
+        }
+        #section1{
+            background-image: url('{{url_for("static",filename="offer2.jpg")}}'); 
+            height:100%;
+        }
+        .card-title{
+            font-family: 'Montserrat', sans-serif;
+            
+
+
+        }
+        .card-title2{
+            font-family: 'Open Sans Condensed', sans-serif;
+        }
+        #refer-btn{
+            background-color:  #d00404; /* Green */
+            border: none;
+            color: white;
+            padding: 10px 36px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor:pointer;
+        }
+        #section2{
+            background-color: #3e505d;
+            padding:15px;
+            margin-left:10px;
+            color:#eee;
+            height:100%;
+           
+        }
+        .hover-underline:hover{
+            text-decoration: underline;
+        }
+        .arrow{
+            font-size: 30px;
+            vertical-align: bottom;
+            
+        }
+        .listnone{
+           margin-bottom: 1px;
+           color:#333;
+           font-size: 14px;
+         }
+         #tab-content1,#tab-content2,#tab-content3,#tab-content4,#tab-content5{
+             position:absolute;
+             z-index:10;
+             top:115px;
+             left:0px;
+             text-align:start;
+            
+             
+         }
+         footer{
+             background-color: #000;
+         }
+    </style>
+</head>
+<body>
+<div class="row" style="width:100%;margin:0px;">
+        <div class="col-11 head-nav">
+            <div class="row d-flex align-items-center" style="height:100%;padding-left:2px;">
+                <div class="col-3 pointer" >
+                    <h4 id="bankname">INFYBank  <span id="logo">IB</span></h4>
+                </div>
+                <div class="col-5">
+
+                </div>
+                <div class="col-4 row  headtext">
+                    
+                
+                    <div class="col-3">
+                        <img  src="{{url_for('static',filename="images.png")}}">  IN 
+                    </div>
+                    <div class="col-3">
+                        English
+                    </div>
+                    
+                       
+                    <div class="col-2 pointer" >
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="col-4 pointer hover-underline" id="register">
+                        Register <i class="fas fa-angle-right" ></i>
+                    </div>
+                            
+                
+                </div>
+               
+                
+            </div>
+        </div>
+        <div class="col-1 d-flex align-items-center justify-content-center pointer" id="logon-btn" style="height:100%">
+                Log On
+        </div>
+</div>
+
+<ul class="nav  nav-fill" style="width:100%;margin:0px;">
+        <li class="nav-item" id="tab1">
+                 <p class="nav-text">Banking</p>
+                 <div class="row" id="tab-content1" style="display:none;width:100%;padding:25px 25px;margin:0px;background-color:#eee;">
+                        <div class="col-3" style="border-right:1px solid #ddd">
+                            <h5>Products</h5>
+                            
+                                <p class="listnone hover-underline pointer">Credit Cards</p>
+                                <p class="listnone hover-underline pointer">Checking</p>
+                                <p class="listnone hover-underline pointer">Savings</p>
+                                <p class="listnone hover-underline pointer">Certificates of Deposits</p>
+                                <p class="listnone hover-underline pointer">Debit Cards</p>
+                            
+                            <br>
+                            <h5>Rates</h5>
+                           
+                            <p class="listnone hover-underline pointer">Deposit Rates</p>
+                        
+                        </div>
+                        <div class="col-3" style="border-right:1px solid #ddd">
+                                <h5>International Banking</h5>
+                                
+                                    <p class="listnone hover-underline pointer">International banking Overview</p>
+                                    <p class="listnone hover-underline pointer">Global Transfers</p>
+                                    <p class="listnone hover-underline pointer">Mortages for International Borrowers</p>
+                                    <p class="listnone hover-underline pointer">International students</p>
+                                    <p class="listnone hover-underline pointer">Book an Appointment</p>
+                                
+                                <br>
+                                <h5>Other Banking</h5>
+                               
+                                <p class="listnone hover-underline pointer">ATM Banking</p>
+                            
+                        </div>
+                        <div class="col-3" >
+                                <h5>Tools and Resources</h5>
+                                
+                                    <p class="listnone hover-underline pointer">Help, Resources and FAQs</p>
+                                    <p class="listnone hover-underline pointer">Tools</p>
+                                    <p class="listnone hover-underline pointer">Referral Program</p>
+                                    <p class="listnone hover-underline pointer">Find a branch or ATM</p>
+                                
+                                <br>
+                               
+                            
+                        </div>
+                        <div class="col-3" style="background-color:#333;color:#eee;padding:30px;height:100%;">
+                            <h5>Our Relationships</h5>
+                            <p class="listnone hover-underline pointer" style="color:#eee">Infybank Premier</p>
+                            <p class="listnone hover-underline pointer" style="color:#eee">InfyBank Advance</p>
+                            
+                        </div>
+                    </div>
+                    
+        </li>
+        <li class="nav-item" id="tab2">
+        <p class="nav-text">Borrowing</p>
+        <div class="row " id="tab-content2" style="display:none;width:100%;padding:25px 25px;margin:0px;background-color:#eee">
+                <div class="col-3" style="border-right:1px solid #ddd">
+                    <h5>Products</h5>
+                    
+                        <p class="listnone hover-underline pointer">Home Loan</p>
+                        <p class="listnone hover-underline pointer">Home Equity Line of Credit</p>
+                        <p class="listnone hover-underline pointer">Line of Credit</p>
+                        <p class="listnone hover-underline pointer">Mortgages for nternational Borrowers</p>
+                        <p class="listnone hover-underline pointer">Refinancing</p>
+                    
+                    <br>
+                    
+                
+                </div>
+                <div class="col-3" style="border-right:1px solid #ddd">
+                        <h5>Rates</h5>
+                        
+                            <p class="listnone hover-underline pointer">Mortgage Rates</p>
+                            <p class="listnone hover-underline pointer">Home Equity Rates</p>
+                            
+                        
+                        <br>
+                        
+                </div>
+                <div class="col-3" >
+                        <h5>Tools and Resources</h5>
+                        
+                            <p class="listnone hover-underline pointer">Mortgage Calculator</p>
+                            <p class="listnone hover-underline pointer">FAQ's</p>
+                            
+                            <p class="listnone hover-underline pointer">Book an Appointment</p>
+                        
+                        <br>
+                        <h5>Rates</h5>
+                       
+                        <p class="listnone hover-underline pointer">Deposit Rates</p>
+                    
+                </div>
+                <div class="col-3" style="background-color:#333;color:#eee;padding:30px;height:100%;">
+                    <h5>Our Relationships</h5>
+                    <p class="listnone hover-underline pointer" style="color:#eee">Infybank Premier</p>
+                    <p class="listnone hover-underline pointer" style="color:#eee">InfyBank Advance</p>
+                    
+                </div>
+            </div>
+        
+        </li>
+        <li class="nav-item" id="tab3">
+            <p class="nav-text">Investing & Retiring</p>
+            <div class="row " id="tab-content3" style="display:none;width:100%;padding:25px 25px;margin:0px;background-color:#eee">
+                    <div class="col-3" style="border-right:1px solid #ddd">
+                        <h5>Investments</h5>
+                        
+                            <p class="listnone hover-underline pointer">Overview</p>
+                        <br>
+                        <h5>Products</h5>
+                            <p class="listnone hover-underline pointer">Assets Allocation Solution</p>
+                            <p class="listnone hover-underline pointer">Savings</p>
+                            <p class="listnone hover-underline pointer">Certificates of Deposits</p>
+                            <p class="listnone hover-underline pointer">Debit Cards</p>
+                        
+                        <br>
+                        <h5>Rates</h5>
+                        
+                        <p class="listnone hover-underline pointer">Deposit Rates</p>
+                    
+                    </div>
+                    <div class="col-3" style="border-right:1px solid #ddd">
+                            <h5>International Banking</h5>
+                            
+                                <p class="listnone hover-underline pointer">Credit Cards</p>
+                                <p class="listnone hover-underline pointer">Checking</p>
+                                <p class="listnone hover-underline pointer">Savings</p>
+                                <p class="listnone hover-underline pointer">Certificates of Deposits</p>
+                                <p class="listnone hover-underline pointer">Debit Cards</p>
+                            
+                            <br>
+                            <h5>Rates</h5>
+                            
+                            <p class="listnone hover-underline pointer">Deposit Rates</p>
+                        
+                    </div>
+                    <div class="col-3" >
+                            <h5>Products</h5>
+                            
+                                <p class="listnone hover-underline pointer">Credit Cards</p>
+                                <p class="listnone hover-underline pointer">Checking</p>
+                                <p class="listnone hover-underline pointer">Savings</p>
+                                <p class="listnone hover-underline pointer">Certificates of Deposits</p>
+                                <p class="listnone hover-underline pointer">Debit Cards</p>
+                            
+                            <br>
+                            <h5>Rates</h5>
+                            
+                            <p class="listnone hover-underline pointer">Deposit Rates</p>
+                        
+                    </div>
+                    <div class="col-3" style="background-color:#333;color:#eee;padding:30px;height:100%;">
+                        <h5>Our Relationships</h5>
+                        <p class="listnone hover-underline pointer" style="color:#eee">Infybank Premier</p>
+                        <p class="listnone hover-underline pointer" style="color:#eee">InfyBank Advance</p>
+                        
+                    </div>
+                </div>
+        </li>
+        <li class="nav-item" id="tab4">
+        <p class="nav-text">Insurance</p>
+        <div class="row " id="tab-content4" style="display:none;width:100%;padding:25px 25px;margin:0px;background-color:#eee">
+                <div class="col-3" style="border-right:1px solid #ddd">
+                    <h5>Insurance</h5>
+                    
+                        <p class="listnone hover-underline pointer">Overview</p>
+                    <br>
+                    <h5>Products</h5>
+                        <p class="listnone hover-underline pointer">Life-Insurance</p>
+                        <p class="listnone hover-underline pointer">Long-Term-Insurance</p>
+                        
+                    
+                    <br>
+                    
+                
+                </div>
+                <div class="col-3" style="border-right:1px solid #ddd">
+                        <h5>Why InfyBank</h5>
+                        
+                            <p class="listnone hover-underline pointer">Invest with Us</p>
+                            
+                        
+                        <br>
+                        
+                    
+                </div>
+                <div class="col-3" >
+                        <h5>Tools and Resources</h5>
+                        
+                            <p class="listnone hover-underline pointer">Guide to Insurance</p>
+                            <p class="listnone hover-underline pointer">FAQs</p>
+                            
+                        
+                        <br>
+                        
+                </div>
+                <div class="col-3" style="background-color:#333;color:#eee;padding:30px;height:100%;">
+                    <h5>Our Relationships</h5>
+                    <p class="listnone hover-underline pointer" style="color:#eee">Infybank Premier</p>
+                    <p class="listnone hover-underline pointer" style="color:#eee">InfyBank Advance</p>
+                    
+                </div>
+            </div>
+        </li>
+        <li class="nav-item" id="tab5">
+        <p class="nav-text">Online Banking</p>
+        <div class="row" id="tab-content5" style="display:none;width:100%;padding:25px 25px;margin:0px;background-color:#eee;">
+                <div class="col-3" style="border-right:1px solid #ddd">
+                    <h5>Products</h5>
+                    
+                        <p class="listnone hover-underline pointer">Credit Cards</p>
+                        <p class="listnone hover-underline pointer">Checking</p>
+                        <p class="listnone hover-underline pointer">Savings</p>
+                        <p class="listnone hover-underline pointer">Certificates of Deposits</p>
+                        <p class="listnone hover-underline pointer">Debit Cards</p>
+                    
+                    <br>
+                    <h5>Rates</h5>
+                    
+                    <p class="listnone hover-underline pointer">Deposit Rates</p>
+                
+                </div>
+                <div class="col-3" style="border-right:1px solid #ddd">
+                        <h5>International Banking</h5>
+                        
+                            <p class="listnone hover-underline pointer">Credit Cards</p>
+                            <p class="listnone hover-underline pointer">Checking</p>
+                            <p class="listnone hover-underline pointer">Savings</p>
+                            <p class="listnone hover-underline pointer">Certificates of Deposits</p>
+                            <p class="listnone hover-underline pointer">Debit Cards</p>
+                        
+                        <br>
+                        <h5>Rates</h5>
+                        
+                        <p class="listnone hover-underline pointer">Deposit Rates</p>
+                    
+                </div>
+                <div class="col-3" >
+                        <h5>Products</h5>
+                        
+                            <p class="listnone hover-underline pointer">Credit Cards</p>
+                            <p class="listnone hover-underline pointer">Checking</p>
+                            <p class="listnone hover-underline pointer">Savings</p>
+                            <p class="listnone hover-underline pointer">Certificates of Deposits</p>
+                            <p class="listnone hover-underline pointer">Debit Cards</p>
+                        
+                        <br>
+                        <h5>Rates</h5>
+                        
+                        <p class="listnone hover-underline pointer">Deposit Rates</p>
+                    
+                </div>
+                <div class="col-3" style="background-color:#333;color:#eee;padding:30px;height:100%;">
+                    <h5>Our Relationships</h5>
+                    <p class="listnone hover-underline pointer" style="color:#eee">Infybank Premier</p>
+                    <p class="listnone hover-underline pointer" style="color:#eee">InfyBank Advance</p>
+                    
+                </div>
+            </div>
+        </li>
+</ul>
+
+
+
+<div class="row" style="width:100%;padding:0px 25px;margin:0px;">
+    <div class="col-9 " id="section1">
+        <div class="card" style="margin:80px 100px">
+            <div class="card-body">
+                    <h1 class="card-title">Earn Up to &#x20B9;2,000</h1>
+                    <p class="card-text" style="margin-bottom: 0pc">When you refer friends who open </p>
+                        <p class="card-text">a qualifying InfyBank account.</p>
+                    <button id="refer-btn">Refer Now</button>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-3"  >
+        <div class="row" id="section2" >
+            <div class="col-12" style="height:50%;border-bottom:1px solid #eee">
+                <div class="hover-underline pointer" >
+                    <h2 class="card-title2 ">
+                        Pay Bills 
+                    </h2>
+                    <h2 class="card-title2 ">
+                            Online <i class="fas fa-angle-right arrow"></i>
+                    </h2>     
+                </div>
+                
+                <p class="card-title">Pay bills anywhere in the India - Online!</p>
+
+            </div>
+            <div class="col-12" style="height:50%;padding-top:7px;">
+                    <h2 class="card-title2 pointer hover-underline">
+                    eStatements <i class="fas fa-angle-right arrow"></i>
+                    </h2>
+                   
+                    <p class="card-title">Save time with eStatements</p>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="width:100%;padding:0px 25px;margin:10px 0px;">
+    <div class="col-3">
+        <h2 class="card-title2 pointer hover-underline">
+            Checking <i class="fas fa-angle-right arrow" style="color:#d00404"></i>
+        </h2>
+        <br>
+        <p  style="font-size:18px">Find the Infybank checking account that's right for you</p>
+    </div>
+    <div class="col-3">
+        <h2 class="card-title2 pointer hover-underline">
+            Savings <i class="fas fa-angle-right arrow" style="color:#d00404"></i>
+        </h2>
+        <br>
+        <p style="font-size:18px">Infybank savings accounts may help you reach your financial goals sooner</p>
+    </div>
+    <div class="col-3">
+        <h2 class="card-title2 pointer hover-underline">
+            Credit Cards <i class="fas fa-angle-right arrow" style="color:#d00404"></i>
+        </h2>
+        <br>
+        <p style="font-size:18px">New introductory offers plus unique benefits and rich rewards</p>
+    </div>
+    <div class="col-3">
+        <h2 class="card-title2 pointer hover-underline">
+            Mobile Banking <i class="fas fa-angle-right arrow" style="color:#d00404"></i>
+        </h2>
+        <br>
+        <p style="font-size:18px">Access your eligible accounts anytime</p>
+    </div>
+</div>
+<footer style="width:100%;padding:0px 15px;margin:10px 0px;">
+<div class="row" style="padding:25px;color:#eee;">
+    <div class="col-3" style="border-right:1px solid #ddd ">
+        <h4 class="card-title2"> Contact INFYBank</h4>
+        <br>
+        <p class="pointer hover-underline" style="font-size:15px">Write, call or send a message  <i class="fas fa-angle-right arrow" style="color:#fff;font-size:20px"></i></p>
+    </div>
+    <div class="col-3" style="border-right:1px solid #ddd ">
+            <h4 class="card-title2"> Find a Branch</h4>
+            <br>
+            <p class="pointer hover-underline" style="font-size:15px">Find your nearest branch location  <i class="fas fa-angle-right arrow" style="color:#fff;font-size:20px"></i></p>
+    </div>
+    <div class="col-3" style="border-right:1px solid #ddd ">
+
+            <h4 class="card-title2"> Frequently Asked Questions</h4>
+            <br>
+            <p class="pointer hover-underline" style="font-size:15px">See FAQs on Personal Internet Banking   <i class="fas fa-angle-right arrow" style="color:#fff;font-size:20px"></i></p>
+    </div>
+    <div class="col-3">
+            <h4 class="card-title2"> About INFYBank</h4>
+            <br>
+            <p class="pointer hover-underline" style="font-size:15px">Careers , media , investor and other information   <i class="fas fa-angle-right arrow" style="color:#fff;font-size:20px"></i></p>
+    </div>
+</div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script>
+    $('.nav-item').hover(function(event){
+        event.preventDefault();
+        $(this).prev().find('.nav-text').css("border-right","none");
+        var tab = $(this).attr('id');
+        var idname = '#tab-content'+tab.charAt(tab.length-1)
+        $(idname).show();
+       
+        
+    },function(event){
+        event.preventDefault();
+        $(this).prev().find('.nav-text').css("border-right","1px solid #eee");
+        var tab = $(this).attr('id');
+        var idname = '#tab-content'+tab.charAt(tab.length-1)
+        $(idname).hide();
+    });
+    $('#register').click(function(event){
+        event.preventDefault();
+        // window.location = 'templates/register.html';
+        window.location.href = '/register';
+    });
+    $('#bankname').click(function(){
+        window.location.href = '/';
+    });
+    $('#logon-btn').click(function(){
+        window.location.href = '/login';
+    });
+
+
+</script>
+</body>
+</html>
 
