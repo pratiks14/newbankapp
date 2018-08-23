@@ -1,169 +1,338 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='style.css')}}">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>THE Bank</title>
+    <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Atomic+Age|Montserrat" rel="stylesheet">
+     <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='fontawesome/css/all.min.css')}}" >   
 
 
-<script src="//apis.google.com/js/platform.js?onload=start"> </script>
-</head>
-<body>
-	<div class="container">
+    <style>
+        .arrow{
+            font-size: 20px;
+            vertical-align: bottom;
+            color:#d00100
+            
+        }
+        
+        body{
+    /* background-color: #E7E7EF; */
+        height: 100%;
+        padding:0px;
+        margin:0px;
+        width:100vw;
+        box-sizing: border-box;
+        /* opacity: 0.8; */
+        
+        }
+        .wrapper{
+            background-repeat: no-repeat;
+            background-image:url('{{url_for("static",filename="loginimage.jpeg")}}');
+            z-index: -2;
+            position: fixed;
+            height:100vh;
+            width:100vw;
+            margin:0px;
+            padding:0px;
+            /* opacity: 1; */
+        }
+    .pointer{
+            cursor:pointer;
+        }
+        .hover-underline:hover{
+            text-decoration: underline;
+        }
+
+        #bankname{
+            font-family: 'Exo 2', sans-serif;
+        }
+        #logo{
+            font-family: 'Atomic Age', cursive;
+            color:#d00404;
+            border:1px solid #eee;
+            border-radius: 4px;
+        }
+        .head{
+            background-color: #555;
+        }
+        
+        footer{
+             background-color: #111;
+
+         }
+         .login-card{
+             background-color:#eee;
+             padding:20px;
+             font-family: Montserrat,sans-serif;
+         }
+         .login-card p,.login-card small{
+             color:#555;
+         }
+         #login-body{
+             padding:80px 20px;
+         }
+         input{
+            height:40px;
+            border:1px solid #aaa;
+            border-radius: 3px;
+            padding:7px;
+            font-size:18px;
+            font-family: 'Montserrat', sans-serif;
+            
+            outline:none;
+        }
+        input:focus{
+            border:1px solid #555;
+
+        }
+        button{
+            /* background-color:#aaa; */
+           padding:5px 20px;
+            border:1px solid #fff;
+            color:#eee;
+            cursor:pointer;
+            outline:none !important;
+        }
+        .vertical-alignment-helper {
+            display:table;
+            height: 100%;
+            width: 80%;
+            margin:0% 10%;
+            padding: 50px;
+        }
+        .modal-dialog {
+            display: table-cell;
+            vertical-align: middle;
+            border-radius: 20em;
+        }
+       
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+
+        </div>
+        <div class="head" style="height:30px">
+        </div>
+        <div class="row" style="border-bottom:1px solid black;background-color:#eee;margin:0px;width:100vw;">
+            <div class="col-4 " style="padding:30px;">
+                <h3 id="bankname" class="pointer">INFYBank  <span id="logo">IB</span></h3>
+            </div>
+            <div class ="col-8" >
+
+            </div>
+        </div>
+        <div id="login-body" class="row">
+            <div class="col-3">
+
+            </div>
+            <div class="col-6">
+                <div class="login-card">
+                    <h2>Log on</h2>
+                    <br>
+                    <p style="margin-bottom:0px">Enter your Username</p>
+                    <small><i class="fas fa-exclamation-circle"></i> This is the username you chose when registering for Online Banking</small>
+                    <input type="text" name="username" style="width:100%">
+                    <div style="text-align: end;">
+                        <p id="forgot-password" class="pointer hover-underline">Forgot Password?</p>
+                    </div>
+                    <br>
+                    <br>
+                    <div style="text-align:end;">
+                    <button type="submit" disabled class="continue" style="background-color:#d86d6d" >Continue</button>
+                    </div>
+                    <hr>
+                    <p class="d-inline pointer hover-underline register">Not Registered <i class="fas fa-angle-right arrow "></i></p>
+                </div>
+            </div>
+            <div class="col-3">
+
+            </div>
+
+        </div>
+        <div class="modal fade" id="dataModal" role="dialog">  
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog">  
+                    
+                    <!-- Modal content-->  
+                        <div class="modal-content ">  
+                            
+                              
+                             
+                        </div> 
+                        
+                    </div>  
+                </div>	
+            </div>
+        <footer style="width:100%;padding:0px 15px;">
+            <div class="row" style="padding:25px;color:#eee;">
+                <div class="col-3" style="border-right:1px solid #ddd ">
+                    <h4 class="card-title2"> Contact INFYBank</h4>
+                    <br>
+                    <p class="pointer hover-underline" style="font-size:15px">Write, call or send a message  <i class="fas fa-angle-right arrow" style="color:#fff;font-size:20px"></i></p>
+                </div>
+                <div class="col-3" style="border-right:1px solid #ddd ">
+                        <h4 class="card-title2"> Find a Branch</h4>
+                        <br>
+                        <p class="pointer hover-underline" style="font-size:15px">Find your nearest branch location  <i class="fas fa-angle-right arrow" style="color:#fff;font-size:20px"></i></p>
+                </div>
+                <div class="col-3" style="border-right:1px solid #ddd ">
+            
+                        <h4 class="card-title2"> Frequently Asked Questions</h4>
+                        <br>
+                        <p class="pointer hover-underline" style="font-size:15px">See FAQs on Personal Internet Banking   <i class="fas fa-angle-right arrow" style="color:#fff;font-size:20px"></i></p>
+                </div>
+                <div class="col-3">
+                        <h4 class="card-title2"> About INFYBank</h4>
+                        <br>
+                        <p class="pointer hover-underline" style="font-size:15px">Careers , media , investor and other information   <i class="fas fa-angle-right arrow" style="color:#fff;font-size:20px"></i></p>
+                </div>
+            </div>
+        </footer>
 
 
-<!-- offline =access user even whe n the user is offline -->
-
-<section class= "default well well-sm">
-	<div class="jumbotron text-center">
-	<div class="btn-group btn-group-lg text-center" >
-	<button class="btn btn-primary btn-lg"  id="login-btn">Login</button>
-	<button class="btn btn-primary"  id ="Signup-btn">SignUp</button>
-	</div>
-	</div>
-	<br>
-	<div id="login" class="well well-sm">
-	<form name="Login" id="loginform" action="" method="post">
-		<div class="input-group input-group-lg">
-			<span class="input-group-addon">username</span>
-			<input type="text" name="email" class="form-control" maxlength="50" >
-		</div><br>
-		<div class="input-group input-group-lg">
-			<span class="input-group-addon">password </span>
-			<input type="password" name="password" class="form-control" maxlength="50" autocomplete="false">
-		</div><br>
-		<p><button class="btn btn-submit btn-lg" type="submit">Login</button></p>
-	</form>
-	</div>
-	<div id="Signup" class="well well-sm">
-	<form id="signupform" action="" method = "post">
-		<div class="input-group input-group-lg">
-			<span class="input-group-addon">username</span>
-			<input type="text" name="email" class="form-control" maxlength="50">
-		</div><br>
-		<div class="input-group input-group-lg">
-			<span class="input-group-addon">FullName</span>
-			<input type="text" name="name"  class="form-control" maxlength="50" >
-		</div><br>
-		<div class="input-group input-group-lg">
-			<span class="input-group-addon">password</span>
-			<input type="password" name="password" class="form-control" maxlength="50" autocomplete="false">
-		</div><br>
-		<p><input class="btn btn-submit btn-lg" type="submit" name="button" value="Sign Up"></p>
-	</form>
-	</div>
-</section>
-<section id="result" ></section>
-</div>
-<script>
-window.onload=function(){
-		$('#login').show();
-		$('#Signup').hide();
-
-	};
-
-</script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script>
-
-	$('#login-btn').click(function(){
-			$('#login').show();
-			$('#Signup').hide();
-		});
-	$('#Signup-btn').click(function(){
-			$('#login').hide();
-			$('#Signup').show();
-		});
-
-	// login ajax request
-	$('#loginform').submit(function(event)
-	{
-		event.preventDefault();
-		data  = {};
-		$.map($('#loginform').serializeArray(),function(ele,index){
-			data[ele["name"]] = ele["value"];
-
-		});
-		$.ajax({
-			type : 'POST',
-			url : '/login',
-			processData:false,
-			data :JSON.stringify(data),
-			contentType: 'application/ajax; charset=utf-8',
-			success:function(result)
-			{
-				if(result)
-				{
-					$(".container").hide();
-					$('#result').html("Sign up successfull!!<br>"+result+"redirecting..");
-
-					setTimeout(function(){
-							window.location.href = "/";
-						},2000);
-				}
-				else
-				{
-					$('#result').html("Invalid Credentials!!");
-				}
-			},
-			statusCode: {
-				401: function() {
-
-				  alert("login Unsuccessfull!!");
-				},
-				404:function(){
-					alert("Invalid Credentials!!");
-				}
-			}
-		});
-	});
-
-	// singup ajax request
-	$('#signupform').submit(function(event)
-	{
-		event.preventDefault();
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+        <script>
+            $(window).on('load',function(){
+                window.sessionStorage.clear();
+            });
 
 
+            $('#bankname').click(function(){
+                window.location.href = '/'
+            });
+            $
+            $('.register').click(function(){
+                window.location.href = '/register'
+            });
+            $('.login-card').delegate('.continue','click',function(){
+                if ($('input[name=username]').val() == ''){
+                    var modalcontent = `
+                                <div class="modal-body ">  
+                                <h5><i class="fas fa-exclamation-circle"></i> Fill all the Inputs before continuing</h5>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-start">
+                                <button type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Close</button>
+                                </div>`;
+                    $('.modal-content').html(modalcontent);
+                    $('#dataModal').modal('show');
+                }
+                else{
+                    var data = {};
+                    data['username'] = $('input[name=username]').val();
+                    $.ajax({
+                        url:'/login',
+                        type:'POST',
+                        processData:false,
+                        data:JSON.stringify(data),
+                        contentType:'Application/json',
+                        success:function(resp){
+                            window.sessionStorage['username'] = data['username'];
+                            $('.login-card h2:nth-child(1)').html("Hello " +data['username'][0].toUpperCase()+data['username'].slice(1,data['username'].length ).toLowerCase());
+                            $('.login-card p:nth-child(3)').html("Enter Your password");
+                            $('.login-card small:nth-child(4)').html('<i class="fas fa-exclamation-circle"></i> This value is required');
+                            $('.login-card input').prop('type','password').prop('name','password').val('');
+                            $('.login-card input').css('width','90%');
+                            $('.login-card input').after('<div style="display:inline;padding-left:5px"> <i class="far fa-eye eye pointer"></div>')
+                            $('.continue').removeClass('continue').addClass('login');
+                            $('.login').html('Login');
+                            $('.eye').click(function(){
+                            if($(this).parent().parent().find('input').attr('type') == 'password'){
+                                $(this).parent().parent().find('input').attr('type','text');
+                                $(this).removeClass('fa-eye').addClass('fa-eye-slash');
+                            }
+                            else{
+                                $(this).parent().parent().find('input').attr('type','password');
+                                $(this).removeClass('fa-eye-slash').addClass('fa-eye');
+                            }
+                            });
+                        },
+                        error:function(data){
+                            var modalcontent = `
+                                <div class="modal-body ">  
+                                <h5><i class="fas fa-exclamation-circle"></i> `+data.responseJSON+`</h5>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-start">
+                                <button type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Close</button>
+                                </div>`;
+                            $('.modal-content').html(modalcontent);
+                            $('#dataModal').modal('show');
+                        }
 
-		data  = {};
-		$.map($('#signupform').serializeArray(),function(ele,index){
-			data[ele["name"]] = ele["value"];
-		});
+                    });
+                }
+            });
+            $('input[name=username]').keyup(function(){
+                if($(this).val().length >=3){
+                    $('.continue').css('background-color','#d00104').prop('disabled',false);
+                    
+                }
+                else{
+                    $('.continue').css('background-color','#d86d6d').prop('disabled',true);
+                }
+            });
 
-		$.ajax({
-			type : 'POST',
-			url : '/signup',
-			processData:false,
-			data :JSON.stringify(data),
-			contentType: 'application/ajax; charset=utf-8',
-			success:function(result)
-			{
-				if(result)
-				{
-					$('.container').hide();
-					$('#result').html("Sign up successfull!!<br>"+result+"redirecting..");
+            $('.login-card').delegate('.login','click',function(){
+                if ($('input[name=password]').val() == ''){
+                    var modalcontent = `
+                                <div class="modal-body ">  
+                                <h5><i class="fas fa-exclamation-circle"></i> Fill all the Inputs before continuing</h5>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-start">
+                                <button type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Close</button>
+                                </div>`;
+                    $('.modal-content').html(modalcontent);
+                    $('#dataModal').modal('show');
+                }
+                else{
+                    data = {};
+                    var data = {};
+                    data['username'] = window.sessionStorage['username'];
+                    data['password'] = $('input[name=password]').val();
+                    console.log(data);
+                    $.ajax({
+                        url:'/login',
+                        type:'POST',
+                        processData:false,
+                        data:JSON.stringify(data),
+                        contentType:'Application/json',
+                        success:function(){
+                            var modalcontent = `
+                            <div class="modal-body ">  
+                            <h5><i class="far fa-check-square" style="color:green"></i> Login Successful</h5>
+                            <hr>
+                            <p>Loading Your Home Page</p>
+                        
+                            </div>`;
+                            $('.modal-content').html(modalcontent);
+                            $('#dataModal').modal('show');
+                            window.sessionStorage.clear();
+                            setTimeout(function(){
+                                window.location.href = '/main';
+                            },1500);
+                        },
+                        error:function(data){
+                            var modalcontent = `
+                            <div class="modal-body ">  
+                            <h5><i class="fas fa-exclamation-circle"></i> `+data.responseJSON+`</h5>
+                            </div>
+                            <div class="modal-footer d-flex justify-content-start">
+                            <button type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Close</button>
+                            </div>`;
+                            $('.modal-content').html(modalcontent);
+                            $('#dataModal').modal('show');
+                        }
 
-					setTimeout(function(){
-							window.location.href = "/";
-						},2000);
-				}
-				else
-				{
-					$('#result').html("Please Try Again!!");
-				}
-			},
-			statusCode:{
-				401:function(){
-					alert("Error:Please try Again! ");
-				},
-				404:function(){
-					alert("Username is already Present");
-				}
-			}
-		});
-	});
-</script>
-</body>
-</html>
+                    });
+                }
+            });
+        </script>
+    </body>
