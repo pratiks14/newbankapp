@@ -108,7 +108,39 @@ class Validation():
             return response
         return None
     
-   
+    @staticmethod
+    def toaccount(accountno):
+        if re.match(r"^[0-9]{16}$",accountno)== None:
+            response = make_response(json.dumps('Invalid Account Number'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        
+        if not Dbase.accountExists(accountno):
+            response = make_response(json.dumps('Account Number doestn\'t exists'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        return None
+
+    @staticmethod
+    def transferamount(amount):
+        if re.match(r'^[0-9]+$',amount) == None:
+            response = make_response(json.dumps('Amount should be a positive number'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        
+        if int(amount)%500 != 0 or int(amount) /500 <1:
+            response = make_response(json.dumps('Amount should be min. Rs 500  or multiple of Rs 500'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        return None
+
+    @staticmethod
+    def fromaccount(accountno,amount):
+        if not Dbase.hasAccountBalance(accountno,amount):
+            response = make_response(json.dumps('Not enough balance in your account'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+
 class Operations():
     
     @staticmethod
@@ -207,6 +239,42 @@ class Operations():
                 return response
         except Exception as e:
             raise e
+    
+    @staticmethod
+    def moneyTransferValidate(params):
+        try:
+            fromaccount = params['fromaccount']
+            toaccount = params['toaccount']
+            amount = params['amount']
+            if toaccount == fromaccount:
+                response = make_response(json.dumps('Money transfer between same account'), 200)
+                response.headers['Content-Type'] = 'application/json'
+                return response
+            resp = Validation.toaccount(toaccount)
+            if resp != None:
+                return resp
+            resp = Validation.transferamount(amount)
+            if resp != None:
+                return resp
+            resp = Validation.fromaccount(fromaccount,amount)
+            if resp != None:
+                return resp
+            return None
+
+            
+
+        except Exception as e:
+            raise e
+    
+    @staticmethod
+    def transferAmount(params):
+        try:
+            fromaccount = params['fromaccount']
+            toaccount = params['toaccount']
+            amount = params['amount']
+            Dbase.transfer(fromaccount,toaccount,amount)
+        except Exception as e:
+            raise e
         
     @staticmethod
     def getCustomerDetailsDict(ssn):
@@ -265,4 +333,98 @@ class Operations():
             return customerDetails
         except Exception as e:
             raise e
+
+    @staticmethod
+    def getAccountDetails(accounttype,accountno):
+        try:
+            detailsDict = {}
+            account = Dbase.getAccountDetails(accounttype,accountno)
+            print(account)
+            detailsDict['accounttype'] = accounttype
+            detailsDict['id'] = accountno
+            if accounttype == 'loanaccount': 
+                detailsDict['loannumber'] = account[0]
+                detailsDict['customername'] = account[1]
+                detailsDict['password'] = account[2]
+                detailsDict['loantype'] = account[4]
+                detailsDict['loanamount'] = str(amount[5])
+            elif accounttype == 'insurance':
+                detailsDict['number'] = account[0]
+                detailsDict['customername'] = account[1]
+                detailsDict['password'] = account[2]
+                detailsDict['insurancetype'] = account[4]
+                detailsDict['premium'] = account[5]
+                detailsDict['duedate'] = time.strftime('%d\%m\%Y',time.strptime(insurance[6],'%d-%m-%Y'))
+            elif accounttype == 'creditcard':
+                detailsDict['cardnumber'] = account[0]
+                detailsDict['cardholder'] = account[1]
+                detailsDict['pin'] = account[2]
+                detailsDict['creditlimit'] = str(account[4])
+                detailsDict['amountdue'] = str(account[5])
+            else:
+                detailsDict['cardnumber'] = account[0]
+                detailsDict['cardholder'] = account[2]
+                detailsDict['pin'] = account[3]
+                detailsDict['accountnumber'] = account[1]
+                detailsDict['accountbalance'] = str(account[5])
+                detailsDict['accounttype'] = account[6]
+            transactions = Dbase.getTransactionDetails(accounttype,accountno)
+            tranxList = []
+            transactions.sort(key=lambda r:time.strptime(r[8],'%m:%d:%Y %H:%M:%S'),reverse=True)
+            count = 0
+            for trans in transactions:
+                tranxDict = {}
+                tranxDict['tranxid'] = trans[0]
+                tranxDict['account1type'] = trans[2]
+                tranxDict['account2'] = trans[3]
+                tranxDict['account2type'] = trans[4]
+                tranxDict['amount'] = trans[5]
+                tranxDict['tranxtype'] = trans[6]
+                tranxDict['tranxdate'] = trans[8].split(' ')[0].replace(':','/')
+                tranxDict['tranxtime'] = trans[8].split(' ')[1]
+                tranxDict['status'] = trans[9]
+                tranxList.append(tranxDict)
+                count+=1
+                if count == 10:
+                    break
+            detailsDict['transactions'] = tranxList
+            return detailsDict
+        except Exception as e:
+            raise e
             
+    @staticmethod
+    def getTransactions(accounttype,accountno,startdate,enddate):
+        try:
+            transactionDict = {}
+            transactions = Dbase.getTransactionDetails(accounttype,accountno)
+            tranxList = []
+            transactions.sort(key=lambda r:time.strptime(r[8],'%m:%d:%Y %H:%M:%S'),reverse=True)
+            for trans in transactions:
+                tranxDict = {}
+                tranxDict['tranxdate'] = trans[8].split(' ')[0].replace(':','/')
+                if time.strptime(tranxDict['tranxdate'],'%m/%d/%Y') >= startdate and time.strptime(tranxDict['tranxdate'],'%m/%d/%Y') <= enddate:
+                    
+                    tranxDict['tranxid'] = trans[0]
+                    tranxDict['account1type'] = trans[2]
+                    tranxDict['account2'] = trans[3]
+                    tranxDict['account2type'] = trans[4]
+                    tranxDict['amount'] = trans[5]
+                    tranxDict['tranxtype'] = trans[6]
+                    tranxDict['tranxdate'] = trans[8].split(' ')[0].replace(':','/')
+                    tranxDict['tranxtime'] = trans[8].split(' ')[1]
+                    tranxDict['status'] = trans[9]
+                    tranxList.append(tranxDict)
+                
+            transactionDict['transactions'] = tranxList
+            return transactionDict
+        except Exception as e:
+            raise e
+    
+    @staticmethod
+    def getSavingsAccounts():
+        try:
+            ssn = login_session['ssn']
+            accounts = Dbase.getSavingsAccounts(ssn)
+            return accounts
+        except Exception as e:
+            raise e
