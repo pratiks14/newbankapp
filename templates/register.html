@@ -1,350 +1,676 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <title>ETA Bank</title>
+    <title>THE Bank</title>
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:700|Quicksand" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Atomic+Age|Montserrat" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet"> 
+     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='bootstrap.min.css')}}">
-    
-    
     <link rel="stylesheet" href="{{url_for('static',filename='fontawesome/css/all.min.css')}}" >   
-    <!-- <link rel="stylesheet" href="..\static\fontawesome\css\all.min.css" >    -->
+
+
     <style>
-      @font-face {
-        font-family: Tajawal;
-        src: url("{{url_for('static',filename='fonts/Tajawal/Tajawal-Bold.ttf')}}");
-    }
-    @font-face {
-        font-family: Merriweather;
-        src: url("{{url_for('static',filename='fonts/Merriweather/Merriweather-Bold.ttf')}}");
-    }
-    @font-face {
-        font-family: Quicksand;
-        src: url("{{url_for('static',filename='fonts/Quicksand/Quicksand-Regular.ttf')}}");
-    }
-body, html {
-    height: auto;
-    background-repeat: no-repeat;
-    background-image: linear-gradient(rgb(104, 145, 162), rgb(207, 230, 212));
-}
+        body{
+    /* background-color: #E7E7EF; */
+        height: 100%;
+        background-repeat: no-repeat;
+        background-image: #eee;
+        padding:0px;
+        margin:0px;
+        width:100vw;
+        box-sizing: border-box;
+        }
+        
+    .pointer{
+            cursor:pointer;
+        }
+        .hover-underline:hover{
+            text-decoration: underline;
+        }
 
-.card-container.card {
-    width:40vw;
-    padding: 40px 40px;
-}
-label {
-    font-family: Tajawal,sans-serif;
-}
-.btn {
-    font-weight: 700;
-    height: 36px;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: default;
-}
-label,.profile-name-card,h5,strong{
-    font-family: Tajawal,sans-serif;
-}
+        #bankname{
+            font-family: 'Exo 2', sans-serif;
+        }
+        #logo{
+            font-family: 'Atomic Age', cursive;
+            color:#d00404;
+            border:1px solid white;
+            border-radius: 4px;
+        }
 
 
- .vertical-alignment-helper {
-    display:table;
-    height: 100%;
-    width: 60%;
-    margin:0% 20%;
-}
-.modal-dialog {
-    display: table-cell;
-    vertical-align: middle;
-    border-radius: 20em;
-  }
-
-/*
- * Card component
- */
-.card {
-    background-color: #F7F7F7;
-    /* just in case there no content*/
-    padding: 20px 25px 30px;
-    margin: 0 auto 25px;
-    margin-top: 50px;
-    /* shadows and rounded borders */
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-}
-
-.profile-img-card {
-    width: 96px;
-    height: 96px;
-    margin: 0 auto 10px;
-    display: block;
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
-    border-radius: 50%;
-}
-
-/*
- * Form styles
- */
-.profile-name-card {
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    margin: 10px 0 0;
-    min-height: 1em;
-}
-
-.reauth-email {
-    display: block;
-    color: #404040;
-    line-height: 2;
-    margin-bottom: 10px;
-    font-size: 14px;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-.form-signin #inputEmail,
-.form-signin #inputPassword {
-    direction: ltr;
-    height: 44px;
-    font-size: 16px;
-}
-
-.form-signin input[type=email],
-.form-signin input[type=password],
-.form-signin input[type=text],
-.form-signin button {
-    width: 100%;
-    display: block;
-    margin-bottom: 10px;
-    z-index: 1;
-    position: relative;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-.form-signin .form-control:focus {
-    border-color: rgb(104, 145, 162);
-    outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
-}
+        .card-title{
+            font-family: 'Montserrat', sans-serif;
 
 
-.btn.btn-signin {
-    /*background-color: #4d90fe; */
-    background-color: rgb(104, 145, 162);
-    /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
-    padding: 0px;
-    font-weight: 700;
-    font-size: 14px;
-    height: 36px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-    border: none;
-    -o-transition: all 0.218s;
-    -moz-transition: all 0.218s;
-    -webkit-transition: all 0.218s;
-    transition: all 0.218s;
-}
 
-.btn.btn-signin:hover,
-.btn.btn-signin:active,
-.btn.btn-signin:focus {
-    background-color: rgb(12, 97, 33);
-}
+        }
+        .card-title2{
+            font-family: 'Open Sans Condensed', sans-serif;
+        }
+        .head{
+            background-color: #555;
+        }
+        #gradient{
+            background-image: linear-gradient(#555,#eee);
+            height:10px;
+        }
+        .number{
+            border:1px solid #aaa;
+            font-family: 'Montserrat', sans-serif;
+            width:20px;
+            height:20px;
+            border-radius:50%;
+            padding:2px 5px;
+            margin-left:20px;
+            background-color: #aaa;
+            color:#eee;
+        }
+        .active .number{
+            background-color: #eee;
+            color:#111;
+            border:1px solid #eee;
+        }
+        .done .number{
+            background-color: #5b7632;
+            color:#eee;
+            border:1px solid #5b7632;
+        }
+        .active > .row >div:first-child{
+            background-color:#555;
+        }
+        .active .triangle{
+            width:0px;
+            height:0px;
+            border-top:25px solid transparent;
+            border-left : 50px solid #555;
+            border-bottom:25px solid transparent;
+        }
+        .active .breadcrumbtext{
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color:#eee;
+            display:inline;
+            margin:10px;
+        }
+        .breadcrumbtext{
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color:#555;
+            display:inline;
+            margin:10px;
+        }
+        .content{
+            margin-top:30px;
+            /* font-family: 'Montserrat', sans-serif; */
+            font-size:16px;
+        }
+        form  >div:nth-child(2n+1){
+            display:flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
 
-.forgot-password {
-    color: rgb(104, 145, 162);
-}
+        form > div:nth-child(2n){
+/*            display:flex;
+*/            align-items: center;
+        }
+        select{
+            background-image: linear-gradient(#fff,#eee);
+            height:30px;
+            border:1px solid #ddd;
+            color:#777;
+            width:300px;
+            border-radius:2px;
+            cursor:pointer;
+/*            padding:0 25%;
+*/        }
+        input{
+            height:40px;
+            border:1px solid #aaa;
+            border-radius: 3px;
+            padding:7px;
+            font-size:18px;
+            font-family: 'Montserrat', sans-serif;
+            width:300px;
+        }
+        select:focus,button:focus,input:focus{
+            outline: none !important;
 
-.forgot-password:hover,
-.forgot-password:active,
-.forgot-password:focus{
-    color: rgb(12, 97, 33);
-}
-a{
-    color:#555;
-}
-a:hover{
-    text-decoration: none;
-    color:#555;
-}
+        }
+        .inputcheck{
+            color:#bbb;
+        }
+
+       button{
+            /* background-color:#aaa; */
+           padding:5px 20px;
+            border:1px solid #fff;
+            color:#eee;
+            cursor:pointer
+        }
+        .vertical-alignment-helper {
+            display:table;
+            height: 100%;
+            width: 80%;
+            margin:0% 10%;
+            padding: 50px;
+        }
+        .modal-dialog {
+            display: table-cell;
+            vertical-align: middle;
+            border-radius: 20em;
+        }
+        
     </style>
 </head>
 <body>
-    <div class="container">
-            <div class="card card-container">
+<div class="head" style="height:30px">
+</div>
+<div class="row" style="border-bottom:1px solid black;margin:0px;width:100vw;">
+    <div class="col-4 " style="padding:30px;">
+        <h3 id="bankname" class="pointer">INFYBank  <span id="logo">IB</span></h3>
+    </div>
+    <div class ="col-8" >
 
-                <small class="d-flex justify-content-end"><a href="#" id="back"><i class="fas fa-times-circle"></i></a></small>
-            <!-- <img class="profile-img-card/" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
-            <a  href="/"><h5 class="card-title text-center"><span class="badge badge-secondary"><i>EB</i></span>  ETA BANK</h5></a>
-            <!-- <p id="profile-name" class="profile-name-card "> REGISTER</p>       -->
-            <form class="" id="register-form" action="" method="post">
-                <div class="form-group row">
-                    <label for="staticEmail" class="col-6 col-form-label">Customer ID</label>
-                    <div class="col-6">
-                      <input type="text" name="customerid" readonly class="form-control-plaintext" id="staticEmail" value="{{customerid}}" >
-                    </div>
-                    <div class="col-12"><p >(Customer Id will be your <strong>Login Id</strong  > for netbanking)</p></div>
-                </div>
-                <div class="form-group ">
-                    <label for="name" class="col-form-label">Name</label>
-                    <div class="">
-                      <input type="text" name="name"  class="form-control" id="inputname" placeholder="Your Full Name" required  autofocus>
-                    </div>
-                </div>
-                <label for="mobile" class="col-form-label">Mobile No</label>
-                <div class="input-group ">
-                    <div class="input-group-prepend">
-                            <span class="input-group-text">+91</span>
-                    </div>
-                    <input type="text" name="mobileno"  class="form-control" id="inputmobile" placeholder="10 Digit Mobile Number " required >
-                </div>
-                <div class="form-group ">
-                    <label for="email" class="col-form-label">Email</label>
-                    <div class="">
-                      <input type="email" name="email"  class="form-control" id="inputemail" placeholder="someone@example.com" required >
-                    </div>
-                </div>    
+    </div>
+</div>
+<div id="gradient">
 
-                <div class="form-group ">
-                    <label for="inputPassword" class="col-form-label">Password</label>
-                    <div class="">
-                      <input type="password" name="password"  class="form-control" id="inputPassword" placeholder="Must have atleast 6 characters" required >
-                    </div>
+</div>
+<div class="col-12 " style = "font-size:25px;background-color:#eee;padding-bottom:2px;">
+    <p>Registration</p>
+</div>
+<div class="bread-crumb" style="padding:30px;">
+    <div class="row" style="width:100%;height:50px;background-color:#eee;border:1px solid #ddd;">
+        <div class="col-3 active">
+            <div class="row">
+                <div class="col-10 " style="padding:10px">
+                    <div class="number d-inline" style="padding:1px 6px">1</div>
+                    <div class="breadcrumbtext"> Verify Identity</div>
                 </div>
-                <div class="form-group ">
-                    <label data-toggle="popover" onmouseover="this.title='';" data-placement="left" data-trigger="none" title="Popover Header" data-content="Password doesn't match!!" for="inputPassword" class="col-form-label">Confirm Password</label>
-                    <div  >
-                      <input type="password" name="password" class="form-control" id="retypePassword" placeholder="Retype-Password" required>
-                    </div>
+                <div class='col-2 ' style="padding:0px">
+                    <div class="triangle"></div>
                 </div>
-                <button class="btn  btn-primary" id="register-btn" type="submit">Register</button>
-            </form>
-            <!-- /form -->
-        </div><!-- /card-container -->
-        <div class="modal fade" id="signModal" role="dialog">  
-            <div class="vertical-alignment-helper">
-                <div class="modal-dialog">  
-                
-                <!-- Modal content-->  
-                <div class="modal-content">  
-                    <div class="modal-header ">
-                      
-                        <h3><i class="far fa-check-square"></i> Verifing..</h3>
-                    </div>  
-                    <div class="modal-body">  
-                    <ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> Checking Inputs..</li></ol>  
-                    </div>  
-                    <div class="modal-footer">    
-                    </div>  
-                </div>  
-                    
-                </div>  
-            </div>	
+            </div>
         </div>
-    </div><!-- /container -->
+        <div class="col-3 ">
+            <div class="row">
+                <div class="col-10  " style="padding:10px">
+                    <div class="number d-inline">2</div>
+                    <div class="breadcrumbtext"> Set up Login</div>
+                </div>
+                <div class='col-2 ' style="padding:0px">
+                    <div class="triangle"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 ">
+            <div class="row">
+                <div class="col-10  " style="padding:10px 0px">
+                    <div class="number d-inline">3</div>
+                    <div class="breadcrumbtext"> Security Question</div>
+                </div>
+                <div class='col-2 ' style="padding:0px">
+                    <div class="triangle"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 " >
+            <div class="row" style="height:100%">
+                <div class="col-12" style="padding:10px;height:100%;">
+                    <div class="number d-inline">4</div>
+                    <div class="breadcrumbtext"> Confirmation</div>
+                </div>
 
-    <script src="{{url_for('static', filename='jquery.min.js')}}" ></script>
-        <script src="{{url_for('static', filename='popper.min.js')}}" ></script>
-        <script src="{{url_for('static', filename='bootstrap.min.js')}}" ></script>
+            </div>
+
+    </div>
+</div>
+<div class="content">
+    <p>If you already have an INFYBank account and wish to register for Personal Internet Banking, you will be required to utilize your  Security Number.</p>
+    <p>You need to provide an account details(loan account/ Savings account/ Credit Card/ Insurance).</p>
+    <form class="row " style="margin:0px;width:100%;">
+        <div class="col-4 " >
+                <label style="margin-right:10px;"> <span style="color:#d00404">*</span>Required Field </label>
+        </div>
+        <div class="col-8"></div>
+        <br>
+        <br>
+        <div class="col-4">
+            <label><span style="color:#d00404">*</span>Verification Method :</label>
+        </div>
+        <div class="col-8 row">
+
+                <div class="col-6 ">
+                    <select name="verificationtype" >
+                        <option value="loanaccount">Loan Account</option>
+                        <option value="debitcard">Debit Card</option>
+                        <option value="creditcard">Credit Card</option>
+                        <option value="insurance">Insurance</option>
+                    </select>
+                </div>
+
+
+        </div>
+        <!-- page 3 -->
         
+        <!-- page 3 -->
+        <br>
+        <br>
+        
+        <div class="col-4">
+                <label><span style="color:#d00404">*</span>Security Number :</label>
+
+        </div>
+        <div class="col-8 row">
+
+                <div class="col-6 " style="vertical-align: middle">
+                    <input type="password"  name="securitynumber" required>
+                </div>
+                <div class="col-6 verification" style="display:none">
+                    <small><i class="far fa-check-circle inputcheck"></i> Only Numbers are allowed </small>
+                    <br>
+                    <small><i class="far fa-check-circle inputcheck"></i> Length must be 6 characters </small>
+
+                </div>
+
+        </div>
+        <br>
+        <br>
+        <!-- <br>
+        <br> -->
+        <div class="col-4">
+            <label id="number"><span style="color:#d00404">*</span >Account Number :</label>
+
+        </div>
+        <div class="col-8 row">
+
+            <div class="col-6 " style="vertical-align: middle">
+                <input type="text"  name="number" required>
+            </div>
+            <div class="col-6 verification" style="display:none">
+                <small><i class="far fa-check-circle inputcheck"></i> Only Numbers are allowed </small>
+                <br>
+                <small><i class="far fa-check-circle inputcheck"></i> Length must be 16 characters </small>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="col-4">
+            <label id="code"><span style="color:#d00404">*</span>4 Digit Code :</label>
+
+        </div>
+        
+        <div class="col-8 row">
+
+                <div class="col-6 " style="vertical-align: middle">
+                    <input type="password"  name="password" required>
+                </div>
+                <div class="col-6 verification" style="display:none">
+                    <small><i class="far fa-check-circle inputcheck"></i> Only Numbers are allowed </small>
+                    <br>
+                    <small><i class="far fa-check-circle inputcheck"></i> Length must be 4 characters </small>
+
+                </div>
+
+        </div>
+        
+        <!-- page 4 -->
+        
+        <!-- page 4 end -->
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="col-4">
+            <label id="code"><span style="color:#d00404">*</span>Email :</label>
+
+        </div>
+        
+        <div class="col-8 row">
+
+                <div class="col-6 " style="vertical-align: middle">
+                    <input type="text"  name="email" required>
+                </div>
+                <div class="col-6 verification" style="display:none">
+                    <small><i class="far fa-check-circle inputcheck"></i> Email id format : something@something.com</small>
+                    
+
+                </div>
+
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="col-4">
+            <label id="code"><span style="color:#d00404">*</span>Mobile Number :</label>
+
+        </div>
+        
+        <div class="col-8 row">
+
+                <div class="col-6 " style="vertical-align: middle">
+                    <input type="text"  name="mobileno" required>
+                </div>
+                <div class="col-6 verification" style="display:none">
+                    <small><i class="far fa-check-circle inputcheck"></i> Only Numbers are allowed </small>
+                    <br>
+                    <small><i class="far fa-check-circle inputcheck"></i> Length must be 10 characters </small>
+
+                </div>
+
+        </div>
+        <br>
+        <br>
+        
+    </form>
+</div>
+<div class="modal fade" id="dataModal" role="dialog">  
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog">  
+        
+        <!-- Modal content-->  
+            <div class="modal-content ">  
+                
+                  
+                 
+            </div> 
+            
+        </div>  
+    </div>	
+</div>
+<br>
+<hr style="border:1px solid #aaa">
+<div class="row d-flex navbuttons">
+    <div class="col-6">
+        <button class="cancel" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;">Cancel</button>
+    </div>
+    <div class="col-6 d-flex justify-content-end">
+        <button class="continue" style="background-image:linear-gradient(#d00100,#900404,#d00100)" >Continue</button>
+    </div>
+</div>
+<script src="{{url_for('static', filename='jquery.min.js')}}" ></script>
+<script src="{{url_for('static', filename='popper.min.js')}}" ></script>
+<script src="{{url_for('static', filename='bootstrap.min.js')}}" ></script>
+<script src="{{url_for('static', filename='registerscript.js')}}"></script>
+<script src="{{url_for('static', filename='registerscript2.js')}}"></script>
+
 <script>
-$('#back').click(function(event){
-    event.preventDefault();
-    window.history.back();
-
+$(window).on('load',function(){
+    window.sessionStorage.clear();
 });
 
-// window.onload = function(){
-//     $('#card-form').hide(); 
-// };
-
-$('#retypePassword').focus(function(){
-    $("[data-toggle='popover']").popover('hide');
-});
-
-$('#inputPassword').focus(function(){
-    $("[data-toggle='popover']").popover('hide');
-});
-
-function equatePassword(){
-    if($('#inputPassword').val() === $('#retypePassword').val())
-    {
-        return true;
+$(document).ready(function() {
+  $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
     }
-    else
-        return false;    
-}
-$('#register-form').submit(function(event)
-{
-    event.preventDefault();
-    if(!equatePassword()){
-        $("[data-toggle='popover']").popover('show');
-         }
-    else{
+  });
+});
+
+// window.addEventListener("popstate", function(){
+// e = location.pathname.split("/").pop();
+// window.location.href = '/'+e;
+// });
+
+    $('#bankname').click(function(){
+        window.location.href = '/';
+    });
+    $('select[name=verificationtype]').on('change',function(e){
+        e.preventDefault();
+        if($(this).val() == 'insurance')
+        {
+            $('#number').html('<span style="color:#d00404">*</span >Insurance Number :');
+            $('#code').html('<span style="color:#d00404">*</span >4 Digit Code :');
+        }
+        else if($(this).val() == 'creditcard' || $(this).val()=='debitcard')
+        {
+            $('#number').html('<span style="color:#d00404">*</span >Card Number :');
+            $('#code').html('<span style="color:#d00404">*</span >PIN  :');
+        }
+        else{
+            $('#number').html('<span style="color:#d00404">*</span >Account Number :');
+            $('#code').html('<span style="color:#d00404">*</span >4 Digit Code :');
+        }
+    });
+    $('form').delegate('input','focus',function(){
+    
+        $(this).parent().parent().find('.verification').show();
+    });
+    $('form').delegate('input','focusout',function(){
+        
+        $(this).parent().parent().find('.verification').hide();
+        
+    });
+
+    $('form').delegate('input[name=username]','keyup',function(){
+        var val = $(this).val();
         data = {};
- 		
- 		$.map($('#register-form').serializeArray(),function(ele,index){
-             if (ele["name"] == "password"){
-                data[ele["name"]] = ele["value"];
-             }
-             else{
- 			    data[ele["name"]] = $.trim(ele["value"]);
-             }
- 		});
-
- 		
- 	
+        data['username'] = val;
         $.ajax({
- 			type:"POST",
- 			url:'/signup',
- 			processData:false,
- 			data:JSON.stringify(data),
- 			contentType:'application/ajax; charset=utf-8',
- 			success:function(result){
- 				
-               
-                    $('#signModal .modal-header').html('<h3><i class="fas fa-check-square"></i> Successful</h3>');
-                $('#signModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> '+ result+ '</li></ol>');
-                $("#signModal").modal("show");
-               
+            type:'POST',
+            url :'/checkusername',
+            data : JSON.stringify(data),
+            processData:false,
+            contentType:'application/json',
+            success:function(data){
+                var result = '<small><i class="far fa-check-circle" style="color:green;"></i> '+data+' </small>';
+                $('input[name="username"]').parent().parent().find('.verification').html(result);
+                $('input[name="username"]').css('border','1px solid green');
+            },
+            error:function(data){
+                var result = '<small><i class="fas fa-exclamation-circle"></i> '+data.responseJSON+'</small>';
+                $('input[name="username"]').parent().parent().find('.verification').html(result);
+                $('input[name="username"]').css('border','1px solid #aaa');
+            }
+        });
+    });
+    $('form').delegate('input[name=userpassword]','keyup',function(){
+        var val = $(this).val();
+        var valid = true;
+        if (val.toLowerCase() != val && val.toUpperCase() != val){
+            $(this).parent().parent().find('.verification small:nth-child(3) i').css('color','green');
+            
+        }
+        else{
+            $(this).parent().parent().find('.verification').find('small:nth-child(3) i').css('color','#bbb');
+            valid = false;
+        }
+        if(val.length >= 6){
+            $(this).parent().parent().find('.verification small:nth-child(1) i').css('color','green');
+        }
+        else{
+            $(this).parent().parent().find('.verification small:nth-child(1) i').css('color','#bbb');
+            valid = false;
+        }
+        if(val.match(/\d+/g) != null){
+            $(this).parent().parent().find('.verification small:nth-child(5) i').css('color','green');
+        }
+        else{
+            $(this).parent().parent().find('.verification small:nth-child(5) i').css('color','#bbb');
+            valid = false;
+        }
+        if (valid){
+            $(this).css('border','1px solid green');
 
+        }
+        else{
+            $(this).css('border','1px solid #aaa');
 
-                setTimeout(function(){
-                    window.location.href = '/main';
-                    },2000);
- 			},
- 			error:function(response){
- 			
- 					$('#signModal .modal-header').html('<h3><i class="fas fa-exclamation-triangle"></i> Error</h3>');
- 					$('#signModal .modal-body').html('<ol class="breadcrumb"><li class="active"><i class="fas fa-angle-right"></i> '+response.responseJSON+'</li></ol>');
- 					$('#signModal .modal-footer').html('<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>');
-                    $("#signModal").modal("show");
- 			}
-		});
-    }
-});
+        }
+    });
+    $('.cancel').click(function(e){
+        e.preventDefault();
+        var modalbody = `
+        <div class="modal-body ">  
+                    <h5>Do you want to cancel the registration process ?</h5>
+                    <button type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Dont Cancel</button>
+                    <button type="button" style="background-image:linear-gradient(#d00100,#900404,#d00100)" class="redirecthome" >Cancel</button>
+                </div>`;
+        $('.modal-content').html(modalbody);
+        $('#dataModal').modal('show');
+        $('.redirecthome').click(function(event){
+            event.preventDefault();
+            window.location.href = '/';
+            // if($.trim($('.active .number').html()) != '1' ){
+            //     var data = {};
+            //     data['securitynumber'] = window.sessionStorage['securitynumber'];
+            //     $.ajax({
+            //         url:'/register',
+            //         type:'DELETE',
+            //         processData:false,
+            //         data: JSON.stringify(data),
+            //         contentType : 'application/json;',
+            //         success:function(data){
+            //             window.location.href = '/';
+            //         },
+            //         error:function(){
+            //             var modalcontent = `
+            //                 <div class="modal-body ">  
+            //                 <h5><i class="fas fa-exclamation-circle"></i> Some Error Occured Try Again</h5>
+            //                 </div>
+            //                 <div class="modal-footer d-flex justify-content-start">
+            //                 <button type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Close</button>
+            //                 </div>`;
+            //             $('.modal-content').html(modalcontent);
+            //             $('#dataModal').modal('show');
+            //         }
+            //     });
 
+            // }
+        });
+    });
+
+    $('.navbuttons').delegate('.continue','click',function(e){
+        e.preventDefault();
+        data = {};
+        var formData = new FormData($('form')[0]);
+        var empty = false;
+        for (var [key, value] of formData.entries()) { 
+            if (value == ''){
+                empty = true;
+                break;
+            }
+        }
+
+        // $.map($('form').serializeArray(),function(ele,index){
+        //     if (ele["type"] == "password"){
+        //         data[ele["name"]] = ele["value"];
+        //      }
+        //      else{
+ 		// 	    data[ele["name"]] = $.trim(ele["value"]);
+        //      }
+ 		
+ 		// });
+        if(empty){
+            var modalcontent = `
+                                <div class="modal-body ">  
+                                <h5><i class="fas fa-exclamation-circle"></i> Fill all the Inputs before continuing</h5>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-start">
+                                <button type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Close</button>
+                                </div>`;
+            $('.modal-content').html(modalcontent);
+            $('#dataModal').modal('show');
+        }
+        else{
+            formData.append("registerno",1)
+            $.ajax({
+                type:'POST',
+                url:'/register',
+                processData:false,
+                contentType:false,
+                data:formData,
+                success :function(data){
+                    
+                    for(var [key,value] of formData.entries() ){
+                        window.sessionStorage[key] = value;
+                    }
+                    $('.content p:nth-child(1)').html('Enter username and password of your choice to logon to Netbanking.');
+                    $('.content p:nth-child(2)').html('Password must contain atleast 1 Uppercase and lowercase along with a numerical character.');
+                    var form = `
+                    <div class="col-4 " >
+                        <label style="margin-right:10px;"> <span style="color:#d00404">*</span>Required Field </label>
+                    </div>
+                    <div class="col-8"></div>
+                    <br>
+                    <br>
+                    <div class="col-4">
+                        <label ><span style="color:#d00404">*</span>Username :</label>
+
+                    </div>
+                    
+                    <div class="col-8 row">
+
+                            <div class="col-4 " style="vertical-align: middle">
+                                <input type="text"  style="width:100%" name="username" required>
+                            </div>
+                            <div class="col-8 verification" style="display:none">
+                                <small><i class="far fa-check-circle inputcheck"></i> Must have atleast 3 characters </small>
+                                
+
+                            </div>
+
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="col-4">
+                        <label ><span style="color:#d00404">*</span>Password :</label>
+
+                    </div>
+                    
+                    <div class="col-8 row">
+
+                            <div class="col-4 " style="vertical-align: middle">
+                                <input type="password" style="width:100%" name="userpassword" required>
+                            </div>
+                            <div class="col-8 verification" style="display:none">
+                                <small><i class="far fa-check-circle inputcheck"></i> Must have atleast 6 characters </small>
+                                <br>
+                                <small><i class="far fa-check-circle inputcheck"></i> Must contain atleast 1 Uppercase and lowercase character </small>
+                                <br>
+                                <small><i class="far fa-check-circle inputcheck"></i> Must contain atleast 1 Numerical character </small>
+                            </div>
+
+                    </div>
+                    `;
+                    // var obj = { Page: 'sdsd', Url: 'dsdsds784' };
+                    // history.pushState(obj, obj.Page, obj.Url);
+                    $('form').html(form);
+                    var nextactive = $('.bread-crumb .active').next();
+                    $('.bread-crumb .active').removeClass('active').addClass('done');
+                    nextactive.addClass('active');
+                    $('.continue').removeClass('continue').addClass('continue2');
+                    
+                },
+                error:function(data){
+                    var modalcontent = `
+                                <div class="modal-body ">  
+                                <h5><i class="fas fa-exclamation-circle"></i> `+data.responseJSON+`</h5>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-start">
+                                <button type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Close</button>
+                                </div>`;
+                    $('.modal-content').html(modalcontent);
+                    $('#dataModal').modal('show');
+                }
+            });
+        }
+    });
+   
 </script>
 </body>
+</html>
