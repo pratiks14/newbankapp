@@ -359,7 +359,18 @@ hr{
         var idname = '#tab-content'+tab.charAt(tab.length-1)
         $(idname).hide();
     });
+    $('.dropdown').click(function(){
+        $(this).find('.dropdowncontent').slideToggle();
+        if($(this).find('p i').hasClass('fa-chevron-circle-down')){
+            $(this).find('p i').removeClass('fa-chevron-circle-down').addClass('fa-chevron-circle-up');
+        }
+        else{
+            $(this).find('p i').removeClass('fa-chevron-circle-up').addClass('fa-chevron-circle-down');
 
+        }
+    });
+
+    
     $('.pay').click(function(event){
         event.preventDefault();
         data = {};
