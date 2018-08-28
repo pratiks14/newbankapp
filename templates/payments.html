@@ -13,7 +13,7 @@
      <!-- Bootstrap Core CSS -->
      <link href="{{url_for('static',filename='gijgo.min.css')}}" rel="stylesheet"  />
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{url_for('static',filename='fontawesome/css/all.min.css')}}" >   
+    <link rel="stylesheet" href="{{url_for('static',filename='fontawesome/css/all.min.css')}}" >
 <style>
      body{
     /* background-color: #E7E7EF; */
@@ -48,17 +48,17 @@
 
     /* Track */
     ::-webkit-scrollbar-track {
-        background: #f1f1f1; 
+        background: #f1f1f1;
     }
-    
+
     /* Handle */
     ::-webkit-scrollbar-thumb {
-        background: #888; 
+        background: #888;
     }
 
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
-        background: #555; 
+        background: #555;
     }
 
 
@@ -129,7 +129,7 @@
 .nav-item.active{
     /* background-color: #eee; */
     border-bottom:2px solid #ddd;
-    
+
 }
 .active .nav-text{
     color:#333;
@@ -139,7 +139,7 @@
     background-color: #555;
     padding:7px;
     display: inline;
-    
+
 }
 h4,h5,h6{
     font-family: Montserrat,sans-serif;
@@ -178,7 +178,7 @@ h4,h5,h6{
     padding: 3px;
     text-align: center;
     cursor:pointer;
-    
+
 }
 .dropdowncontent li:hover{
     background-color:#700404;
@@ -203,7 +203,7 @@ a:hover{
     border:none;
     padding:7px 20px;
     cursor: pointer;
-    
+
 }
 input,select{
     outline:none !important;
@@ -237,7 +237,7 @@ hr{
     margin-left: 0px;
     border-style: dotted;
     border-color: #aaa;
-    
+
 }
 
 </style>
@@ -254,25 +254,25 @@ hr{
 
                 </div>
                 <div class="col-4 row  headtext">
-                    
-                
+
+
                     <div class="col-3">
                     </div>
                     <div class="col-3">
                     </div>
-                    
-                       
+
+
                     <div class="col-2 pointer" >
                         <i class="fas fa-search"></i>
                     </div>
                     <div class="col-4 pointer hover-underline" id="register">
                         Alerts <i class="fas fa-angle-right" ></i>
                     </div>
-                            
-                
+
+
                 </div>
-               
-                
+
+
             </div>
         </div>
         <div class="col-1 d-flex align-items-center justify-content-center pointer dropdown" id="logon-btn" style="height:100%">
@@ -304,7 +304,7 @@ hr{
         <div class="card-body" style="padding:2%">
             <!-- <div class="d-inline-block" style="width:2%;"></div> -->
             <h3 class="d-inline-block" >AMOUNT</h3>
-            <h4 class="d-inline-block" style="">&#8377; 8000</h4>
+            <h4 class="d-inline-block" style="">&#8377; {{debtAccount['amount']}}</h4>
             <hr style="">
             {% if accounts | length > 0 %}
             <h5 style="font-weight:bold;">Select Account</h5>
@@ -322,36 +322,36 @@ hr{
 
         </div>
     </div>
-   
-</div>     
-<div class="modal fade" id="dataModal" role="dialog">  
+
+</div>
+<div class="modal fade" id="dataModal" role="dialog">
     <div class="vertical-alignment-helper">
-        <div class="modal-dialog">  
-        
-        <!-- Modal content-->  
-            <div class="modal-content ">  
-                
-                    
-                    
-            </div> 
-            
-        </div>  
-    </div>	
+        <div class="modal-dialog">
+
+        <!-- Modal content-->
+            <div class="modal-content ">
+
+
+
+            </div>
+
+        </div>
+    </div>
 </div>
             <script src="{{url_for('static', filename='jquery.min.js')}}" ></script>
             <script src="{{url_for('static', filename='popper.min.js')}}" ></script>
             <script src="{{url_for('static', filename='bootstrap.min.js')}}" ></script>
 <script>
 
-  
+
     $('.nav-item').hover(function(event){
         event.preventDefault();
         $(this).prev().find('.nav-text').css("border-right","none");
         var tab = $(this).attr('id');
         var idname = '#tab-content'+tab.charAt(tab.length-1)
         $(idname).show();
-       
-        
+
+
     },function(event){
         event.preventDefault();
         $(this).prev().find('.nav-text').css("border-right","1px solid #eee");
@@ -370,7 +370,7 @@ hr{
         }
     });
 
-    
+
     $('.pay').click(function(event){
         event.preventDefault();
         data = {};
@@ -383,7 +383,7 @@ hr{
             contentType:'application/json',
             suceess:function(data){
                 var modalcontent = `
-                                <div class="modal-body ">  
+                                <div class="modal-body ">
                                 <h5><i class="far fa-check-square" style="color:green"></i> Payment made</h5>
                                 <hr>
                                 <p>Redirecting to main page</p>
@@ -391,7 +391,7 @@ hr{
             },
             error:function(data){
                 var modalcontent = `
-                                <div class="modal-body ">  
+                                <div class="modal-body ">
                                 <h5><i class="fas fa-exclamation-circle"></i> `+data.responseJSON+`</h5>
                                 </div>
                                 <div class="modal-footer d-flex justify-content-start">
@@ -405,11 +405,11 @@ hr{
 
     });
 
-    
-   
 
-   
-   
+
+
+
+
 </script>
 </body>
 

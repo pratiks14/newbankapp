@@ -8,10 +8,10 @@ class Dbase():
         db = sqlite3.connect('database/main.db')
         cursor =  db.cursor()
         sql = "select * from netbankusers where email = ?"
-        try : 
+        try :
             cursor.execute(sql,(email,))
         except Exception as e:
-           
+
             traceback.print_exc()
             raise e
         if len(cursor.fetchall())==0:
@@ -43,14 +43,14 @@ class Dbase():
             sql = "select * from %s where number = ?"%(tablename)
             cursor.execute(sql,(number,))
         except Exception as e:
-            
+
             traceback.print_exc()
             raise e
         if len(cursor.fetchall()) == 0:
             return False
         else:
             return True
-    
+
     @staticmethod
     def verifyPassword(number,verification_type,password):
         db = sqlite3.connect('database/main.db')
@@ -62,7 +62,7 @@ class Dbase():
                 sql = "select * from %s where number = ? and pin = ?"%(tablename)
             cursor.execute(sql,(number,password))
         except Exception as e:
-            
+
             traceback.print_exc()
             raise e
         if len(cursor.fetchall()) == 0:
@@ -79,23 +79,23 @@ class Dbase():
             sql = "select * from %s where number = ? and ssn = ?"%(tablename)
             cursor.execute(sql,(number,securitynumber))
         except Exception as e:
-            
+
             traceback.print_exc()
             raise e
         if len(cursor.fetchall()) == 0:
             return False
         else:
             return True
-    
+
     @staticmethod
     def mobilenoExists(mobileno):
         db = sqlite3.connect('database/main.db')
         cursor =  db.cursor()
         sql = "select * from netbankusers where mobileno = ?"
-        try : 
+        try :
             cursor.execute(sql,(mobileno,))
         except Exception as e:
-            
+
             traceback.print_exc()
             raise e
         if len(cursor.fetchall())==0:
@@ -137,7 +137,7 @@ class Dbase():
 
         except Exception as e:
             db.rollback()
-            
+
             traceback.print_exc()
             raise e
         print('registered')
@@ -151,17 +151,17 @@ class Dbase():
             db.commit()
         except Exception as e:
             db.rollback()
-            
+
             traceback.print_exc()
             raise e
-    
+
     @staticmethod
     def usernameExists(username):
         db = sqlite3.connect('database/main.db')
         cursor =  db.cursor()
         try:
             sql = "select * from netbankusers where username = ?"
-            cursor.execute(sql,(username,)) 
+            cursor.execute(sql,(username,))
         except Exception as e:
             traceback.print_exc()
             raise e
@@ -169,14 +169,14 @@ class Dbase():
             return False
         else:
             return True
-    
+
     @staticmethod
     def verifyLoginPassword(username,password):
         db = sqlite3.connect('database/main.db')
         cursor =  db.cursor()
         try:
             sql = "select * from netbankusers where username = ? and password = ?"
-            cursor.execute(sql,(username,password)) 
+            cursor.execute(sql,(username,password))
         except Exception as e:
             traceback.print_exc()
             raise e
@@ -210,7 +210,7 @@ class Dbase():
         except Exception as e:
             raise e
         return name
-    
+
 
     @staticmethod
     def getLoanAccounts(ssn):
@@ -233,7 +233,7 @@ class Dbase():
         except Exception as e:
             raise e
         return cursor.fetchall()
-    
+
     @staticmethod
     def getDebitCards(ssn):
         db = sqlite3.connect('database/main.db')
@@ -251,6 +251,41 @@ class Dbase():
         cursor =  db.cursor()
         try:
             sql = "select * from insurance where ssn = ?"
+            cursor.execute(sql,(ssn,))
+        except Exception as e:
+            raise e
+        return cursor.fetchall()
+
+    @staticmethod
+    def getAccountDetails(accounttype,accountno):
+        db = sqlite3.connect('database/main.db')
+        cursor =  db.cursor()
+        try:
+            sql = "select * from "+accounttype+" where number = ?"
+            cursor.execute(sql,(accountno,))
+        except Exception as e:
+            raise e
+        return cursor.fetchone()
+
+    @staticmethod
+    def getTransactionDetails(accounttype,accountno):
+        db = sqlite3.connect('database/main.db')
+        cursor =  db.cursor()
+        try:
+            sql = "select * from transactions where account1 = ? and account1type = ?"
+            cursor.execute(sql,(accountno,accounttype))
+        except Exception as e:
+            raise e
+        return cursor.fetchall()
+
+
+
+    @staticmethod
+    def getSavingsAccounts(ssn):
+        db = sqlite3.connect('database/main.db')
+        cursor =  db.cursor()
+        try:
+            sql = "select * from debitcard where ssn = ?"
             cursor.execute(sql,(ssn,))
         except Exception as e:
             raise e

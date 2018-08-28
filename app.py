@@ -31,7 +31,7 @@ def register():
 			# print(params['registerno'])
 			resp = Operations.validate(params)
 			return resp
-			
+
 		except Exception as e:
 			print(e)
 			traceback.print_exc()
@@ -41,7 +41,7 @@ def register():
 	if request.method == 'DELETE':
 		params = json.loads(request.data.decode('utf-8'))
 		securitynumber = params['securitynumber']
-		
+
 
 	return render_template('register.html')
 
@@ -50,9 +50,9 @@ def checkUsername():
 	params = json.loads(request.data.decode('utf-8'))
 	username  = params['username']
 	resp = Validation.username(username)
-	
+
 	return resp
-	
+
 
 @app.route('/login',methods=['GET','POST'])
 def login():
@@ -120,7 +120,7 @@ def transactions(accounttype,accountno):
 		response = make_response(json.dumps('Some Error Occured! Refresh and Try again '), 400)
 		response.headers['Content-Type'] = 'application/json'
 		return response
-	
+
 @app.route('/payments')
 def payments():
 	if "username" not in login_session:
@@ -133,7 +133,7 @@ def moneytransfer():
 		if "username" not in login_session:
 			return redirect('/')
 		accounts = Operations.getSavingsAccounts()
-		
+
 		return render_template('moneytransfer.html',accounts = accounts)
 	else:
 		try:
@@ -144,18 +144,19 @@ def moneytransfer():
 			Operations.transferAmount(params)
 			response = make_response(json.dumps('Transfer Completed'), 200)
 			response.headers['Content-Type'] = 'application/json'
-			return response	
+			return response
 		except Exception as e:
 			traceback.print_exc()
 			response = make_response(json.dumps('Some Error Occured! Refresh and Try again '), 400)
 			response.headers['Content-Type'] = 'application/json'
-			return response	
+			return response
 
 
 @app.route('/payment/<accounttype>/<number>')
 def payment(accounttype,number):
 	accounts = Operations.getSavingsAccounts()
-	return render_template('payments.html',accounts=accounts)
+	debtAccount=  Operations.getDebtAccount(accounttype,number)
+	return render_template('payments.html',accounts=accounts,debtAccount=debtAccount)
 
 
 @app.route('/disconnect')

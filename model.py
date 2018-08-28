@@ -18,26 +18,26 @@ class Validation():
             response = make_response(json.dumps('Email too long'), 400)
             response.headers['Content-Type'] = 'application/json'
             return response
-        
+
         if Dbase.emailExists(email):
             response = make_response(json.dumps('This email has already been registered with an account'), 400)
             response.headers['Content-Type'] = 'application/json'
             return response
         return None
-    
+
     @staticmethod
     def securitynumber(number,verification_type,securitynumber):
         if re.match(r"^[0-9]{6}$",securitynumber) == None:
             response = make_response(json.dumps('Invalid Security Number'), 400)
             response.headers['Content-Type'] = 'application/json'
             return response
-        
+
         if not Dbase.verifySecurityNumber(number,verification_type,securitynumber):
             response = make_response(json.dumps('Security Number doesn\'t match'), 400)
             response.headers['Content-Type'] = 'application/json'
             return response
         return None
-    
+
     @staticmethod
     def accountNumber(number,verification_type):
         if re.match(r"^[0-9]{16}$",number)== None:
@@ -56,7 +56,7 @@ class Validation():
             response.headers['Content-Type'] = 'application/json'
             return response
         return None
-    
+
     @staticmethod
     def password(number,verification_type, password):
         if not Dbase.verifyPassword(number,verification_type,password):
@@ -68,7 +68,7 @@ class Validation():
             response.headers['Content-Type'] = 'application/json'
             return response
         return None
-    
+
     @staticmethod
     def mobileno(mobileno):
         if re.match(r'^[0-9]{10}$',mobileno) == None:
@@ -79,7 +79,7 @@ class Validation():
             response = make_response(json.dumps('Mobile number already registered with an account'), 400)
             response.headers['Content-Type'] = 'application/json'
             return response
-        
+
         return None
 
     @staticmethod
@@ -107,14 +107,14 @@ class Validation():
             response.headers['Content-Type'] = 'application/json'
             return response
         return None
-    
+
     @staticmethod
     def toaccount(accountno):
         if re.match(r"^[0-9]{16}$",accountno)== None:
             response = make_response(json.dumps('Invalid Account Number'), 400)
             response.headers['Content-Type'] = 'application/json'
             return response
-        
+
         if not Dbase.accountExists(accountno):
             response = make_response(json.dumps('Account Number doestn\'t exists'), 400)
             response.headers['Content-Type'] = 'application/json'
@@ -127,7 +127,7 @@ class Validation():
             response = make_response(json.dumps('Amount should be a positive number'), 400)
             response.headers['Content-Type'] = 'application/json'
             return response
-        
+
         if int(amount)%500 != 0 or int(amount) /500 <1:
             response = make_response(json.dumps('Amount should be min. Rs 500  or multiple of Rs 500'), 400)
             response.headers['Content-Type'] = 'application/json'
@@ -142,7 +142,7 @@ class Validation():
             return response
 
 class Operations():
-    
+
     @staticmethod
     def validate(params):
         try:
@@ -162,7 +162,7 @@ class Operations():
                 resp = Validation.password(number,verification_type,password)
                 if resp != None:
                     return resp
-                
+
                 resp = Validation.securitynumber(number,verification_type,securitynumber)
                 if resp != None:
                     return resp
@@ -174,7 +174,7 @@ class Operations():
                 resp = Validation.mobileno(mobileno)
                 if resp != None:
                     return resp
-                
+
             elif params['registerno'] == '2':
                 username = params['username']
                 userpassword = params['userpassword']
@@ -184,14 +184,14 @@ class Operations():
                 resp = Validation.userpassword(userpassword)
                 if resp != None:
                     return resp
-                
+
             elif params['registerno'] == '3':
                 answer = params['answer']
                 if len(answer)==0:
                     response = make_response(json.dumps('Give a valid Answer'), 400)
                     response.headers['Content-Type'] = 'application/json'
                     return response
-                
+
             else:
                 print(params['registerno'] == 'confirm')
                 Dbase.register(params)
@@ -207,7 +207,7 @@ class Operations():
             return response
         except Exception as e:
             raise e
-        
+
     @staticmethod
     def loginValidate(params):
         try:
@@ -219,15 +219,15 @@ class Operations():
                     return response
                 response = make_response(json.dumps('Valid Username'), 200)
                 response.headers['Content-Type'] = 'application/json'
-                return response	
+                return response
             else:
                 username = params['username']
                 password = params['password']
                 if not Dbase.verifyLoginPassword(username,password):
                     response = make_response(json.dumps('Invalid Credentials'), 400)
                     response.headers['Content-Type'] = 'application/json'
-                    return response	
-				
+                    return response
+
 				#login successful
                 ssn = Dbase.getSecurityNumber(username)
                 customername = Dbase.getCustomerName(ssn)
@@ -239,7 +239,7 @@ class Operations():
                 return response
         except Exception as e:
             raise e
-    
+
     @staticmethod
     def moneyTransferValidate(params):
         try:
@@ -261,11 +261,11 @@ class Operations():
                 return resp
             return None
 
-            
+
 
         except Exception as e:
             raise e
-    
+
     @staticmethod
     def transferAmount(params):
         try:
@@ -275,7 +275,7 @@ class Operations():
             Dbase.transfer(fromaccount,toaccount,amount)
         except Exception as e:
             raise e
-        
+
     @staticmethod
     def getCustomerDetailsDict(ssn):
         try:
@@ -329,7 +329,7 @@ class Operations():
                 insuranceDict['duedate'] = time.strftime('%d\%m\%Y',time.strptime(insurance[6],'%d-%m-%Y'))
                 insuranceList.append(insuranceDict)
             customerDetails['insurances'] = insuranceList
-            
+
             return customerDetails
         except Exception as e:
             raise e
@@ -342,7 +342,8 @@ class Operations():
             print(account)
             detailsDict['accounttype'] = accounttype
             detailsDict['id'] = accountno
-            if accounttype == 'loanaccount': 
+            print(account)
+            if accounttype == 'loanaccount':
                 detailsDict['loannumber'] = account[0]
                 detailsDict['customername'] = account[1]
                 detailsDict['password'] = account[2]
@@ -391,7 +392,7 @@ class Operations():
             return detailsDict
         except Exception as e:
             raise e
-            
+
     @staticmethod
     def getTransactions(accounttype,accountno,startdate,enddate):
         try:
@@ -403,7 +404,7 @@ class Operations():
                 tranxDict = {}
                 tranxDict['tranxdate'] = trans[8].split(' ')[0].replace(':','/')
                 if time.strptime(tranxDict['tranxdate'],'%m/%d/%Y') >= startdate and time.strptime(tranxDict['tranxdate'],'%m/%d/%Y') <= enddate:
-                    
+
                     tranxDict['tranxid'] = trans[0]
                     tranxDict['account1type'] = trans[2]
                     tranxDict['account2'] = trans[3]
@@ -414,17 +415,36 @@ class Operations():
                     tranxDict['tranxtime'] = trans[8].split(' ')[1]
                     tranxDict['status'] = trans[9]
                     tranxList.append(tranxDict)
-                
+
             transactionDict['transactions'] = tranxList
             return transactionDict
         except Exception as e:
             raise e
-    
+
     @staticmethod
     def getSavingsAccounts():
         try:
             ssn = login_session['ssn']
             accounts = Dbase.getSavingsAccounts(ssn)
             return accounts
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def getDebtAccount(accounttype,number):
+        try:
+            account = Dbase.getAccountDetails(accounttype,number)
+            debtAccount = {}
+            debtAccount['accounttype'] = accounttype
+            debtAccount['number'] = number
+            if accounttype == 'creditcard':
+                debtAccount['amount'] = account[5]
+            elif accounttype == 'loanaccount':
+                debtAccount['amount'] = account[5]
+            else:
+                debtAccount['amount'] = account[5]
+
+
+            return debtAccount
         except Exception as e:
             raise e
