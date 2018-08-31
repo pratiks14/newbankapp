@@ -152,11 +152,25 @@ def moneytransfer():
 			return response
 
 
-@app.route('/payment/<accounttype>/<number>')
+@app.route('/payment/<accounttype>/<number>',methods=['GET','POST'])
 def payment(accounttype,number):
-	accounts = Operations.getSavingsAccounts()
-	debtAccount=  Operations.getDebtAccount(accounttype,number)
-	return render_template('payments.html',accounts=accounts,debtAccount=debtAccount)
+	if request.method == 'POST':
+		try:
+			params = json.loads(request.data.decode('utf-8'))
+			Operations.validatePayment(params)
+			response = make_response(json.dumps("Payment Successful"), 200)
+			response.headers['Content-Type'] = 'application/json'
+			return response
+		except Exception as e:
+			# print(e)
+			traceback.print_exc()
+			response = make_response(json.dumps(str(e)), 400)
+			response.headers['Content-Type'] = 'application/json'
+			return response
+	else:
+		accounts = Operations.getSavingsAccounts()
+		debtAccount=  Operations.getDebtAccount(accounttype,number)
+		return render_template('payments.html',accounts=accounts,debtAccount=debtAccount)
 
 
 @app.route('/disconnect')
