@@ -4,7 +4,8 @@ create table loanaccount(
     password varchar(50),
     ssn char(6),
     loantype varchar(20),
-    loanamount varchar
+    loanamount varchar,
+    duedate datetime
 );
 
 create table insurance(
@@ -14,7 +15,8 @@ create table insurance(
     ssn char(6),
     insurancetype varchar(20),
     premium varchar,
-    duedate datetime
+    duedate datetime,
+    insurance_amount varchar(50)
 );
 
 insert into insurance(number,name,password,ssn,insurancetype,premium,duedate) values('6666666666666666','Pratik Shetty','pratiks14','454545','Vehicle Insurance','1000000','14-09-2018');
@@ -26,8 +28,8 @@ create table creditcard(
     credit_limit varchar,
     amountdue varchar
 );
-insert into creditcard(number,name,pin,ssn,credit_limit,amountdue) values('4545454545454545','Pratik Shetty','4545','454545',10000.00,6000.00);
-insert into creditcard(number,name,pin,ssn,credit_limit,amountdue) values('4545445454545454','Pratik Shetty','4545','454545',10000.00,6000.00);
+insert into creditcard(number,name,pin,ssn,credit_limit,amountdue) values('4545454545454545','Pratik Shetty','4545','454545','10000.00','6000.00');
+insert into creditcard(number,name,pin,ssn,credit_limit,amountdue) values('4545445454545454','Pratik Shetty','4545','454545','10000.00','6000.00');
 
 delete from creditcard;
 delete from sqlite_sequence where name="creditcard";
@@ -76,10 +78,10 @@ create table transactions
 );
 
 insert into transactions(tranxid,account1,account1type,account2,account2type,amount,tranxtype,tranx_time,tranx_status) values(
-    '1026111b8645d113bcbf936b38e376c5e30f93b','4545454545454545','creditcard','5555555555555555','loanaccount','5000','debit','08:16:2018 13:02:35','Pending'
+    '1026111b8645d113bcbf936b38e376c5e30f93b','4545454545454545','creditcard','5555555555555555','loanaccount','5000','debit','08:16:2018 13:02:35','Completed'
 );
 insert into transactions(tranxid,account1,account1type,account2,account2type,amount,tranxtype,tranx_time,tranx_status) values(
-    '1026111b8645d113bcbf936b38e375e65e9a13b','4545454545454545','creditcard','5555555555555555','loanaccount','5000','credit','08:10:2018 13:02:35','Pending'
+    '1026111b8645d113bcbf936b38e375e65e9a13b','4545454545454545','creditcard','5555555555555555','loanaccount','5000','credit','08:10:2018 13:02:35','Completed'
 );insert into transactions(tranxid,account1,account1type,account2,account2type,amount,tranxtype,tranx_time,tranx_status) values(
     '1026111b8645d113bcbf936b38e37735a54a53b','4545454545454545','creditcard','5555555555555555','loanaccount','5000','debit','08:19:2018 13:02:35','Pending'
 );
