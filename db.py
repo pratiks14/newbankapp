@@ -1,7 +1,8 @@
 import sqlite3
 import json
 import traceback
-
+import time
+from hexhash import getTranxid
 class Dbase():
     @staticmethod
     def emailExists(email):
@@ -278,6 +279,17 @@ class Dbase():
             raise e
         return cursor.fetchall()
 
+    @staticmethod
+    def getDebitCardAccountno(number):
+        db = sqlite3.connect('database/main.db')
+        cursor =  db.cursor()
+        try:
+            sql = "Select accountno from debitcard where number = ?"
+            cursor.execute(sql,(number,))
+            return cursor.fetchone()[0]
+        except Exception as e:
+            raise e
+
 
 
     @staticmethod
@@ -290,3 +302,101 @@ class Dbase():
         except Exception as e:
             raise e
         return cursor.fetchall()
+
+    @staticmethod
+    def hasAccountBalance(accountno,reqbalance):
+        db = sqlite3.connect('database/main.db')
+        cursor = db.cursor()
+        try:
+            sql = "select balance from debitcard where accountno = ?"
+            cursor.execute(sql,(accountno,))
+            balance = cursor.fetchone()[0]
+            if float(balance) >= float(reqbalance):
+                return True
+            else:
+                return False
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def transfer(fromaccount,toaccount,amount):
+        db = sqlite3.connect('database/main.db')
+        cursor = db.cursor()
+        try:
+            sql = "select balance from debitcard where accountno = ?"
+            cursor.execute(sql,(fromaccount,))
+            from_bal = cursor.fetchone()[0]
+            cursor.execute(sql,(toaccount,))
+            to_bal =  cursor.fetchone()[0]
+
+            from_bal = "%.2f" % (float(from_bal) - float(amount))
+            to_bal = "%.2f" % (float(to_bal) + float(amount) )
+            sql = "update debitcard set balance = ?  where accountno = ?"
+            cursor.execute(sql,(to_bal,toaccount))
+            cursor.execute(sql,(from_bal,fromaccount))
+            Dbase.addTransactions(cursor,fromaccount,'debitcard',toaccount,'debitcard',amount)
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            print (e)
+            raise Exception("Some Error Occured!")
+
+    @staticmethod
+    def pay(accounttype, number,fromaccount):
+        db = sqlite3.connect('database/main.db')
+        cursor = db.cursor()
+        if accounttype =="loanaccount":
+            debt_name = "loanamount"
+        elif accounttype == "creditcard":
+            debt_name = "amountdue"
+        else:
+            debt_name = "premium"
+        try:
+            sql = "select balance from debitcard where accountno = ?"
+            cursor.execute(sql,(fromaccount,))
+            from_bal =  cursor.fetchone()[0]
+            sql ="select " + debt_name + " from " + accounttype + " where number = ?"
+            cursor.execute(sql,(number,))
+            debt_amount = cursor.fetchone()[0]
+
+            from_bal = "%.2f" %(float(from_bal) - float(debt_amount))
+            # debt_amount = "0"
+            sql = "update debitcard set balance = ?  where accountno = ?"
+            cursor.execute(sql,(from_bal,fromaccount))
+            sql = "update "+ accounttype + " set " + debt_name + " = ? where number = ?"
+            cursor.execute(sql,("0",number))
+            Dbase.addTransactions(cursor,fromaccount,'debitcard',number,accounttype,debt_amount)
+
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            print (e)
+            raise Exception("Some Error Occured!")
+    
+    @staticmethod
+    def addTransactions(cursor,fromaccount,fromaccounttype,toaccount,toaccounttype,amount):
+        date = time.strftime('%m:%d:%Y %H:%M:%S')
+        
+        try:
+            tranxid = getTranxid(fromaccount,toaccount,date)
+            sql = "insert into transactions(tranxid,account1,account1type,account2,account2type,amount,tranxtype,tranx_time,tranx_status) values(?,?,?,?,?,?,?,?,?)"
+            cursor.execute(sql,(tranxid,fromaccount,fromaccounttype,toaccount,toaccounttype,amount,"credit",date,"Completed"))
+            tranxid = getTranxid(toaccount,fromaccount,date)
+            cursor.execute(sql,(tranxid,toaccount,toaccounttype,fromaccount,fromaccounttype,amount,"credit",date,"Completed"))
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def accountExists(accountno):
+        db = sqlite3.connect('database/main.db')
+        cursor = db.cursor()
+        try:
+            sql = "select * from debitcard where accountno = ?"
+            cursor.execute(sql,(accountno,))
+            if (len(cursor.fetchall())==0):
+                return False
+            else:
+                return True
+        except Exception as e:
+            traceback.print_exc()
+            raise Exception("Some Error Occured")
