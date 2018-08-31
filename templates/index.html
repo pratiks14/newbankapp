@@ -295,7 +295,7 @@ a:hover{
                     <p>&#8377; {{creditcard['creditlimit']}}</p>
                 </div>
                 <div class="col-3 " >
-                    <p>&#8377; {{creditcard['amountdue']}} <span class="pay credit pointer">PAY</span></p>
+                    <p>&#8377; {{creditcard['amountdue']}} {% if creditcard['amountdue'] != '0' %}<span class="pay credit pointer">PAY</span>{% endif %}</p>
                 </div>
             </div>
             <div class="modal fade infoModal" role="dialog">  
@@ -357,7 +357,7 @@ a:hover{
                     <p>{{debitcard['accountnumber']}}</p>
                 </div>
                 <div class="col-3 " >
-                    <p>{{debitcard['accounttype']}}</p>
+                    <p>{{debitcard['debitaccounttype']}}</p>
                 </div>
                 <div class="col-3 " >
                     <p>&#8377; {{debitcard['accountbalance']}}</p>
@@ -450,7 +450,7 @@ a:hover{
                         <p>&#8377; {{insurance['premium']}}</p>
                     </div>
                     <div class="col-3 " >
-                        <p> {{insurance['duedate']}} <span class="pay insurance pointer">PAY</span></p>
+                        <p> {{insurance['duedate']}} {% if insurance['premium'] != '0' %}<span class="pay insurance pointer">PAY</span>{% endif %}</p>
                     </div>
                 </div>
             {% endfor %}
@@ -511,7 +511,7 @@ a:hover{
         event.preventDefault();
         $(this).prev().find('.nav-text').css("border-right","none");
         var tab = $(this).attr('id');
-        var idname = '#tab-content'+tab.charAt(tab.length-1)
+        var idname = '#tab-content'+tab.charAt(tab.length-1);
         $(idname).show();
        
         
@@ -519,7 +519,7 @@ a:hover{
         event.preventDefault();
         $(this).prev().find('.nav-text').css("border-right","1px solid #eee");
         var tab = $(this).attr('id');
-        var idname = '#tab-content'+tab.charAt(tab.length-1)
+        var idname = '#tab-content'+tab.charAt(tab.length-1);
         $(idname).hide();
     });
 
@@ -543,9 +543,12 @@ a:hover{
 
             window.location.href = '/payment/creditcard/'+$(this).parent().parent().parent().attr('data-card-no');
         }
+        if($(this).hasClass('insurance')){
+
+            window.location.href = '/payment/insurance/'+$(this).parent().parent().parent().find('div').first().find('p').html();
+        }
     });
 </script>
 </body>
 
 </html>
-
