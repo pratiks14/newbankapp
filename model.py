@@ -141,6 +141,13 @@ class Validation():
             response.headers['Content-Type'] = 'application/json'
             return response
 
+    @staticmethod
+    def fromaccount1(accountno,amount):
+        if not Dbase.hasAccountBalance(accountno,amount):
+            raise Exception('Not enough balance in your account')
+            
+    
+
 class Operations():
 
     @staticmethod
@@ -241,6 +248,15 @@ class Operations():
             raise e
 
     @staticmethod
+    def validatePayment(params):
+        amount = params['amount']
+        debtAccounttype = params['debtaccounttype']
+        debtAccountNumber = params['debtaccountnumber']
+        fromaccount = params['fromaccount']
+        Validation.fromaccount1(fromaccount,amount)
+        Dbase.pay(debtAccounttype,debtAccountNumber,fromaccount)
+
+    @staticmethod
     def moneyTransferValidate(params):
         try:
             fromaccount = params['fromaccount']
@@ -273,6 +289,7 @@ class Operations():
             toaccount = params['toaccount']
             amount = params['amount']
             Dbase.transfer(fromaccount,toaccount,amount)
+            
         except Exception as e:
             raise e
 
@@ -368,8 +385,11 @@ class Operations():
                 detailsDict['pin'] = account[3]
                 detailsDict['accountnumber'] = account[1]
                 detailsDict['accountbalance'] = str(account[5])
-                detailsDict['accounttype'] = account[6]
+                detailsDict['debitaccounttype'] = account[6]
             transactions = Dbase.getTransactionDetails(accounttype,accountno)
+            if accounttype == "debitcard":
+                debit_accountno = Dbase.getDebitCardAccountno(accountno)
+                transactions += Dbase.getTransactionDetails(accounttype,debit_accountno)
             tranxList = []
             transactions.sort(key=lambda r:time.strptime(r[8],'%m:%d:%Y %H:%M:%S'),reverse=True)
             count = 0
@@ -396,9 +416,15 @@ class Operations():
     @staticmethod
     def getTransactions(accounttype,accountno,startdate,enddate):
         try:
+            # print(accounttype)
             transactionDict = {}
             transactions = Dbase.getTransactionDetails(accounttype,accountno)
+            if accounttype == "debitcard":
+                debit_accountno = Dbase.getDebitCardAccountno(accountno)
+                transactions += Dbase.getTransactionDetails(accounttype,debit_accountno)
+                # print(transactions)
             tranxList = []
+            # print(transactions)
             transactions.sort(key=lambda r:time.strptime(r[8],'%m:%d:%Y %H:%M:%S'),reverse=True)
             for trans in transactions:
                 tranxDict = {}
