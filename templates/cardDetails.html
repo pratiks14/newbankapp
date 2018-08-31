@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -232,8 +231,8 @@ label{
     padding-left: 0px;
 }
 .card > .card-body{
-    background-color: #ddd;
-    margin:20px 0px;
+    /* background-color: #ddd; */
+    margin:20px 20px;
     border-radius: 2px;
 }
 .transdetails{
@@ -246,9 +245,7 @@ label{
 .debit::before{
     content: '-';
 }
-.credit{
-    color:rgb(28, 104, 28);
-}
+
 .fa-check-circle{
     color:rgb(16, 119, 16);
 }
@@ -323,129 +320,261 @@ button:focus,input:focus {outline:0;}
         <p class="nav-text">Loans</p>
     </li>
 </ul>
+
 <div class="currcont container" style="padding:20px 0;">
-    <div class="card" style="border:none;">
-        <div class="card-body" >
-            <h4 class="cardhead">Card Details</h4>
-            <div class="row details">
-                <div class="col-4" >
-                    <label>Card Number</label>
-                </div>
-                <div class="col-8">
-                    <p>{{details['cardnumber']}}</p>
-                </div>
-            </div>    
-            <hr>
-            <div class="row details">
-                    <div class="col-4">
-                        <label>Card Holder</label>
-                    </div>
-                    <div class="col-8">
-                        <p>{{details['cardholder']}}</p>
-                    </div>
-            </div>
-            <hr>
-            <div class="row details">
-                    <div class="col-4">
-                        <label>PIN</label>
-                    </div> 
-                    <div class="col-8 row">
-                            <div class="col-3 " style="vertical-align: middle">
-                                    <input type="password"  class="form-control-plaintext"  style="padding-top:0px;" value="{{details['pin']}}" >
-                                </div>
-                                <div class="col-9" >
-                                <i class="far fa-eye eye pointer"></i>
-                        
+    <div class="jumbotron" id="firstspace" style="min-height:65vh;margin-top:20px;">
+            {% if details['accounttype'] == 'creditcard' %}
+        <div class="card" style="border:none;">
+            
+                <div class="card-body" >
+                    <h4 class="cardhead">Card Details</h4>
+                    <div class="row details">
+                        <div class="col-4" >
+                            <label>Card Number</label>
+                        </div>
+                        <div class="col-8">
+                            <p>{{details['cardnumber']}}</p>
+                        </div>
+                    </div>    
+                    <hr>
+                    <div class="row details">
+                            <div class="col-4">
+                                <label>Card Holder</label>
+                            </div>
+                            <div class="col-8">
+                                <p>{{details['cardholder']}}</p>
                             </div>
                     </div>
-            </div>
-            <hr>
-            <div class="row details">
-                    <div class="col-4">
-                        <label>Credit Limit</label>
-                    </div> 
-                    <div class="col-8">
-                            <p>&#8377; {{details['creditlimit']}}</p>
+                    <hr>
+                    <div class="row details">
+                            <div class="col-4">
+                                <label>PIN</label>
+                            </div> 
+                            <div class="col-8 row">
+                                    <div class="col-3 " style="vertical-align: middle">
+                                            <input type="password"  class="form-control-plaintext"  style="padding-top:0px;" value="{{details['pin']}}" >
+                                        </div>
+                                        <div class="col-9" >
+                                        <i class="far fa-eye eye pointer"></i>
+                                
+                                    </div>
+                            </div>
                     </div>
-            </div>
-            <hr>
-            <div class="row details">
-                    <div class="col-4">
-                        <label>You Owe</label>
-                    </div> 
-                    <div class="col-8">
-                            <p>&#8377; {{details['amountdue']}} <span class="pay pointer">PAY</span></p>
+                    <hr>
+                    <div class="row details">
+                            <div class="col-4">
+                                <label>Credit Limit</label>
+                            </div> 
+                            <div class="col-8">
+                                    <p>&#8377; {{details['creditlimit']}}</p>
+                            </div>
                     </div>
-            </div>
-        </div>
-
-        <div class="card-body" >
-                <h4 class="cardhead">Transations</h4>
-                <div class="row" style="margin:0px ">
-                    <div class="col-4">
-                           <label style="font-weight:bold;padding-left:0px;"> Start Date: </label><input id="startDate"  />
-
-                    </div>
-                    <div class="col-4">
-                           <label style="font-weight:bold;padding-left:0px;"> End Date: </label><input id="endDate"  />
-                    </div>
-                    <div class="col-4" style="display:flex;align-items:flex-end;">
-                        <button  class="mybtn" id="filter">Filter</button>
+                    <hr>
+                    <div class="row details">
+                            <div class="col-4">
+                                <label>You Owe</label>
+                            </div> 
+                            <div class="col-8">
+                                    <p>&#8377; {{details['amountdue']}} {% if details['amountdue'] != '0' %}<span class="pay credit pointer">PAY</span>{% endif %}</p>
+                            </div>
                     </div>
                 </div>
-                <!-- Start Date: <input id="startDate" width="276" />
-        End Date: <input id="endDate" width="276" /> -->
-                <ul class="list-group transactions">
-                    {% if details['transactions'] | length > 0 %}
-                    {% for transaction in details['transactions'] %}
-                    <div class="transdetails pointer">
-                        <li class="list-group-item " style="background-color:#555;color:#fff;">
-                                <i class="fas dropcircle fa-chevron-circle-down"></i> Rs {{transaction['amount']}}<span style="color:#999">({{transaction['account2type']}}/{{transaction['account2']}})</span>
-                            <span style="display:flex;float:right;">{{transaction['tranxdate']}}</span></li>
-                        <li class="list-group-item "  style="display:none">
-                            <div class="row ">
-                                <div class="col-4">
-                                    <label>Transaction ID</label>
-                                </div>
-                                <div class="col-8">
-                                    <p>{{transaction['tranxid']}}</p>
-                                </div>
-                                <div class="col-4">
-                                    <label>To</label>
-                                </div>
-                                <div class="col-8">
-                                    <p>{{transaction['account2type']}}/{{transaction['account2']}}</p>
-                                </div>
-                                <div class="col-4">
-                                    <label>Amount</label>
-                                </div>
-                                <div class="col-8">
-                                    <p class="{{transaction['tranxtype']}}">{{transaction['amount']}}</p>
-                                </div>
-                                <div class="col-4">
-                                    <label>Time</label>
-                                </div>
-                                <div class="col-8">
-                                    <p>{{transaction['tranxtime']}}</p>
-                                </div>
-                                <div class="col-4">
-                                        <label>Status</label>
-                                </div>
-                                <div class="col-8">
-                                    <p ><i class="fas {% if transaction['status'] == 'Completed'%}fa-check-circle{% else %}fa-exclamation-circle {% endif %}"></i> {{transaction['status']}}</p>
-                                </div>
-                            </div>
-                        </li>
 
-                    
-                    {% endfor %}
-                    {% else %}
-                    <li class="list-group-item " style="background-color:#555;color:#eee;margin-top:10px;"><i class="fas fa-exclamation-triangle"></i> No Transaction done yet</li>
-                    {% endif %}
-                </ul>
+                <div class="card-body" >
+                        <h4 class="cardhead">Transations</h4>
+                        <div class="row" style="margin:0px ">
+                            <div class="col-4">
+                                <label style="font-weight:bold;padding-left:0px;"> Start Date: </label><input id="startDate"  />
+
+                            </div>
+                            <div class="col-4">
+                                <label style="font-weight:bold;padding-left:0px;"> End Date: </label><input id="endDate"  />
+                            </div>
+                            <div class="col-4" style="display:flex;align-items:flex-end;">
+                                <button  class="mybtn" id="filter">Filter</button>
+                            </div>
+                        </div>
+                        <!-- Start Date: <input id="startDate" width="276" />
+                End Date: <input id="endDate" width="276" /> -->
+                        <ul class="list-group transactions">
+                            {% if details['transactions'] | length > 0 %}
+                            {% for transaction in details['transactions'] %}
+                            <div class="transdetails pointer">
+                                <li class="list-group-item " style="background-color:#555;color:#fff;">
+                                        <i class="fas dropcircle fa-chevron-circle-down"></i> Rs {{transaction['amount']}}<span style="color:#999">({{transaction['account2type']}}/{{transaction['account2']}})</span>
+                                    <span style="display:flex;float:right;">{{transaction['tranxdate']}}</span></li>
+                                <li class="list-group-item "  style="display:none">
+                                    <div class="row ">
+                                        <div class="col-4">
+                                            <label>Transaction ID</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <p>{{transaction['tranxid']}}</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <label>To</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <p>{{transaction['account2type']}}/{{transaction['account2']}}</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <label>Amount</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <p class="{{transaction['tranxtype']}}">{{transaction['amount']}}</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <label>Time</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <p>{{transaction['tranxtime']}}</p>
+                                        </div>
+                                        <div class="col-4">
+                                                <label>Status</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <p ><i class="fas {% if transaction['status'] == 'Completed'%}fa-check-circle{% else %}fa-exclamation-circle {% endif %}"></i> {{transaction['status']}}</p>
+                                        </div>
+                                    </div>
+                                </li>
+
+                            
+                            {% endfor %}
+                            {% else %}
+                            <li class="list-group-item " style="background-color:#555;color:#eee;margin-top:10px;"><i class="fas fa-exclamation-triangle"></i> No Transaction done yet</li>
+                            {% endif %}
+                        </ul>
+                </div>
+            </div>
+            {% elif details['accounttype'] == 'debitcard' %}
+
+            <div class="card" style="border:none;">
+            
+                <div class="card-body" >
+                    <h4 class="cardhead">Card Details</h4>
+                    <div class="row details">
+                        <div class="col-4" >
+                            <label>Card Number</label>
+                        </div>
+                        <div class="col-8">
+                            <p>{{details['cardnumber']}}</p>
+                        </div>
+                    </div>    
+                    <hr>
+                    <div class="row details">
+                            <div class="col-4">
+                                <label>Account Number</label>
+                            </div>
+                            <div class="col-8">
+                                <p>{{details['accountnumber']}}</p>
+                            </div>
+                    </div>
+                    <hr>
+                    <div class="row details">
+                            <div class="col-4">
+                                <label>PIN</label>
+                            </div> 
+                            <div class="col-8 row">
+                                    <div class="col-3 " style="vertical-align: middle">
+                                            <input type="password"  class="form-control-plaintext"  style="padding-top:0px;" value="{{details['pin']}}" >
+                                        </div>
+                                        <div class="col-9" >
+                                        <i class="far fa-eye eye pointer"></i>
+                                
+                                    </div>
+                            </div>
+                    </div>
+                    <hr>
+                    <div class="row details">
+                            <div class="col-4">
+                                <label>Account Type</label>
+                            </div> 
+                            <div class="col-8">
+                                    <p>{{details['debitaccounttype']}}</p>
+                            </div>
+                    </div>
+                    <hr>
+                    <div class="row details">
+                            <div class="col-4">
+                                <label>Account Balance</label>
+                            </div> 
+                            <div class="col-8">
+                                    <p>&#8377; {{details['accountbalance']}} </p>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="card-body" >
+                        <h4 class="cardhead">Transations</h4>
+                        <div class="row" style="margin:0px ">
+                            <div class="col-4">
+                                <label style="font-weight:bold;padding-left:0px;"> Start Date: </label><input id="startDate"  />
+
+                            </div>
+                            <div class="col-4">
+                                <label style="font-weight:bold;padding-left:0px;"> End Date: </label><input id="endDate"  />
+                            </div>
+                            <div class="col-4" style="display:flex;align-items:flex-end;">
+                                <button  class="mybtn" id="filter">Filter</button>
+                            </div>
+                        </div>
+                        <!-- Start Date: <input id="startDate" width="276" />
+                End Date: <input id="endDate" width="276" /> -->
+                        <ul class="list-group transactions">
+                            {% if details['transactions'] | length > 0 %}
+                            {% for transaction in details['transactions'] %}
+                            <div class="transdetails pointer">
+                                <li class="list-group-item " style="background-color:#555;color:#fff;">
+                                        <i class="fas dropcircle fa-chevron-circle-down"></i> Rs {{transaction['amount']}}<span style="color:#999">({{transaction['account2type']}}/{{transaction['account2']}})</span>
+                                    <span style="display:flex;float:right;">{{transaction['tranxdate']}}</span></li>
+                                <li class="list-group-item "  style="display:none">
+                                    <div class="row ">
+                                        <div class="col-4">
+                                            <label>Transaction ID</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <p>{{transaction['tranxid']}}</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <label>To</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <p>{{transaction['account2type']}}/{{transaction['account2']}}</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <label>Amount</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <p class="{{transaction['tranxtype']}}">{{transaction['amount']}}</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <label>Time</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <p>{{transaction['tranxtime']}}</p>
+                                        </div>
+                                        <div class="col-4">
+                                                <label>Status</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <p ><i class="fas {% if transaction['status'] == 'Completed'%}fa-check-circle{% else %}fa-exclamation-circle {% endif %}"></i> {{transaction['status']}}</p>
+                                        </div>
+                                    </div>
+                                </li>
+
+                            
+                            {% endfor %}
+                            {% else %}
+                            <li class="list-group-item " style="background-color:#555;color:#eee;margin-top:10px;"><i class="fas fa-exclamation-triangle"></i> No Transaction done yet</li>
+                            {% endif %}
+                        </ul>
+                </div>
+            </div>
+            {% elif details['accounttype'] %}
+            {% endif %}
+            
         </div>
-    </div>
-   
+
 </div>     
 <div class="modal fade" id="dataModal" role="dialog">  
     <div class="vertical-alignment-helper">
@@ -526,7 +655,7 @@ button:focus,input:focus {outline:0;}
 
 
     function displayFilteredTransactions(transDict){
-        var content = '';
+        var content = '<ul class="list-group transactions">';
         if(transDict['transactions'].length == 0){
             content = `
             <li class="list-group-item " style="background-color:#555;color:#eee;margin-top:10px;"><i class="fas fa-exclamation-triangle"></i> No Transaction within this period</li>
@@ -546,7 +675,7 @@ button:focus,input:focus {outline:0;}
                     statusclassname = 'fa-exclamation-circle';
                 }
                 content += `
-                <div class="transdetails pointer">
+                <div class="transdetails pointer" style="margin:10px 0px 0px 0px;">
                         <li class="list-group-item " style="background-color:#555;color:#fff;">
                                 <i class="fas dropcircle fa-chevron-circle-down"></i> Rs ${transaction['amount']}<span style="color:#999">(${transaction['account2type']}/${transaction['account2']})</span>
                             <span style="display:flex;float:right;">${transaction['tranxdate']}</span></li>
@@ -589,8 +718,10 @@ button:focus,input:focus {outline:0;}
                 `;
 
             });
+           
 
         }
+        content +='</ul>';
         $('.transactions').html(content);
     }
 
@@ -635,6 +766,16 @@ button:focus,input:focus {outline:0;}
                     $('#dataModal').modal('show');
                 }
             });
+        }
+    });
+    $('.pay').click(function(){
+        if($(this).hasClass('credit')){
+
+            window.location.href = "/payment/creditcard/{{details['cardnumber']}}";
+        }
+        if($(this).hasClass('insurance')){
+
+            window.location.href = '/payment/insurance/'+$(this).parent().parent().parent().find('div').first().find('p').html();
         }
     });
 </script>
