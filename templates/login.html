@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Atomic+Age|Montserrat" rel="stylesheet">
      <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{url_for('static',filename='fontawesome/css/all.min.css')}}" >
+    <link rel="stylesheet" href="{{url_for('static',filename='fontawesome/css/all.min.css')}}" >   
 
 
     <style>
@@ -18,9 +18,9 @@
             font-size: 20px;
             vertical-align: bottom;
             color:#d00100
-
+            
         }
-
+        
         body{
     /* background-color: #E7E7EF; */
         height: 100%;
@@ -29,17 +29,18 @@
         width:100vw;
         box-sizing: border-box;
         /* opacity: 0.8; */
-
+        overflow-x: hidden;
+        
         }
         .wrapper{
-            /*background-repeat: no-repeat;
+            background-repeat: no-repeat;
             background-image:url('{{url_for("static",filename="loginimage.jpeg")}}');
             z-index: -2;
             position: fixed;
-            height:100%;
-            width:100%;
+            height:100vh;
+            width:100vw;
             margin:0px;
-            padding:0px;*/
+            padding:0px;
             /* opacity: 1; */
         }
     .pointer{
@@ -61,7 +62,7 @@
         .head{
             background-color: #555;
         }
-
+        
         footer{
              background-color: #111;
 
@@ -75,10 +76,8 @@
              color:#555;
          }
          #login-body{
-             padding:80px 20px;
+             padding:80px 0px;
              width:100vw;
-             margin:0px;
-
          }
          input{
             height:40px;
@@ -87,7 +86,7 @@
             padding:7px;
             font-size:18px;
             font-family: 'Montserrat', sans-serif;
-
+            
             outline:none;
         }
         input:focus{
@@ -114,7 +113,7 @@
             vertical-align: middle;
             border-radius: 20em;
         }
-
+       
         </style>
     </head>
     <body>
@@ -159,22 +158,22 @@
             </div>
 
         </div>
-        <div class="modal fade" id="dataModal" role="dialog">
+        <div class="modal fade" id="dataModal" role="dialog">  
                 <div class="vertical-alignment-helper">
-                    <div class="modal-dialog">
-
-                    <!-- Modal content-->
-                        <div class="modal-content ">
-
-
-
-                        </div>
-
-                    </div>
-                </div>
+                    <div class="modal-dialog">  
+                    
+                    <!-- Modal content-->  
+                        <div class="modal-content ">  
+                            
+                              
+                             
+                        </div> 
+                        
+                    </div>  
+                </div>	
             </div>
-        <footer style="width:100%;padding:0px 15px;">
-            <div class="row" style="padding:25px;color:#eee;">
+        <footer style="">
+            <div class="row" style="width:100vw;margin:0px;padding:25px;color:#eee;">
                 <div class="col-3" style="border-right:1px solid #ddd ">
                     <h4 class="card-title2"> Contact INFYBank</h4>
                     <br>
@@ -186,7 +185,7 @@
                         <p class="pointer hover-underline" style="font-size:15px">Find your nearest branch location  <i class="fas fa-angle-right arrow" style="color:#fff;font-size:20px"></i></p>
                 </div>
                 <div class="col-3" style="border-right:1px solid #ddd ">
-
+            
                         <h4 class="card-title2"> Frequently Asked Questions</h4>
                         <br>
                         <p class="pointer hover-underline" style="font-size:15px">See FAQs on Personal Internet Banking   <i class="fas fa-angle-right arrow" style="color:#fff;font-size:20px"></i></p>
@@ -219,7 +218,7 @@
             $('.login-card').delegate('.continue','click',function(){
                 if ($('input[name=username]').val() == ''){
                     var modalcontent = `
-                                <div class="modal-body ">
+                                <div class="modal-body ">  
                                 <h5><i class="fas fa-exclamation-circle"></i> Fill all the Inputs before continuing</h5>
                                 </div>
                                 <div class="modal-footer d-flex justify-content-start">
@@ -260,7 +259,7 @@
                         },
                         error:function(data){
                             var modalcontent = `
-                                <div class="modal-body ">
+                                <div class="modal-body ">  
                                 <h5><i class="fas fa-exclamation-circle"></i> `+data.responseJSON+`</h5>
                                 </div>
                                 <div class="modal-footer d-flex justify-content-start">
@@ -276,7 +275,7 @@
             $('input[name=username]').keyup(function(){
                 if($(this).val().length >=3){
                     $('.continue').css('background-color','#d00104').prop('disabled',false);
-
+                    
                 }
                 else{
                     $('.continue').css('background-color','#d86d6d').prop('disabled',true);
@@ -286,7 +285,7 @@
             $('.login-card').delegate('.login','click',function(){
                 if ($('input[name=password]').val() == ''){
                     var modalcontent = `
-                                <div class="modal-body ">
+                                <div class="modal-body ">  
                                 <h5><i class="fas fa-exclamation-circle"></i> Fill all the Inputs before continuing</h5>
                                 </div>
                                 <div class="modal-footer d-flex justify-content-start">
@@ -309,11 +308,11 @@
                         contentType:'Application/json',
                         success:function(){
                             var modalcontent = `
-                            <div class="modal-body ">
+                            <div class="modal-body ">  
                             <h5><i class="far fa-check-square" style="color:green"></i> Login Successful</h5>
                             <hr>
                             <p>Loading Your Home Page</p>
-
+                        
                             </div>`;
                             $('.modal-content').html(modalcontent);
                             $('#dataModal').modal('show');
@@ -324,7 +323,7 @@
                         },
                         error:function(data){
                             var modalcontent = `
-                            <div class="modal-body ">
+                            <div class="modal-body ">  
                             <h5><i class="fas fa-exclamation-circle"></i> `+data.responseJSON+`</h5>
                             </div>
                             <div class="modal-footer d-flex justify-content-start">
