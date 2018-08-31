@@ -13,7 +13,7 @@
      <!-- Bootstrap Core CSS -->
      <link href="{{url_for('static',filename='gijgo.min.css')}}" rel="stylesheet"  />
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{url_for('static',filename='fontawesome/css/all.min.css')}}" >
+    <link rel="stylesheet" href="{{url_for('static',filename='fontawesome/css/all.min.css')}}" >   
 <style>
      body{
     /* background-color: #E7E7EF; */
@@ -48,17 +48,17 @@
 
     /* Track */
     ::-webkit-scrollbar-track {
-        background: #f1f1f1;
+        background: #f1f1f1; 
     }
-
+    
     /* Handle */
     ::-webkit-scrollbar-thumb {
-        background: #888;
+        background: #888; 
     }
 
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
-        background: #555;
+        background: #555; 
     }
 
 
@@ -129,7 +129,7 @@
 .nav-item.active{
     /* background-color: #eee; */
     border-bottom:2px solid #ddd;
-
+    
 }
 .active .nav-text{
     color:#333;
@@ -139,7 +139,7 @@
     background-color: #555;
     padding:7px;
     display: inline;
-
+    
 }
 h4,h5,h6{
     font-family: Montserrat,sans-serif;
@@ -178,7 +178,7 @@ h4,h5,h6{
     padding: 3px;
     text-align: center;
     cursor:pointer;
-
+    
 }
 .dropdowncontent li:hover{
     background-color:#700404;
@@ -203,7 +203,7 @@ a:hover{
     border:none;
     padding:7px 20px;
     cursor: pointer;
-
+    
 }
 input,select{
     outline:none !important;
@@ -211,22 +211,26 @@ input,select{
 select{
     padding:6px 10px;
     width:48%;
+    height: 100%;
     border:1px solid #eee;
     border-radius: 4px;
-    color:#777;
+    background-color: #eee;
+    color:#555;
     font-family:  Montserrat,sans-serif;
 
 }
 button:focus,input:focus {outline:0;}
 
-.card-body h3:nth-child(1){
+.card-body h3:nth-child(1),.card-body h3:nth-child(4){
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: normal;
     border-right:1px dotted gray;
     /* border-left:1px dotted gray; */
-
+    display:inline-block;
     width:48%;
+    padding-bottom:5px;
 }
+
 .card-body h4:nth-child(2){
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #3e505d;
@@ -237,7 +241,7 @@ hr{
     margin-left: 0px;
     border-style: dotted;
     border-color: #aaa;
-
+    
 }
 
 </style>
@@ -254,25 +258,25 @@ hr{
 
                 </div>
                 <div class="col-4 row  headtext">
-
-
+                    
+                
                     <div class="col-3">
                     </div>
                     <div class="col-3">
                     </div>
-
-
+                    
+                       
                     <div class="col-2 pointer" >
                         <i class="fas fa-search"></i>
                     </div>
                     <div class="col-4 pointer hover-underline" id="register">
                         Alerts <i class="fas fa-angle-right" ></i>
                     </div>
-
-
+                            
+                
                 </div>
-
-
+               
+                
             </div>
         </div>
         <div class="col-1 d-flex align-items-center justify-content-center pointer dropdown" id="logon-btn" style="height:100%">
@@ -286,13 +290,13 @@ hr{
         </div>
 </div>
 <ul class="nav  nav-fill" style="width:100%;margin:0px;">
-    <li class="nav-item active" id="tab1">
+    <li class="nav-item " id="tab1">
              <a href="/main" class="nav-text">Accounts</a>
     </li>
     <li class="nav-item " id="tab1">
         <a href="/moneytransfer" class="nav-text">Money Transfer</a>
     </li>
-    <li class="nav-item" id="tab1">
+    <li class="nav-item active" id="tab1">
         <p class="nav-text">Payments</p>
     </li>
     <li class="nav-item" id="tab1">
@@ -300,58 +304,63 @@ hr{
     </li>
 </ul>
 <div class="currcont container" style="padding:10% 0;">
-    <div class="card" style="background-color:#ddd">
-        <div class="card-body" style="padding:2%">
-            <!-- <div class="d-inline-block" style="width:2%;"></div> -->
-            <h3 class="d-inline-block" >AMOUNT</h3>
-            <h4 class="d-inline-block" style="">&#8377; {{debtAccount['amount']}}</h4>
-            <hr style="">
-            {% if accounts | length > 0 %}
-            <h5 style="font-weight:bold;">Select Account</h5>
-            <select name="fromaccount">
-                {% for account in accounts %}
-                <option value="{{account[1]}}">{{account[1]}}</option>
-                {% endfor %}
-            </select>
-            <br>
-            <br>
-            <button class="mybtn pay" style="background-color: rgb(31, 117, 31);">PAY</button>
-            {% else %}
-            <p style="font-family:'Segoe UI'" >You Dont have any account with us</p>
-            {% endif %}
-
-        </div>
-    </div>
-
-</div>
-<div class="modal fade" id="dataModal" role="dialog">
-    <div class="vertical-alignment-helper">
-        <div class="modal-dialog">
-
-        <!-- Modal content-->
-            <div class="modal-content ">
-
-
+    <div class="jumbotron" id="firstspace" style="min-height:65vh;margin-top:20px;">
+        <div class="card" >
+            <div class="card-body" style="padding:2%">
+                <!-- <div class="d-inline-block" style="width:2%;"></div> -->
+                <h3 class="d-inline-block" >Amount</h3>
+                <h4 class="d-inline-block" style="">&#8377; {{debtAccount['amount']}}</h4>
+                <hr style="">
+                {% if accounts | length > 0 %}
+                <div style="align-items:center;"> 
+                    <h3>Select Account</h3>
+            
+                    <select name="fromaccount" style="">
+                        {% for account in accounts %}
+                        <option value="{{account[1]}}">{{account[1]}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <br>
+                <br>
+                <button class="mybtn pay" style="background-color: rgb(31, 117, 31);">PAY</button>
+                {% else %}
+                <p style="font-family:'Segoe UI'" >You Dont have any account with us</p>
+                {% endif %}
 
             </div>
-
         </div>
-    </div>
+     </div>   
+   
+</div>     
+<div class="modal fade" id="dataModal" role="dialog">  
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog">  
+        
+        <!-- Modal content-->  
+            <div class="modal-content ">  
+                
+                    
+                    
+            </div> 
+            
+        </div>  
+    </div>	
 </div>
             <script src="{{url_for('static', filename='jquery.min.js')}}" ></script>
             <script src="{{url_for('static', filename='popper.min.js')}}" ></script>
             <script src="{{url_for('static', filename='bootstrap.min.js')}}" ></script>
 <script>
 
-
+  
     $('.nav-item').hover(function(event){
         event.preventDefault();
         $(this).prev().find('.nav-text').css("border-right","none");
         var tab = $(this).attr('id');
         var idname = '#tab-content'+tab.charAt(tab.length-1)
         $(idname).show();
-
-
+       
+        
     },function(event){
         event.preventDefault();
         $(this).prev().find('.nav-text').css("border-right","1px solid #eee");
@@ -370,28 +379,36 @@ hr{
         }
     });
 
-
+    
     $('.pay').click(function(event){
+        $('.pay').attr('disable','disabled');
         event.preventDefault();
         data = {};
         data['fromaccount'] = $('select').val();
+        data['debtaccounttype'] = "{{debtAccount['accounttype']}}";
+        data['debtaccountnumber'] = "{{debtAccount['number']}}";
+        data['amount'] = "{{debtAccount['amount']}}"
         $.ajax({
             url:window.location.href,
-            type:POST,
+            type:'POST',
             data:JSON.stringify(data),
             processData:false,
             contentType:'application/json',
-            suceess:function(data){
+            success:function(data){
                 var modalcontent = `
-                                <div class="modal-body ">
-                                <h5><i class="far fa-check-square" style="color:green"></i> Payment made</h5>
+                                <div class="modal-body ">  
+                                <h5><i class="far fa-check-square" style="color:green"></i> `+data+`</h5>
                                 <hr>
-                                <p>Redirecting to main page</p>
+                                <p>Redirecting to main page ....</p>
                                 </div>`;
+                $('.modal-content').html(modalcontent);
+                $('#dataModal').modal('show');
+                window.setTimeout(function(){
+                    window.location.href = '/main'},2000);
             },
             error:function(data){
                 var modalcontent = `
-                                <div class="modal-body ">
+                                <div class="modal-body ">  
                                 <h5><i class="fas fa-exclamation-circle"></i> `+data.responseJSON+`</h5>
                                 </div>
                                 <div class="modal-footer d-flex justify-content-start">
@@ -399,17 +416,18 @@ hr{
                                 </div>`;
                 $('.modal-content').html(modalcontent);
                 $('#dataModal').modal('show');
+                $('.pay').removeAttr('disable');
             }
         });
 
 
     });
 
+    
+   
 
-
-
-
-
+   
+   
 </script>
 </body>
 
