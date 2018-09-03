@@ -7,7 +7,7 @@ create table loanaccount(
     loanamount varchar,
     duedate datetime
 );
-
+insert into loanaccount values('6969696969696969','Pratik Shetty','myloan1','454545','Personal','2400000','09/14/2018');
 create table insurance(
     number char(16) primary key,
     name varchar(50),
@@ -19,7 +19,7 @@ create table insurance(
     insurance_amount varchar(50)
 );
 
-insert into insurance(number,name,password,ssn,insurancetype,premium,duedate) values('6666666666666666','Pratik Shetty','pratiks14','454545','Vehicle Insurance','1000000','14-09-2018');
+insert into insurance(number,name,password,ssn,insurancetype,premium,duedate,insurance_amount) values('6666666666666666','Pratik Shetty','pratiks14','454545','Vehicle','500','09-14-2018','100000000');
 create table creditcard(
     number char(16) primary key,
     name varchar(50),
