@@ -305,7 +305,7 @@ class Operations():
                 loanDict['customername'] = loanaccount[1]
                 loanDict['password'] = loanaccount[2]
                 loanDict['loantype'] = loanaccount[4]
-                loanDict['loanamount'] = str(loanamount[5])
+                loanDict['loanamount'] = str(loanaccount[5])
                 loanaccountlist.append(loanDict)
             customerDetails['loanaccounts'] = loanaccountlist
 
@@ -343,7 +343,7 @@ class Operations():
                 insuranceDict['password'] = insurance[2]
                 insuranceDict['insurancetype'] = insurance[4]
                 insuranceDict['premium'] = insurance[5]
-                insuranceDict['duedate'] = time.strftime('%d\%m\%Y',time.strptime(insurance[6],'%d-%m-%Y'))
+                insuranceDict['duedate'] = time.strftime('%m\%d\%Y',time.strptime(insurance[6],'%m-%d-%Y'))
                 insuranceList.append(insuranceDict)
             customerDetails['insurances'] = insuranceList
 
@@ -372,7 +372,8 @@ class Operations():
                 detailsDict['password'] = account[2]
                 detailsDict['insurancetype'] = account[4]
                 detailsDict['premium'] = account[5]
-                detailsDict['duedate'] = time.strftime('%d\%m\%Y',time.strptime(insurance[6],'%d-%m-%Y'))
+                detailsDict['duedate'] = time.strftime('%m\%d\%Y',time.strptime(account[6],'%m-%d-%Y'))
+                detailsDict['insuranceamount'] = account[7]
             elif accounttype == 'creditcard':
                 detailsDict['cardnumber'] = account[0]
                 detailsDict['cardholder'] = account[1]
