@@ -1,784 +1,477 @@
-<!DOCTYPE html>
-<html lang="en">
+from flask import make_response
+from flask import session as login_session
+import re
+import sqlite3
+import json
+import traceback
+from db import Dbase
+import time
 
-<head>
+class Validation():
+    @staticmethod
+    def email(email):
+        if re.match(r"^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$",email) == None:
+            response = make_response(json.dumps('Invalid Email Format'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        elif len(email) > 254 :
+            response = make_response(json.dumps('Email too long'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        if Dbase.emailExists(email):
+            response = make_response(json.dumps('This email has already been registered with an account'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        return None
 
-    <title>THE Bank</title>
-    <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Atomic+Age|Montserrat" rel="stylesheet">
-     <!-- Bootstrap Core CSS -->
-     <link href="{{url_for('static',filename='gijgo.min.css')}}" rel="stylesheet"  />
-    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{url_for('static',filename='fontawesome/css/all.min.css')}}" >   
-<style>
-     body{
-    /* background-color: #E7E7EF; */
-    height: 100%;
-    background-repeat: no-repeat;
-    background-color: #fff;
-    padding:0px;
-    margin:0px;
-    box-sizing: border-box;
-}
+    @staticmethod
+    def securitynumber(number,verification_type,securitynumber):
+        if re.match(r"^[0-9]{6}$",securitynumber) == None:
+            response = make_response(json.dumps('Invalid Security Number'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
 
-.head-nav{
-    background-color:#111;
-    color :#eee;
-    height : 50px;
-}
-#bankname{
-    font-family: 'Exo 2', sans-serif;
-}
-#logo{
-    font-family: 'Atomic Age', cursive;
-    color:#d00404;
-    border:1px solid white;
-    border-radius: 4px;
-    background-color: #eee
-}
+        if not Dbase.verifySecurityNumber(number,verification_type,securitynumber):
+            response = make_response(json.dumps('Security Number doesn\'t match'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        return None
 
-    /* width */
-    ::-webkit-scrollbar {
-        width: 7px;
-    }
+    @staticmethod
+    def accountNumber(number,verification_type):
+        if re.match(r"^[0-9]{16}$",number)== None:
+            message = ''
+            if verification_type == 'loanaccount':
+                message = "Invalid Loan Account Number"
+            elif verification_type == 'insurance':
+                message  = 'Invalid Insurance number'
+            else:
+                message = 'Invalid Card Number'
+            response = make_response(json.dumps(message), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        if not Dbase.verificationNumberExists(number,verification_type):
+            response = make_response(json.dumps('Account with this number hasn\'t been opened.'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        return None
 
-    /* Track */
-    ::-webkit-scrollbar-track {
-        background: #f1f1f1; 
-    }
-    
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-        background: #888; 
-    }
+    @staticmethod
+    def password(number,verification_type, password):
+        if not Dbase.verifyPassword(number,verification_type,password):
+            if verification_type in ("creditcard","debitcard"):
+                response = make_response(json.dumps('PIN doesn\'t match.'), 400)
+                response.headers['Content-Type'] = 'application/json'
+                return response
+            response = make_response(json.dumps('Password doesn\'t match.'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        return None
 
-    /* Handle on hover */
-    ::-webkit-scrollbar-thumb:hover {
-        background: #555; 
-    }
+    @staticmethod
+    def mobileno(mobileno):
+        if re.match(r'^[0-9]{10}$',mobileno) == None:
+            response = make_response(json.dumps('Invalid mobile Number'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        if Dbase.mobilenoExists(mobileno):
+            response = make_response(json.dumps('Mobile number already registered with an account'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
 
+        return None
 
-.headtext{
-    font-size: 12px;
-}
-#logon-btn{
-    background-color: #d00404;
-    height:50px !important;
-    color:#eee;
-    font-size: 12px;
-    padding: 0px;
-    margin:0px;
-    width:100%;
+    @staticmethod
+    def username(username):
+        if len(username)<3:
+            response = make_response(json.dumps('Username must have atleast 3 character'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        if Dbase.usernameExists(username):
+            response = make_response(json.dumps('Username already taken'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        response = make_response(json.dumps('Valid Username'), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
-}
+    @staticmethod
+    def userpassword(userpassword):
+        if len(userpassword)<3:
+            response = make_response(json.dumps('Password must have atleast 6 character'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        if userpassword.upper() == userpassword or userpassword.lower() == userpassword or re.search(r'[0-9]+',userpassword) == None:
+            response = make_response(json.dumps('Password must follow the Format given'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        return None
 
-.head-nav .row{
-    padding:0px;
-    margin:0px;
-}
-.head-nav img{
-    width:25px;
-    height:18px;
-}
-.head-nav {
-    padding-right: 0px;
-    padding-left: 0px;
-    margin: 0px;
-}
-.pointer{
-    cursor:pointer;
-}
-.hover-underline:hover{
-    text-decoration: underline;
-}
-.nav-item{
-    color:#aaa;
-    height:100%;
-    display: flex ;
-    align-items: center;
-    justify-content: center;
-    cursor:pointer;
-    background-color: #fff;
+    @staticmethod
+    def toaccount(accountno):
+        if re.match(r"^[0-9]{16}$",accountno)== None:
+            response = make_response(json.dumps('Invalid Account Number'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
 
-}
-.nav-text{
-    display: flex ;
-    align-items: flex-start;
-    justify-content: center;
-    width:200%;
-    padding:7px 0px;
-    font-family: 'Exo 2', sans-serif;
-    border-right :1px solid #eee;
-    margin-bottom:0px;
-    color:#aaa;
-    /* margin-right:-1px; */
-}
-.nav{
-    height: 70px;
-    /* border-bottom: 2px solid #eee; */
-}
-.nav-item:hover{
-    /* background-color: #eee; */
-    /* border-bottom:2px solid #ddd; */
-    color:#333;
-}
-.nav-item.active{
-    /* background-color: #eee; */
-    border-bottom:2px solid #ddd;
-    
-}
-.active .nav-text{
-    color:#333;
-}
-.cardcontent-head h5{
-    color:#eee;
-    background-color: #555;
-    padding:7px;
-    display: inline;
-    
-}
-h4,h5,h6{
-    font-family: Montserrat,sans-serif;
-    font-weight: normal;
+        if not Dbase.accountExists(accountno):
+            response = make_response(json.dumps('Account Number doestn\'t exists'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        return None
 
-}
-.vertical-alignment-helper {
-    display:table;
-    height: 100%;
-    width: 80%;
-    margin:0% 10%;
-    padding: 50px;
-}
-.modal-dialog {
-    display: table-cell;
-    vertical-align: middle;
-    border-radius: 20em;
-}
-.dropdowncontent{
-    position:absolute;
-    z-index:100;
-    top:50px;
-    left:0px;
-    border: 1px solid #555;
-    width:100%;
-    display: None;
-}
-.dropdowncontent ul{
-    padding: 3px 5px;
-    margin:0px;
-    font-family: Montserrat,sans-serif;
-}
-.dropdowncontent li{
-    margin:4px 2px;
-    background-color:#d00404;
-    padding: 3px;
-    text-align: center;
-    cursor:pointer;
-    
-}
-.dropdowncontent li:hover{
-    background-color:#700404;
-}
-a{
-    color:#eee;
-}
-a:hover{
-    text-decoration: None;
-    color:inherit;
-}
-.pay{
-    color:#eee;
-    background-color: rgb(36, 133, 36);
-    padding:2px 3px;
-    border-radius: 2px;
-    float: right;
-}
+    @staticmethod
+    def transferamount(amount):
+        if re.match(r'^[0-9]+$',amount) == None:
+            response = make_response(json.dumps('Amount should be a positive number'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
 
-.cardhead{
-    background-color: #3e505d;
-    color:#eee;
-    display:inline-block;
-    padding:7px;
-    margin-bottom:20px;
-}
-.details{
+        if int(amount)%500 != 0 or int(amount) /500 <1:
+            response = make_response(json.dumps('Amount should be min. Rs 500  or multiple of Rs 500'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        return None
 
-    margin:0px 0px;
-    font-family: Montserrat,sans-serif;
-}
-label{
-    /* background-color: #555;
-    color:#eee; */
-    padding:3px 7px;
-}
-.transdetails label{
-    font-weight: bold;
-}
-.details p,.details input,.transdetails li:first-child{
-    font-weight: bold;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-.card-body hr{
-    margin-top:0px;
-    width:98%;
+    @staticmethod
+    def fromaccount(accountno,amount):
+        if not Dbase.hasAccountBalance(accountno,amount):
+            response = make_response(json.dumps('Not enough balance in your account'), 400)
+            response.headers['Content-Type'] = 'application/json'
+            return response
 
-}
-.card-body div.col-4{
-    padding-left: 0px;
-}
-.card > .card-body{
-    /* background-color: #ddd; */
-    margin:20px 20px;
-    border-radius: 2px;
-}
-.transdetails{
-    margin:10px 0;
-}
-.debit{
-    color:#a72323;
-    font-weight: normal;
-}
-.debit::before{
-    content: '-';
-}
-
-.fa-check-circle{
-    color:rgb(16, 119, 16);
-}
-.mybtn{
-    background-color: #555;
-    color:#eee;
-    border:none;
-    padding:7px 10px;
-    cursor: pointer;
-    
-}
-input{
-    outline:none !important;
-}
-button:focus,input:focus {outline:0;}
-</style>
-</head>
-
-<body>
-    <div class="row" style="width:100%;margin:0px;">
-        <div class="col-11 head-nav">
-            <div class="row d-flex align-items-center" style="height:100%;padding-left:2px;">
-                <div class="col-3 " >
-                    <h4 id="bankname">INFYBank  <span id="logo">IB</span></h4>
-                </div>
-                <div class="col-5">
-
-                </div>
-                <div class="col-4 row  headtext">
-                    
-                
-                    <div class="col-3">
-                    </div>
-                    <div class="col-3">
-                    </div>
-                    
-                       
-                    <div class="col-2 pointer" >
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <div class="col-4 pointer hover-underline" id="register">
-                        Alerts <i class="fas fa-angle-right" ></i>
-                    </div>
-                            
-                
-                </div>
-               
-                
-            </div>
-        </div>
-        <div class="col-1 d-flex align-items-center justify-content-center pointer dropdown" id="logon-btn" style="height:100%">
-            <p style="margin-bottom: 0px" class="" > {% if session['customername'] | length > 8 %}{{session['customername'][:8] + '..'}}{% else %}{{session['username']}}{% endif %} <i class="fas fa-chevron-circle-down"></i></p>
-            <div class="dropdowncontent">
-                <ul style="list-style:None">
-                    <li><i class="far fa-user"></i> Info</li>
-                    <li><i class="fas fa-power-off"></i> <a href="/disconnect">Log out</a></li>
-                </ul>
-            </div>
-        </div>
-</div>
-<ul class="nav  nav-fill" style="width:100%;margin:0px;">
-    <li class="nav-item active" id="tab1">
-             <a href="/main" class="nav-text">Accounts</a>
-    </li>
-    <li class="nav-item " id="tab1">
-        <a href="/moneytransfer" class="nav-text">Money Transfer</a>
-    </li>
-    <li class="nav-item" id="tab1">
-        <p class="nav-text">Payments</p>
-    </li>
-    <li class="nav-item" id="tab1">
-        <p class="nav-text">Loans</p>
-    </li>
-</ul>
-
-<div class="currcont container" style="padding:20px 0;">
-    <div class="jumbotron" id="firstspace" style="min-height:65vh;margin-top:20px;">
-            {% if details['accounttype'] == 'creditcard' %}
-        <div class="card" style="border:none;">
+    @staticmethod
+    def fromaccount1(accountno,amount):
+        if not Dbase.hasAccountBalance(accountno,amount):
+            raise Exception('Not enough balance in your account')
             
-                <div class="card-body" >
-                    <h4 class="cardhead">Card Details</h4>
-                    <div class="row details">
-                        <div class="col-4" >
-                            <label>Card Number</label>
-                        </div>
-                        <div class="col-8">
-                            <p>{{details['cardnumber']}}</p>
-                        </div>
-                    </div>    
-                    <hr>
-                    <div class="row details">
-                            <div class="col-4">
-                                <label>Card Holder</label>
-                            </div>
-                            <div class="col-8">
-                                <p>{{details['cardholder']}}</p>
-                            </div>
-                    </div>
-                    <hr>
-                    <div class="row details">
-                            <div class="col-4">
-                                <label>PIN</label>
-                            </div> 
-                            <div class="col-8 row">
-                                    <div class="col-3 " style="vertical-align: middle">
-                                            <input type="password"  class="form-control-plaintext"  style="padding-top:0px;" value="{{details['pin']}}" >
-                                        </div>
-                                        <div class="col-9" >
-                                        <i class="far fa-eye eye pointer"></i>
-                                
-                                    </div>
-                            </div>
-                    </div>
-                    <hr>
-                    <div class="row details">
-                            <div class="col-4">
-                                <label>Credit Limit</label>
-                            </div> 
-                            <div class="col-8">
-                                    <p>&#8377; {{details['creditlimit']}}</p>
-                            </div>
-                    </div>
-                    <hr>
-                    <div class="row details">
-                            <div class="col-4">
-                                <label>You Owe</label>
-                            </div> 
-                            <div class="col-8">
-                                    <p>&#8377; {{details['amountdue']}} {% if details['amountdue'] != '0' %}<span class="pay credit pointer">PAY</span>{% endif %}</p>
-                            </div>
-                    </div>
-                </div>
-
-                <div class="card-body" >
-                        <h4 class="cardhead">Transations</h4>
-                        <div class="row" style="margin:0px ">
-                            <div class="col-4">
-                                <label style="font-weight:bold;padding-left:0px;"> Start Date: </label><input id="startDate"  />
-
-                            </div>
-                            <div class="col-4">
-                                <label style="font-weight:bold;padding-left:0px;"> End Date: </label><input id="endDate"  />
-                            </div>
-                            <div class="col-4" style="display:flex;align-items:flex-end;">
-                                <button  class="mybtn" id="filter">Filter</button>
-                            </div>
-                        </div>
-                        <!-- Start Date: <input id="startDate" width="276" />
-                End Date: <input id="endDate" width="276" /> -->
-                        <ul class="list-group transactions">
-                            {% if details['transactions'] | length > 0 %}
-                            {% for transaction in details['transactions'] %}
-                            <div class="transdetails pointer">
-                                <li class="list-group-item " style="background-color:#555;color:#fff;">
-                                        <i class="fas dropcircle fa-chevron-circle-down"></i> Rs {{transaction['amount']}}<span style="color:#999">({{transaction['account2type']}}/{{transaction['account2']}})</span>
-                                    <span style="display:flex;float:right;">{{transaction['tranxdate']}}</span></li>
-                                <li class="list-group-item "  style="display:none">
-                                    <div class="row ">
-                                        <div class="col-4">
-                                            <label>Transaction ID</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <p>{{transaction['tranxid']}}</p>
-                                        </div>
-                                        <div class="col-4">
-                                            <label>To</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <p>{{transaction['account2type']}}/{{transaction['account2']}}</p>
-                                        </div>
-                                        <div class="col-4">
-                                            <label>Amount</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <p class="{{transaction['tranxtype']}}">{{transaction['amount']}}</p>
-                                        </div>
-                                        <div class="col-4">
-                                            <label>Time</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <p>{{transaction['tranxtime']}}</p>
-                                        </div>
-                                        <div class="col-4">
-                                                <label>Status</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <p ><i class="fas {% if transaction['status'] == 'Completed'%}fa-check-circle{% else %}fa-exclamation-circle {% endif %}"></i> {{transaction['status']}}</p>
-                                        </div>
-                                    </div>
-                                </li>
-
-                            
-                            {% endfor %}
-                            {% else %}
-                            <li class="list-group-item " style="background-color:#555;color:#eee;margin-top:10px;"><i class="fas fa-exclamation-triangle"></i> No Transaction done yet</li>
-                            {% endif %}
-                        </ul>
-                </div>
-            </div>
-            {% elif details['accounttype'] == 'debitcard' %}
-
-            <div class="card" style="border:none;">
-            
-                <div class="card-body" >
-                    <h4 class="cardhead">Card Details</h4>
-                    <div class="row details">
-                        <div class="col-4" >
-                            <label>Card Number</label>
-                        </div>
-                        <div class="col-8">
-                            <p>{{details['cardnumber']}}</p>
-                        </div>
-                    </div>    
-                    <hr>
-                    <div class="row details">
-                            <div class="col-4">
-                                <label>Account Number</label>
-                            </div>
-                            <div class="col-8">
-                                <p>{{details['accountnumber']}}</p>
-                            </div>
-                    </div>
-                    <hr>
-                    <div class="row details">
-                            <div class="col-4">
-                                <label>PIN</label>
-                            </div> 
-                            <div class="col-8 row">
-                                    <div class="col-3 " style="vertical-align: middle">
-                                            <input type="password"  class="form-control-plaintext"  style="padding-top:0px;" value="{{details['pin']}}" >
-                                        </div>
-                                        <div class="col-9" >
-                                        <i class="far fa-eye eye pointer"></i>
-                                
-                                    </div>
-                            </div>
-                    </div>
-                    <hr>
-                    <div class="row details">
-                            <div class="col-4">
-                                <label>Account Type</label>
-                            </div> 
-                            <div class="col-8">
-                                    <p>{{details['debitaccounttype']}}</p>
-                            </div>
-                    </div>
-                    <hr>
-                    <div class="row details">
-                            <div class="col-4">
-                                <label>Account Balance</label>
-                            </div> 
-                            <div class="col-8">
-                                    <p>&#8377; {{details['accountbalance']}} </p>
-                            </div>
-                    </div>
-                </div>
-
-                <div class="card-body" >
-                        <h4 class="cardhead">Transations</h4>
-                        <div class="row" style="margin:0px ">
-                            <div class="col-4">
-                                <label style="font-weight:bold;padding-left:0px;"> Start Date: </label><input id="startDate"  />
-
-                            </div>
-                            <div class="col-4">
-                                <label style="font-weight:bold;padding-left:0px;"> End Date: </label><input id="endDate"  />
-                            </div>
-                            <div class="col-4" style="display:flex;align-items:flex-end;">
-                                <button  class="mybtn" id="filter">Filter</button>
-                            </div>
-                        </div>
-                        <!-- Start Date: <input id="startDate" width="276" />
-                End Date: <input id="endDate" width="276" /> -->
-                        <ul class="list-group transactions">
-                            {% if details['transactions'] | length > 0 %}
-                            {% for transaction in details['transactions'] %}
-                            <div class="transdetails pointer">
-                                <li class="list-group-item " style="background-color:#555;color:#fff;">
-                                        <i class="fas dropcircle fa-chevron-circle-down"></i> Rs {{transaction['amount']}}<span style="color:#999">({{transaction['account2type']}}/{{transaction['account2']}})</span>
-                                    <span style="display:flex;float:right;">{{transaction['tranxdate']}}</span></li>
-                                <li class="list-group-item "  style="display:none">
-                                    <div class="row ">
-                                        <div class="col-4">
-                                            <label>Transaction ID</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <p>{{transaction['tranxid']}}</p>
-                                        </div>
-                                        <div class="col-4">
-                                            <label>To</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <p>{{transaction['account2type']}}/{{transaction['account2']}}</p>
-                                        </div>
-                                        <div class="col-4">
-                                            <label>Amount</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <p class="{{transaction['tranxtype']}}">{{transaction['amount']}}</p>
-                                        </div>
-                                        <div class="col-4">
-                                            <label>Time</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <p>{{transaction['tranxtime']}}</p>
-                                        </div>
-                                        <div class="col-4">
-                                                <label>Status</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <p ><i class="fas {% if transaction['status'] == 'Completed'%}fa-check-circle{% else %}fa-exclamation-circle {% endif %}"></i> {{transaction['status']}}</p>
-                                        </div>
-                                    </div>
-                                </li>
-
-                            
-                            {% endfor %}
-                            {% else %}
-                            <li class="list-group-item " style="background-color:#555;color:#eee;margin-top:10px;"><i class="fas fa-exclamation-triangle"></i> No Transaction done yet</li>
-                            {% endif %}
-                        </ul>
-                </div>
-            </div>
-            {% elif details['accounttype'] %}
-            {% endif %}
-            
-        </div>
-
-</div>     
-<div class="modal fade" id="dataModal" role="dialog">  
-    <div class="vertical-alignment-helper">
-        <div class="modal-dialog">  
-        
-        <!-- Modal content-->  
-            <div class="modal-content ">  
-                
-                    
-                    
-            </div> 
-            
-        </div>  
-    </div>	
-</div>
-            <script src="{{url_for('static', filename='jquery.min.js')}}" ></script>
-            <script src="{{url_for('static', filename='popper.min.js')}}" ></script>
-            <script src="{{url_for('static', filename='bootstrap.min.js')}}" ></script>
-            <script src="{{url_for('static', filename='accountdetails.js')}}"></script>
-            <script src="{{url_for('static', filename='gijgo.min.js')}}" type="text/javascript"></script>
-<script>
     
-    var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-        $('#startDate').datepicker({
-            uiLibrary: 'bootstrap4',
-            iconsLibrary: 'fontawesome',
-            maxDate:today
-        });
-        $('#endDate').datepicker({
-            uiLibrary: 'bootstrap4',
-            iconsLibrary: 'fontawesome',
-            maxDate:today,
-            minDate: function () {
-                return $('#startDate').val();
-            }
-        });
-    
-    $('.transactions').delegate('.dropcircle','click',function(){
-        $(this).parent().next().slideToggle();
-        if($(this).hasClass('fa-chevron-circle-down')){
-            $(this).removeClass('fa-chevron-circle-down').addClass('fa-chevron-circle-up');
-        }
-        else{
-            $(this).removeClass('fa-chevron-circle-up').addClass('fa-chevron-circle-down');
 
-        }
-    });
+class Operations():
 
-    $('.nav-item').hover(function(event){
-        event.preventDefault();
-        $(this).prev().find('.nav-text').css("border-right","none");
-        var tab = $(this).attr('id');
-        var idname = '#tab-content'+tab.charAt(tab.length-1)
-        $(idname).show();
-       
-        
-    },function(event){
-        event.preventDefault();
-        $(this).prev().find('.nav-text').css("border-right","1px solid #eee");
-        var tab = $(this).attr('id');
-        var idname = '#tab-content'+tab.charAt(tab.length-1)
-        $(idname).hide();
-    });
+    @staticmethod
+    def validate(params):
+        try:
+            if params['registerno'] == '1':
+                verification_type = params['verificationtype']
+                securitynumber  = params['securitynumber']
+                if Dbase.securitynumberExists(securitynumber):
+                    response = make_response(json.dumps('You have already registered with us'), 400)
+                    response.headers['Content-Type'] = 'application/json'
+                    return response
 
-    $('.currcont').delegate('.eye','click',function(){
-                    if($(this).parent().parent().find('input').attr('type') == 'password'){
-                        $(this).parent().parent().find('input').attr('type','text');
-                        $(this).removeClass('fa-eye').addClass('fa-eye-slash');
-                    }
-                    else{
-                        $(this).parent().parent().find('input').attr('type','password');
-                        $(this).removeClass('fa-eye-slash').addClass('fa-eye');
-                    }
-        });
-    $('.fa-external-link-square-alt').click(function(){
-        console.log( '/accounts/'+ $(this).prop('id'));
-    });
+                number = params['number'].strip()
+                resp = Validation.accountNumber(number,verification_type)
+                if resp != None:
+                    return resp
+                password = params['password'].strip()
+                resp = Validation.password(number,verification_type,password)
+                if resp != None:
+                    return resp
+
+                resp = Validation.securitynumber(number,verification_type,securitynumber)
+                if resp != None:
+                    return resp
+                email = params['email'].strip()
+                resp = Validation.email(email)
+                if resp != None:
+                    return resp
+                mobileno = params['mobileno'].strip()
+                resp = Validation.mobileno(mobileno)
+                if resp != None:
+                    return resp
+
+            elif params['registerno'] == '2':
+                username = params['username']
+                userpassword = params['userpassword']
+                resp = Validation.username(username)
+                if resp != None:
+                    return resp
+                resp = Validation.userpassword(userpassword)
+                if resp != None:
+                    return resp
+
+            elif params['registerno'] == '3':
+                answer = params['answer']
+                if len(answer)==0:
+                    response = make_response(json.dumps('Give a valid Answer'), 400)
+                    response.headers['Content-Type'] = 'application/json'
+                    return response
+
+            else:
+                print(params['registerno'] == 'confirm')
+                Dbase.register(params)
+                customername = Dbase.getCustomerName(params['securitynumber'])
+                login_session['ssn'] = params['securitynumber']
+                login_session['customername'] = customername
+                login_session['username'] = params['username']
+                response = make_response(json.dumps('Registered'), 200)
+                response.headers['Content-Type'] = 'application/json'
+                return response
+            response = make_response(json.dumps('Registered'), 200)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def loginValidate(params):
+        try:
+            if 'password' not in params:
+                username = params['username']
+                if not Dbase.usernameExists(username):
+                    response = make_response(json.dumps('InValid Username'), 400)
+                    response.headers['Content-Type'] = 'application/json'
+                    return response
+                response = make_response(json.dumps('Valid Username'), 200)
+                response.headers['Content-Type'] = 'application/json'
+                return response
+            else:
+                username = params['username']
+                password = params['password']
+                if not Dbase.verifyLoginPassword(username,password):
+                    response = make_response(json.dumps('Invalid Credentials'), 400)
+                    response.headers['Content-Type'] = 'application/json'
+                    return response
+
+				#login successful
+                ssn = Dbase.getSecurityNumber(username)
+                customername = Dbase.getCustomerName(ssn)
+                login_session['ssn'] = ssn
+                login_session['customername'] = customername
+                login_session['username'] = username
+                response = make_response(json.dumps('Valid Credentials'), 200)
+                response.headers['Content-Type'] = 'application/json'
+                return response
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def validatePayment(params):
+        amount = params['amount']
+        debtAccounttype = params['debtaccounttype']
+        debtAccountNumber = params['debtaccountnumber']
+        fromaccount = params['fromaccount']
+        Validation.fromaccount1(fromaccount,amount)
+        Dbase.pay(debtAccounttype,debtAccountNumber,fromaccount)
+
+    @staticmethod
+    def moneyTransferValidate(params):
+        try:
+            fromaccount = params['fromaccount']
+            toaccount = params['toaccount']
+            amount = params['amount']
+            if toaccount == fromaccount:
+                response = make_response(json.dumps('Money transfer between same account'), 200)
+                response.headers['Content-Type'] = 'application/json'
+                return response
+            resp = Validation.toaccount(toaccount)
+            if resp != None:
+                return resp
+            resp = Validation.transferamount(amount)
+            if resp != None:
+                return resp
+            resp = Validation.fromaccount(fromaccount,amount)
+            if resp != None:
+                return resp
+            return None
 
 
-    function displayFilteredTransactions(transDict){
-        var content = '<ul class="list-group transactions">';
-        if(transDict['transactions'].length == 0){
-            content = `
-            <li class="list-group-item " style="background-color:#555;color:#eee;margin-top:10px;"><i class="fas fa-exclamation-triangle"></i> No Transaction within this period</li>
-            `;
 
-        }
-        else{
-            $.each(transDict['transactions'],function(index,transaction){
-                var statusclassname = '';
-                console.log(transaction);
+        except Exception as e:
+            raise e
 
-                if(transaction['status'] == 'Completed'){
-                    statusclassname = 'fa-check-circle';
+    @staticmethod
+    def transferAmount(params):
+        try:
+            fromaccount = params['fromaccount']
+            toaccount = params['toaccount']
+            amount = params['amount']
+            Dbase.transfer(fromaccount,toaccount,amount)
+            
+        except Exception as e:
+            raise e
 
-                }
-                else{
-                    statusclassname = 'fa-exclamation-circle';
-                }
-                content += `
-                <div class="transdetails pointer" style="margin:10px 0px 0px 0px;">
-                        <li class="list-group-item " style="background-color:#555;color:#fff;">
-                                <i class="fas dropcircle fa-chevron-circle-down"></i> Rs ${transaction['amount']}<span style="color:#999">(${transaction['account2type']}/${transaction['account2']})</span>
-                            <span style="display:flex;float:right;">${transaction['tranxdate']}</span></li>
-                        <li class="list-group-item "  style="display:none">
-                            <div class="row ">
-                                <div class="col-4">
-                                    <label>Transaction ID</label>
-                                </div>
-                                <div class="col-8">
-                                    <p>${transaction['tranxid']}</p>
-                                </div>
-                                <div class="col-4">
-                                    <label>To</label>
-                                </div>
-                                <div class="col-8">
-                                    <p>${transaction['account2type']}/${transaction['account2']}</p>
-                                </div>
-                                <div class="col-4">
-                                    <label>Amount</label>
-                                </div>
-                                <div class="col-8">
-                                    <p class="${transaction['tranxtype']}">${transaction['amount']}</p>
-                                </div>
-                                <div class="col-4">
-                                    <label>Time</label>
-                                </div>
-                                <div class="col-8">
-                                    <p>${transaction['tranxtime']}</p>
-                                </div>
-                                <div class="col-4">
-                                        <label>Status</label>
-                                </div>
-                                <div class="col-8">
-                                    <p ><i class="fas ${statusclassname}"></i> ${transaction['status']}</p>
-                                </div>
-                            </div>
-                        </li>
+    @staticmethod
+    def getCustomerDetailsDict(ssn):
+        try:
+            customerDetails = {}
+            loanaccounts = Dbase.getLoanAccounts(ssn)
+            loanaccountlist = []
+            for loanaccount in loanaccounts:
+                loanDict = {}
+                loanDict['loannumber'] = loanaccount[0]
+                loanDict['customername'] = loanaccount[1]
+                loanDict['password'] = loanaccount[2]
+                loanDict['loantype'] = loanaccount[4]
+                loanDict['loanamount'] = str(loanaccount[5])
+                loanaccountlist.append(loanDict)
+            customerDetails['loanaccounts'] = loanaccountlist
 
-                    </div>
-                `;
+            creditCardAccounts = Dbase.getCreditCards(ssn)
+            creditCardList = []
+            for creditAccount in creditCardAccounts:
+                creditDict = {}
+                creditDict['cardnumber'] = creditAccount[0]
+                creditDict['cardholder'] = creditAccount[1]
+                creditDict['pin'] = creditAccount[2]
+                creditDict['creditlimit'] = str(creditAccount[4])
+                creditDict['amountdue'] = str(creditAccount[5])
+                creditCardList.append(creditDict)
+            customerDetails['creditcards'] = creditCardList
 
-            });
-           
+            debitCardAccounts = Dbase.getDebitCards(ssn)
+            debitCardList = []
+            for debitAccount in debitCardAccounts:
+                debitDict = {}
+                debitDict['cardnumber'] = debitAccount[0]
+                debitDict['cardholder'] = debitAccount[2]
+                debitDict['pin'] = debitAccount[3]
+                debitDict['accountnumber'] = debitAccount[1]
+                debitDict['accountbalance'] = str(debitAccount[5])
+                debitDict['accounttype'] = debitAccount[6]
+                debitCardList.append(debitDict)
+            customerDetails['debitcards'] = debitCardList
 
-        }
-        content +='</ul>';
-        $('.transactions').html(content);
-    }
+            insuranceAccounts = Dbase.getInsuranceAccounts(ssn)
+            insuranceList = []
+            for insurance in insuranceAccounts:
+                insuranceDict = {}
+                insuranceDict['number'] = insurance[0]
+                insuranceDict['customername'] = insurance[1]
+                insuranceDict['password'] = insurance[2]
+                insuranceDict['insurancetype'] = insurance[4]
+                insuranceDict['premium'] = insurance[5]
+                insuranceDict['duedate'] = time.strftime('%m\%d\%Y',time.strptime(insurance[6],'%m-%d-%Y'))
+                insuranceList.append(insuranceDict)
+            customerDetails['insurances'] = insuranceList
+
+            return customerDetails
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def getAccountDetails(accounttype,accountno):
+        try:
+            detailsDict = {}
+            account = Dbase.getAccountDetails(accounttype,accountno)
+            print(account)
+            detailsDict['accounttype'] = accounttype
+            detailsDict['id'] = accountno
+            print(account)
+            if accounttype == 'loanaccount':
+                detailsDict['loannumber'] = account[0]
+                detailsDict['customername'] = account[1]
+                detailsDict['password'] = account[2]
+                detailsDict['loantype'] = account[4]
+                detailsDict['loanamount'] = str(amount[5])
+            elif accounttype == 'insurance':
+                detailsDict['number'] = account[0]
+                detailsDict['customername'] = account[1]
+                detailsDict['password'] = account[2]
+                detailsDict['insurancetype'] = account[4]
+                detailsDict['premium'] = account[5]
+                detailsDict['duedate'] = time.strftime('%m\%d\%Y',time.strptime(account[6],'%m-%d-%Y'))
+                detailsDict['insuranceamount'] = account[7]
+            elif accounttype == 'creditcard':
+                detailsDict['cardnumber'] = account[0]
+                detailsDict['cardholder'] = account[1]
+                detailsDict['pin'] = account[2]
+                detailsDict['creditlimit'] = str(account[4])
+                detailsDict['amountdue'] = str(account[5])
+            else:
+                detailsDict['cardnumber'] = account[0]
+                detailsDict['cardholder'] = account[2]
+                detailsDict['pin'] = account[3]
+                detailsDict['accountnumber'] = account[1]
+                detailsDict['accountbalance'] = str(account[5])
+                detailsDict['debitaccounttype'] = account[6]
+            transactions = Dbase.getTransactionDetails(accounttype,accountno)
+            if accounttype == "debitcard":
+                debit_accountno = Dbase.getDebitCardAccountno(accountno)
+                transactions += Dbase.getTransactionDetails(accounttype,debit_accountno)
+            tranxList = []
+            transactions.sort(key=lambda r:time.strptime(r[8],'%m:%d:%Y %H:%M:%S'),reverse=True)
+            count = 0
+            for trans in transactions:
+                tranxDict = {}
+                tranxDict['tranxid'] = trans[0]
+                tranxDict['account1type'] = trans[2]
+                tranxDict['account2'] = trans[3]
+                tranxDict['account2type'] = trans[4]
+                tranxDict['amount'] = trans[5]
+                tranxDict['tranxtype'] = trans[6]
+                tranxDict['tranxdate'] = trans[8].split(' ')[0].replace(':','/')
+                tranxDict['tranxtime'] = trans[8].split(' ')[1]
+                tranxDict['status'] = trans[9]
+                tranxList.append(tranxDict)
+                count+=1
+                if count == 10:
+                    break
+            detailsDict['transactions'] = tranxList
+            return detailsDict
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def getTransactions(accounttype,accountno,startdate,enddate):
+        try:
+            # print(accounttype)
+            transactionDict = {}
+            transactions = Dbase.getTransactionDetails(accounttype,accountno)
+            if accounttype == "debitcard":
+                debit_accountno = Dbase.getDebitCardAccountno(accountno)
+                transactions += Dbase.getTransactionDetails(accounttype,debit_accountno)
+                # print(transactions)
+            tranxList = []
+            # print(transactions)
+            transactions.sort(key=lambda r:time.strptime(r[8],'%m:%d:%Y %H:%M:%S'),reverse=True)
+            for trans in transactions:
+                tranxDict = {}
+                tranxDict['tranxdate'] = trans[8].split(' ')[0].replace(':','/')
+                if time.strptime(tranxDict['tranxdate'],'%m/%d/%Y') >= startdate and time.strptime(tranxDict['tranxdate'],'%m/%d/%Y') <= enddate:
+
+                    tranxDict['tranxid'] = trans[0]
+                    tranxDict['account1type'] = trans[2]
+                    tranxDict['account2'] = trans[3]
+                    tranxDict['account2type'] = trans[4]
+                    tranxDict['amount'] = trans[5]
+                    tranxDict['tranxtype'] = trans[6]
+                    tranxDict['tranxdate'] = trans[8].split(' ')[0].replace(':','/')
+                    tranxDict['tranxtime'] = trans[8].split(' ')[1]
+                    tranxDict['status'] = trans[9]
+                    tranxList.append(tranxDict)
+
+            transactionDict['transactions'] = tranxList
+            return transactionDict
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def getSavingsAccounts():
+        try:
+            ssn = login_session['ssn']
+            accounts = Dbase.getSavingsAccounts(ssn)
+            return accounts
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def getDebtAccount(accounttype,number):
+        try:
+            account = Dbase.getAccountDetails(accounttype,number)
+            debtAccount = {}
+            debtAccount['accounttype'] = accounttype
+            debtAccount['number'] = number
+            if accounttype == 'creditcard':
+                debtAccount['amount'] = account[5]
+            elif accounttype == 'loanaccount':
+                debtAccount['amount'] = account[5]
+            else:
+                debtAccount['amount'] = account[5]
 
 
-    $('#filter').click(function(event){
-        event.preventDefault();
-        data = {};
-        data['startdate'] = $('#startDate').val();
-        data['enddate'] = $('#endDate').val();
-        if (data['startdate'] == '' || data['enddate'] == ''){
-            var modalcontent = `
-                                <div class="modal-body ">  
-                                <h5><i class="fas fa-exclamation-circle"></i> Fill all the Inputs before continuing</h5>
-                                </div>
-                                <div class="modal-footer d-flex justify-content-start">
-                                <button class="mybtn" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Close</button>
-                                </div>`;
-            $('.modal-content').html(modalcontent);
-            $('#dataModal').modal('show');
-        }
-        else{
-            data = $.param(data);
-            $.ajax({
-                url:'/accounts/{{details["accounttype"]}}/{{details["id"]}}/transactions',
-                type:'GET',
-                data:data,
-                processData:false,
-                dataType:"json",
-                success:function(data){
-                    displayFilteredTransactions(data);
-                        
-                },
-                error:function(data){
-                    var modalcontent = `
-                                <div class="modal-body ">  
-                                <h5><i class="fas fa-exclamation-circle"></i> `+data.responseJSON+`</h5>
-                                </div>
-                                <div class="modal-footer d-flex justify-content-start">
-                                <button class="mybtn" type="button" style="background-image:linear-gradient(#ddd,#bbb,#ddd);color:#111;" data-dismiss="modal" >Close</button>
-                                </div>`;
-                    $('.modal-content').html(modalcontent);
-                    $('#dataModal').modal('show');
-                }
-            });
-        }
-    });
-    $('.pay').click(function(){
-        if($(this).hasClass('credit')){
-
-            window.location.href = "/payment/creditcard/{{details['cardnumber']}}";
-        }
-        if($(this).hasClass('insurance')){
-
-            window.location.href = '/payment/insurance/'+$(this).parent().parent().parent().find('div').first().find('p').html();
-        }
-    });
-</script>
-</body>
-
-</html>
+            return debtAccount
+        except Exception as e:
+            raise e
